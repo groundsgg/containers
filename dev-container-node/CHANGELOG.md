@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/groundsgg/containers/compare/dev-container-node-v0.1.1...dev-container-node@v0.1.2) (2025-10-29)
+
+
+### Bug Fixes
+
+* **ci:** update release-please-config.json to support release tags ([5931aa5](https://github.com/groundsgg/containers/commit/5931aa59fa128c1458ef4792c169ae06509a7f2c))
+
 ## [0.1.1](https://github.com/groundsgg/containers/compare/dev-container-node-v0.1.0...dev-container-node-v0.1.1) (2025-10-29)
 
 

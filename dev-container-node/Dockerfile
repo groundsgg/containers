@@ -18,7 +18,7 @@ LABEL org.opencontainers.image.title="dev-container-node" \
 # Install system dependencies and enable corepack for pnpm
 RUN apk add --no-cache wget curl nano bash && \
     corepack enable && \
-    corepack prepare pnpm@10.18.3 --activate
+    corepack prepare pnpm@10.20 --activate
 
 # Set working directory
 WORKDIR /app

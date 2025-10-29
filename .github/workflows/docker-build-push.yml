@@ -34,14 +34,14 @@ jobs:
       - name: 🔍 Set build matrix
         id: set-matrix
         run: |
-          if [[ "${{ github.ref }}" == refs/heads/main && \
+          if [[ "${{ github.ref }}" == refs/tags/dev-container-node@* ]]; then
+            # dev-container-node tag: build only dev-container-node as release
+            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"release\"}]}" \
+              >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == refs/heads/main && \
                 "${{ github.event_name }}" == "push" ]]; then
             # Main branch push: build all containers as edge
             echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"edge\"}]}" \
-              >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == refs/tags/dev-container-node@* ]]; then
-            # dev-container-node tag: build only dev-container-node as release
-            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"release\"}]}" \
               >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             # Manual dispatch: build selected container as release
@@ -83,8 +83,8 @@ jobs:
           tags: |
             type=match,pattern=${{ matrix.container }}@(.*),group=1,enable=${{ matrix.tag_type == 'release' }}
             type=raw,value=latest,enable=${{ matrix.tag_type == 'release' }}
-            type=raw,value=edge
-            type=sha,prefix=sha-
+            type=raw,value=edge,enable=${{ matrix.tag_type != 'release' }}
+            type=sha,prefix=sha-,enable=${{ matrix.tag_type != 'release' }}
 
       - name: 📋 Set output tag
         id: set-output

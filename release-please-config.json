@@ -1,5 +1,7 @@
 {
-  "packages": {
+    "separate-pull-requests": true,
+    "tag-separator": "@",
+    "packages": {
     "dev-container-node": {
       "release-type": "simple",
       "package-name": "dev-container-node"

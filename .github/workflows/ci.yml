@@ -48,13 +48,13 @@ jobs:
       - name: 🔨 Build Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./${{ matrix.container }}
           file: ./${{ matrix.container }}/Dockerfile
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BUILD_DATE=${{ fromJSON(github.event.head_commit).timestamp }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=ci-test

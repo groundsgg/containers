@@ -16,6 +16,7 @@ LABEL org.opencontainers.image.title="dev-container-node" \
       org.opencontainers.image.version="$IMAGE_VERSION"
 
 # Install system dependencies and enable corepack for pnpm
+# see: https://github.com/nodejs/corepack
 RUN apk add --no-cache wget curl nano bash && \
     corepack enable && \
     corepack prepare pnpm@10.20 --activate

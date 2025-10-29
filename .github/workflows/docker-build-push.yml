@@ -81,9 +81,9 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}/${{ matrix.container }}
           tags: |
-            type=ref,event=tag,pattern=${{ matrix.container }}@*,enable=${{ matrix.tag_type == 'release' }}
-            type=raw,value=latest,enable=${{ matrix.tag_type == 'release' && github.ref == 'refs/heads/main' }}
-            type=raw,value=edge,enable=${{ matrix.tag_type == 'edge' }}
+            type=match,pattern=${{ matrix.container }}@(.*),group=1,enable=${{ matrix.tag_type == 'release' }}
+            type=raw,value=latest,enable=${{ matrix.tag_type == 'release' }}
+            type=raw,value=edge
             type=sha,prefix=sha-
 
       - name: 📋 Set output tag

@@ -2,7 +2,7 @@ version: 2
 updates:
   # Monitor Docker base images
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/dev-container-node"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5

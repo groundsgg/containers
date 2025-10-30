@@ -113,6 +113,9 @@ jobs:
     needs: [determine-matrix, build-push]
     runs-on: ubuntu-latest
     if: needs.determine-matrix.outputs.matrix != '{"include":[]}'
+    permissions:
+      contents: write
+      packages: read
     strategy:
       matrix: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
     steps:
@@ -130,6 +133,7 @@ jobs:
             ${{ matrix.tag_type == 'release' && needs.build-push.outputs.dev-container-node-tag || format('ghcr.io/{0}/{1}:edge', github.repository, matrix.container) }}
           format: spdx-json
           output-file: sbom-${{ matrix.container }}.spdx.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📤 Upload SBOM
         uses: actions/upload-artifact@v5

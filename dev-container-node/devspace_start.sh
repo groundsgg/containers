@@ -2,7 +2,7 @@
 set +e
 
 echo "Installing PNPM Dependencies"
-pnpm install
+pnpm install --reporter=silent
 
 COLOR_BLUE="\033[0;94m"
 COLOR_GREEN="\033[0;92m"
@@ -15,7 +15,7 @@ Welcome to your ${DEVSPACE_NAME} development container!
 
 This is how you can work with it:
 - Files will be synchronized between your local machine and this container
-- Run \`${COLOR_GREEN}npm start${COLOR_RESET}\` to start the application"
+- Run \`${COLOR_GREEN}pnpm start${COLOR_RESET}\` or the script defined in the \`${COLOR_GREEN}package.json${COLOR_RESET}\` file to start the application"
 
 if [[ -n "$INGRESS_URL" ]]; then
   echo -e "- Access ${DEVSPACE_NAME} at ${INGRESS_URL}"

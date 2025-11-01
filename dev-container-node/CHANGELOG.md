@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.2...dev-container-node@v0.1.3) (2025-11-01)
+
+
+### Bug Fixes
+
+* **dev-container-node:** disable pnpm download prompt ([5af81d0](https://github.com/groundsgg/containers/commit/5af81d0f6092293dc41cb14f1b8635d5ac70dda7))
+
 ## [0.1.2](https://github.com/groundsgg/containers/compare/dev-container-node-v0.1.1...dev-container-node@v0.1.2) (2025-10-29)
 
 

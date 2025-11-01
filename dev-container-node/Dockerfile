@@ -15,6 +15,9 @@ LABEL org.opencontainers.image.title="dev-container-node" \
       org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.version="$IMAGE_VERSION"
 
+# Disable download prompt for pnpm
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
 # Install system dependencies and enable corepack for pnpm
 RUN apk add --no-cache wget curl nano bash && \
     corepack enable && \

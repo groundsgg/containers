@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.3...dev-container-node@v0.1.4) (2025-11-20)
+
+
+### Bug Fixes
+
+* add database migration and seeding instructions to devspace_start.sh ([24aacbd](https://github.com/groundsgg/containers/commit/24aacbd8051ab1f07d8fb406dadefe6bbdec9e35))
+* **dev-container-node:** make pnpm install silent and update welcome message ([78cb44a](https://github.com/groundsgg/containers/commit/78cb44ab27916e2ac171f854e3596760ea2b45d2))
+
 ## [0.1.3](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.2...dev-container-node@v0.1.3) (2025-11-01)
 
 

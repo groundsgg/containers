@@ -136,7 +136,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📤 Upload SBOM
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: sbom-${{ matrix.container }}-${{ matrix.tag_type }}
           path: sbom-${{ matrix.container }}.spdx.json

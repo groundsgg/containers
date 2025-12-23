@@ -6,15 +6,17 @@ on:
       - main
     tags:
       - 'dev-container-node@*'
+      - 'velocity@*'
   workflow_dispatch:
     inputs:
       container:
-        description: 'Container to build (dev-container-node)'
+        description: 'Container to build (dev-container-node or velocity)'
         required: true
         default: 'dev-container-node'
         type: choice
         options:
           - dev-container-node
+          - velocity
       version:
         description: 'Version to build'
         required: true
@@ -38,10 +40,14 @@ jobs:
             # dev-container-node tag: build only dev-container-node as release
             echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"release\"}]}" \
               >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == refs/tags/velocity@* ]]; then
+            # velocity tag: build only velocity as release
+            echo "matrix={\"include\":[{\"container\":\"velocity\",\"tag_type\":\"release\"}]}" \
+              >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == refs/heads/main && \
                 "${{ github.event_name }}" == "push" ]]; then
             # Main branch push: build all containers as edge
-            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"edge\"}]}" \
+            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"edge\"},{\"container\":\"velocity\",\"tag_type\":\"edge\"}]}" \
               >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             # Manual dispatch: build selected container as release
@@ -59,6 +65,7 @@ jobs:
     if: needs.determine-matrix.outputs.matrix != '{"include":[]}'
     outputs:
       dev-container-node-tag: ${{ steps.set-output.outputs.dev-container-node-tag }}
+      velocity-tag: ${{ steps.set-output.outputs.velocity-tag }}
     strategy:
       matrix: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
     steps:
@@ -130,7 +137,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: >-
-            ${{ matrix.tag_type == 'release' && needs.build-push.outputs.dev-container-node-tag || format('ghcr.io/{0}/{1}:edge', github.repository, matrix.container) }}
+            ${{ matrix.tag_type == 'release' && (matrix.container == 'dev-container-node' && needs.build-push.outputs.dev-container-node-tag || matrix.container == 'velocity' && needs.build-push.outputs.velocity-tag) || format('ghcr.io/{0}/{1}:edge', github.repository, matrix.container) }}
           format: spdx-json
           output-file: sbom-${{ matrix.container }}.spdx.json
           github-token: ${{ secrets.GITHUB_TOKEN }}

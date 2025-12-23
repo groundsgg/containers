@@ -35,7 +35,7 @@ Create a `README.md` in your container directory with:
 - Environment variables
 - Examples
 
-### 5. Update Release Please Configuration
+### 4. Update Release Please Configuration
 Add your container to `release-please-config.json`:
 
 ```json
@@ -53,41 +53,10 @@ Add your container to `release-please-config.json`:
 }
 ```
 
-### 6. Update GitHub Workflow
-Update `.github/workflows/docker-build-push.yml`:
+### 5. Update GitHub Workflow
+Update the container matrix in all workflows so the new container builds:
+- `.github/workflows/docker-build-push.yml`: add your container to `strategy.matrix.container` (controls build/push and tag matching for `{container}@x.y.z`)
+- `.github/workflows/ci.yml`: add your container to `strategy.matrix.container` (CI build validation)
 
-**a) Add to workflow_dispatch options** (around line 16):
-```yaml
-options:
-  - dev-container-node
-  - your-container-name
-```
-
-**b) Add to determine-matrix step** (around line 40):
-```yaml
-echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"edge\"},{\"container\":\"your-container-name\",\"tag_type\":\"edge\"}]}" \
-  >> $GITHUB_OUTPUT
-```
-
-**c) Add tag pattern for your container** (around line 44):
-```yaml
-elif [[ "${{ github.ref }}" == refs/tags/your-container-name@* ]]; then
-  echo "matrix={\"include\":[{\"container\":\"your-container-name\",\"tag_type\":\"release\"}]}" \
-    >> $GITHUB_OUTPUT
-```
-
-**d) Add output variable** (around line 61):
-```yaml
-outputs:
-  dev-container-node-tag: ${{ steps.set-output.outputs.dev-container-node-tag }}
-  your-container-name-tag: ${{ steps.set-output.outputs.your-container-name-tag }}
-```
-
-**e) Update SBOM generation** (around line 130):
-```yaml
-image: >-
-  ${{ matrix.tag_type == 'release' && needs.build-push.outputs.your-container-name-tag || format('ghcr.io/{0}/{1}:edge', github.repository, matrix.container) }}
-```
-
-### 8. Update Dependabot (Optional)
+### 6. Update Dependabot (Optional)
 If your container has dependencies that need monitoring, update `.github/dependabot.yml` to include your container directory.

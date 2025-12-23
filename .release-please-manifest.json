@@ -1,5 +1,6 @@
 {
   ".": "0.0.1",
-  "dev-container-node": "0.1.4"
+  "dev-container-node": "0.1.4",
+  "velocity": "0.0.1"
 }
 

@@ -2,10 +2,14 @@
     "separate-pull-requests": true,
     "tag-separator": "@",
     "packages": {
-    "dev-container-node": {
-      "release-type": "simple",
-      "package-name": "dev-container-node"
-    }
+      "dev-container-node": {
+        "release-type": "simple",
+        "package-name": "dev-container-node"
+      },
+      "velocity": {
+        "release-type": "simple",
+        "package-name": "velocity"
+      }
   }
 }
 

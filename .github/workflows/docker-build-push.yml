@@ -5,70 +5,35 @@ on:
     branches:
       - main
     tags:
-      - 'dev-container-node@*'
-  workflow_dispatch:
-    inputs:
-      container:
-        description: 'Container to build (dev-container-node)'
-        required: true
-        default: 'dev-container-node'
-        type: choice
-        options:
-          - dev-container-node
-      version:
-        description: 'Version to build'
-        required: true
-        default: 'dispatch'
+      - '*@*'
 
 permissions:
-  contents: write
+  contents: read
   packages: write
 
 jobs:
-  determine-matrix:
-    name: 🔍 Determine Build Matrix
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: 🔍 Set build matrix
-        id: set-matrix
-        run: |
-          if [[ "${{ github.ref }}" == refs/tags/dev-container-node@* ]]; then
-            # dev-container-node tag: build only dev-container-node as release
-            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"release\"}]}" \
-              >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == refs/heads/main && \
-                "${{ github.event_name }}" == "push" ]]; then
-            # Main branch push: build all containers as edge
-            echo "matrix={\"include\":[{\"container\":\"dev-container-node\",\"tag_type\":\"edge\"}]}" \
-              >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # Manual dispatch: build selected container as release
-            echo "matrix={\"include\":[{\"container\":\"${{ github.event.inputs.container }}\",\"tag_type\":\"release\"}]}" \
-              >> $GITHUB_OUTPUT
-          else
-            # Fallback: no builds
-            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
-          fi
-
-  build-push:
+  build-push-sbom:
     name: 🔨 Build & Push ${{ matrix.container }}
-    needs: determine-matrix
     runs-on: ubuntu-latest
-    if: needs.determine-matrix.outputs.matrix != '{"include":[]}'
-    outputs:
-      dev-container-node-tag: ${{ steps.set-output.outputs.dev-container-node-tag }}
     strategy:
-      matrix: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
+      matrix:
+        container:
+          - dev-container-node
+          - velocity
+    env:
+      TAG_TYPE: ${{ startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) && 'release' || 'edge' }}
+      MATCHES_REF: ${{ github.ref_type != 'tag' || startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) }}
     steps:
       - name: 📥 Checkout code
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: actions/checkout@v6
 
       - name: 🐳 Set up Docker Buildx
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: docker/setup-buildx-action@v3
 
       - name: 🔐 Login to GitHub Container Registry
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -77,22 +42,18 @@ jobs:
 
       - name: 📋 Extract metadata
         id: meta
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/${{ matrix.container }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.container }}
           tags: |
-            type=match,pattern=${{ matrix.container }}@(.*),group=1,enable=${{ matrix.tag_type == 'release' }}
-            type=raw,value=latest,enable=${{ matrix.tag_type == 'release' }}
-            type=raw,value=edge,enable=${{ matrix.tag_type != 'release' }}
-            type=sha,prefix=sha-,enable=${{ matrix.tag_type != 'release' }}
-
-      - name: 📋 Set output tag
-        id: set-output
-        run: |
-          FIRST_TAG=$(echo '${{ steps.meta.outputs.tags }}' | head -n1)
-          echo "${{ matrix.container }}-tag=$FIRST_TAG" >> $GITHUB_OUTPUT
+            # Extract version from tag like "container@1.2.3" -> "1.2.3" (release only)
+            type=match,pattern=${{ matrix.container }}@(.*),group=1,enable=${{ env.TAG_TYPE == 'release' }}
+            type=raw,value=edge,enable=${{ env.TAG_TYPE != 'release' }}
+            type=sha,prefix=sha-,enable=${{ env.TAG_TYPE != 'release' }}
 
       - name: 🔨 Build and push image
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: docker/build-push-action@v6
         with:
           context: ./${{ matrix.container }}
@@ -108,36 +69,19 @@ jobs:
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
 
-  generate-sbom:
-    name: 🔍 Generate SBOM for ${{ matrix.container }}
-    needs: [determine-matrix, build-push]
-    runs-on: ubuntu-latest
-    if: needs.determine-matrix.outputs.matrix != '{"include":[]}'
-    permissions:
-      contents: write
-      packages: read
-    strategy:
-      matrix: ${{ fromJSON(needs.determine-matrix.outputs.matrix) }}
-    steps:
-      - name: 🔐 Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 🔍 Generate SBOM
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: anchore/sbom-action@v0
         with:
-          image: >-
-            ${{ matrix.tag_type == 'release' && needs.build-push.outputs.dev-container-node-tag || format('ghcr.io/{0}/{1}:edge', github.repository, matrix.container) }}
+          image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           format: spdx-json
           output-file: sbom-${{ matrix.container }}.spdx.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📤 Upload SBOM
+        if: ${{ env.MATCHES_REF == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: sbom-${{ matrix.container }}-${{ matrix.tag_type }}
+          name: sbom-${{ matrix.container }}-${{ env.TAG_TYPE }}
           path: sbom-${{ matrix.container }}.spdx.json
           retention-days: 30

@@ -21,7 +21,7 @@ ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 # Install system dependencies and enable corepack for pnpm
 RUN apk add --no-cache wget curl nano bash && \
     corepack enable && \
-    corepack prepare pnpm@10.20 --activate
+    corepack prepare pnpm@10.26 --activate
 
 # Set working directory
 WORKDIR /app

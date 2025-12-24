@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.4...dev-container-node@v0.1.5) (2025-12-24)
+
+
+### Bug Fixes
+
+* **dev-container-node:** update pnpm to 10.26 ([#28](https://github.com/groundsgg/containers/issues/28)) ([7917a27](https://github.com/groundsgg/containers/commit/7917a27620ac2175d4205cd1eb0c2c82da2d3197))
+
 ## [0.1.4](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.3...dev-container-node@v0.1.4) (2025-11-20)
 
 

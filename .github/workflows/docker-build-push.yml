@@ -47,8 +47,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/${{ matrix.container }}
           tags: |
-            # Extract version from tag like "container@1.2.3" -> "1.2.3" (release only)
-            type=match,pattern=${{ matrix.container }}@(.*),group=1,enable=${{ env.TAG_TYPE == 'release' }}
+            # Extract version from tag like "container@v1.2.3" -> "1.2.3" (release only)
+            type=match,pattern=${{ matrix.container }}@v(.*),group=1,enable=${{ env.TAG_TYPE == 'release' }}
             type=raw,value=edge,enable=${{ env.TAG_TYPE != 'release' }}
             type=sha,prefix=sha-,enable=${{ env.TAG_TYPE != 'release' }}
 

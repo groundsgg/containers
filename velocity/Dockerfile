@@ -1,5 +1,18 @@
 FROM eclipse-temurin:25-jre-alpine
 
+ARG VCS_REVISION
+ARG BUILD_DATE
+ARG IMAGE_VERSION
+
+LABEL org.opencontainers.image.title="velocity" \
+      org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \
+      org.opencontainers.image.vendor="grounds.gg" \
+      org.opencontainers.image.authors="grounds.gg <hi@grounds.gg>" \
+      org.opencontainers.image.source="https://github.com/groundsgg/containers" \
+      org.opencontainers.image.revision="$VCS_REVISION" \
+      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.version="$IMAGE_VERSION"
+
 ARG VELOCITY_VERSION=3.4.0-SNAPSHOT
 ARG VELOCITY_BUILD=558
 

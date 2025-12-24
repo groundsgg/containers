@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: 🔍 Detect changes
-        uses: tj-actions/changed-files@v45
+        uses: tj-actions/changed-files@v47
         id: changed-files
         with:
           files: |

@@ -1,6 +1,7 @@
 {
     "separate-pull-requests": true,
     "tag-separator": "@",
+    "include-v-in-tag": false,
     "packages": {
       "dev-container-node": {
         "release-type": "simple",

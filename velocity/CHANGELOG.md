@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/groundsgg/containers/compare/velocity@v0.2.0...velocity@0.2.1) (2025-12-24)
+
+
+### Bug Fixes
+
+* **velocity:** optimize docker image ([#23](https://github.com/groundsgg/containers/issues/23)) ([5815c1a](https://github.com/groundsgg/containers/commit/5815c1aeded3536183fc12eacf28492a5c58f549))
+
 ## [0.2.0](https://github.com/groundsgg/containers/compare/velocity@v0.1.0...velocity@v0.2.0) (2025-12-24)
 
 

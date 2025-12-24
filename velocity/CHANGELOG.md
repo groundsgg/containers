@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/groundsgg/containers/compare/velocity@0.2.1...velocity@v0.2.2) (2025-12-24)
+
+
+### Bug Fixes
+
+* **velocity:** align startup flags with docs ([#26](https://github.com/groundsgg/containers/issues/26)) ([f449b67](https://github.com/groundsgg/containers/commit/f449b67bdda24b4bdf1bacbaf36c53c4af97c68c))
+
 ## [0.2.1](https://github.com/groundsgg/containers/compare/velocity@v0.2.0...velocity@0.2.1) (2025-12-24)
 
 

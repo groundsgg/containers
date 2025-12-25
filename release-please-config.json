@@ -9,6 +9,10 @@
       "velocity": {
         "release-type": "simple",
         "package-name": "velocity"
+      },
+      "paper": {
+        "release-type": "simple",
+        "package-name": "paper"
       }
   }
 }

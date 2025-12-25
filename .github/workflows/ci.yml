@@ -20,6 +20,7 @@ jobs:
         container:
           - dev-container-node
           - velocity
+          - paper
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v6

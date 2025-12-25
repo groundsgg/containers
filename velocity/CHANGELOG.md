@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/groundsgg/containers/compare/velocity@v0.2.2...velocity@v0.3.0) (2025-12-25)
+
+
+### Features
+
+* remove forwarding.secret.example and update README for environment variable usage ([e720f81](https://github.com/groundsgg/containers/commit/e720f81fcf39964dbdce86100156f1e4537ce763))
+
+
+### Bug Fixes
+
+* document the changed values in velocity.toml and revert other changes ([9b81126](https://github.com/groundsgg/containers/commit/9b811269d924645ea9894d990bdf2a0bd7b31b8c))
+
 ## [0.2.2](https://github.com/groundsgg/containers/compare/velocity@0.2.1...velocity@v0.2.2) (2025-12-24)
 
 

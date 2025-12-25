@@ -20,6 +20,7 @@ jobs:
         container:
           - dev-container-node
           - velocity
+          - paper
     env:
       TAG_TYPE: ${{ startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) && 'release' || 'edge' }}
       MATCHES_REF: ${{ github.ref_type != 'tag' || startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) }}

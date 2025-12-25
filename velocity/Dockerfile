@@ -33,7 +33,6 @@ RUN set -eux; \
 COPY --chown=velocity:velocity --chmod=755 scripts/start.sh /app/start.sh
 COPY --chown=velocity:velocity config/velocity.toml /app/velocity.toml
 COPY --chown=velocity:velocity config/plugins /app/plugins
-COPY --chown=velocity:velocity config/forwarding.secret.example /app/forwarding.secret
 
 USER velocity
 

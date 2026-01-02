@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.5...dev-container-node@v0.1.6) (2026-01-02)
+
+
+### Bug Fixes
+
+* **dev-container-node:** use correct path of devspace_start.sh ([#37](https://github.com/groundsgg/containers/issues/37)) ([026a974](https://github.com/groundsgg/containers/commit/026a974bff38bbe3e985e4d00e136c76ecf2a81d))
+
 ## [0.1.5](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.4...dev-container-node@v0.1.5) (2025-12-24)
 
 

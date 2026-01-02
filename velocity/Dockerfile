@@ -37,14 +37,15 @@ RUN --mount=type=secret,id=github_token \
         PLUGINS="$PLUGINS" /app/download-plugins.sh; \
       fi; \
     fi; \
+    rm -f /app/download-plugins.sh; \
     apk del curl; \
     addgroup -S velocity; \
     adduser -S -G velocity -h /app velocity; \
     chown -R velocity:velocity /app
 
-COPY --chown=velocity:velocity --chmod=755 scripts/start.sh /app/start.sh
-COPY --chown=velocity:velocity config/velocity.toml /app/velocity.toml
-COPY --chown=velocity:velocity config/plugins /app/plugins
+COPY --chown=velocity:velocity --chmod=755 velocity/scripts/start.sh /app/start.sh
+COPY --chown=velocity:velocity velocity/config/velocity.toml /app/velocity.toml
+COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 USER velocity
 

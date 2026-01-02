@@ -2,11 +2,9 @@
 
 A small Docker image for running a Paper Minecraft server. By using this image you agree to the [Minecraft EULA](https://aka.ms/MinecraftEULA).
 
-## Default Plugins
+## Plugins
 
-The following plugins are installed by default:
-
-- **plugin-server-discovery-paper** (v0.1.0) - Server discovery plugin
+Plugins can be configured via the `PLUGINS` build argument. By default, some plugins are pre-configured, but you can customize the plugin list during build. See the "Building with Custom Plugins" section below for details.
 
 ## Build & Run
 

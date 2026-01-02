@@ -2,11 +2,9 @@
 
 A small Docker image for running a Velocity proxy.
 
-## Default Plugins
+## Plugins
 
-The following plugins are installed by default:
-
-- **plugin-server-discovery-velocity** (v0.1.0) - Server discovery plugin
+Plugins can be configured via the `PLUGINS` build argument. By default, some plugins are pre-configured, but you can customize the plugin list during build. See the "Building with Custom Plugins" section below for details.
 
 ## Build & Run
 

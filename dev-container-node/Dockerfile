@@ -27,7 +27,7 @@ RUN apk add --no-cache wget curl nano bash && \
 WORKDIR /app
 
 # Copy and set permissions for startup script
-COPY devspace_start.sh ./
+COPY ./dev-container-node/devspace_start.sh ./
 RUN chmod +x devspace_start.sh
 
 # Default command for interactive development

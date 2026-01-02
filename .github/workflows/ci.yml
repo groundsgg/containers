@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   pull-requests: read
+  packages: read
 
 jobs:
   docker-build:
@@ -33,7 +34,6 @@ jobs:
         with:
           files: |
             ${{ matrix.container }}/**
-
       - name: 🐳 Set up Docker Buildx
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v3
@@ -42,7 +42,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.container }}
+          context: .
           file: ./${{ matrix.container }}/Dockerfile
           push: false
           cache-from: type=gha
@@ -52,3 +52,5 @@ jobs:
             BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=ci-test
+          secrets: |
+            github_token=${{ secrets.GITHUB_TOKEN }}

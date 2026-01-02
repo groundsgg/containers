@@ -57,7 +57,7 @@ jobs:
         if: ${{ env.MATCHES_REF == 'true' }}
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.container }}
+          context: .
           file: ./${{ matrix.container }}/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -69,6 +69,8 @@ jobs:
             BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          secrets: |
+            github_token=${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔍 Generate SBOM
         if: ${{ env.MATCHES_REF == 'true' }}

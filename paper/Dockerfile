@@ -29,11 +29,7 @@ RUN --mount=type=secret,id=github_token \
       "https://api.papermc.io/v2/projects/paper/versions/${PAPER_VERSION}/builds/${PAPER_BUILD}/downloads/paper-${PAPER_VERSION}-${PAPER_BUILD}.jar"; \
     mkdir -p /app/plugins; \
     if [ -n "$PLUGINS" ]; then \
-      if [ -f /run/secrets/github_token ]; then \
-        PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
-      else \
-        PLUGINS="$PLUGINS" /app/download-plugins.sh; \
-      fi; \
+      PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
     fi; \
     rm -f /app/download-plugins.sh; \
     apk del curl; \

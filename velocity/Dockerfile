@@ -19,6 +19,7 @@ LABEL org.opencontainers.image.title="velocity" \
 WORKDIR /app
 
 COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
+COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 RUN --mount=type=secret,id=github_token \
     set -eux; \
@@ -31,11 +32,7 @@ RUN --mount=type=secret,id=github_token \
       "https://api.papermc.io/v2/projects/velocity/versions/${VELOCITY_VERSION}/builds/${VELOCITY_BUILD}/downloads/velocity-${VELOCITY_VERSION}-${VELOCITY_BUILD}.jar"; \
     mkdir -p /app/plugins; \
     if [ -n "$PLUGINS" ]; then \
-      if [ -f /run/secrets/github_token ]; then \
-        PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
-      else \
-        PLUGINS="$PLUGINS" /app/download-plugins.sh; \
-      fi; \
+      PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
     fi; \
     rm -f /app/download-plugins.sh; \
     apk del curl; \
@@ -45,7 +42,6 @@ RUN --mount=type=secret,id=github_token \
 
 COPY --chown=velocity:velocity --chmod=755 velocity/scripts/start.sh /app/start.sh
 COPY --chown=velocity:velocity velocity/config/velocity.toml /app/velocity.toml
-COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 USER velocity
 

@@ -5,6 +5,7 @@ ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=3.4.0-SNAPSHOT
 ARG VELOCITY_BUILD=558
+ARG PLUGINS="plugin-server-discovery:plugin-server-discovery-velocity:0.1.0"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \
@@ -17,7 +18,10 @@ LABEL org.opencontainers.image.title="velocity" \
 
 WORKDIR /app
 
-RUN set -eux; \
+COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
+
+RUN --mount=type=secret,id=github_token \
+    set -eux; \
     apk add --no-cache curl netcat-openbsd; \
     if [ -z "$VELOCITY_BUILD" ]; then \
       echo "Velocity build must be set" >&2; \
@@ -25,6 +29,14 @@ RUN set -eux; \
     fi; \
     curl -fsSL -o /app/velocity.jar \
       "https://api.papermc.io/v2/projects/velocity/versions/${VELOCITY_VERSION}/builds/${VELOCITY_BUILD}/downloads/velocity-${VELOCITY_VERSION}-${VELOCITY_BUILD}.jar"; \
+    mkdir -p /app/plugins; \
+    if [ -n "$PLUGINS" ]; then \
+      if [ -f /run/secrets/github_token ]; then \
+        PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
+      else \
+        PLUGINS="$PLUGINS" /app/download-plugins.sh; \
+      fi; \
+    fi; \
     apk del curl; \
     addgroup -S velocity; \
     adduser -S -G velocity -h /app velocity; \

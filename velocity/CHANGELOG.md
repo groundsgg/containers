@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/groundsgg/containers/compare/velocity@v0.4.0...velocity@v0.5.0) (2026-01-04)
+
+
+### Features
+
+* switch plugin-server-discovery to plugin-agones in paper and velocity ([1d8d806](https://github.com/groundsgg/containers/commit/1d8d80647b212a82183ca742eb338e100b00394a))
+
 ## [0.4.0](https://github.com/groundsgg/containers/compare/velocity@v0.3.0...velocity@v0.4.0) (2026-01-02)
 
 

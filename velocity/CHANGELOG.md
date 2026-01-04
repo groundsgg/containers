@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/groundsgg/containers/compare/velocity@v0.5.0...velocity@v0.6.0) (2026-01-04)
+
+
+### Features
+
+* enable accepts-transfers in velocity ([#41](https://github.com/groundsgg/containers/issues/41)) ([5449da1](https://github.com/groundsgg/containers/commit/5449da14dbff77ea1669f224d45d405cc9595828))
+
 ## [0.5.0](https://github.com/groundsgg/containers/compare/velocity@v0.4.0...velocity@v0.5.0) (2026-01-04)
 
 

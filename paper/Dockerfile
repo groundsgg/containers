@@ -5,7 +5,7 @@ ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG PAPER_VERSION=1.21.11
 ARG PAPER_BUILD=54
-ARG PLUGINS="plugin-server-discovery:plugin-server-discovery-paper:0.1.0"
+ARG PLUGINS="plugin-agones:plugin-agones-paper:0.1.0"
 
 LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.description="A small Docker image for running a Paper Minecraft server." \

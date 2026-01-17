@@ -60,3 +60,7 @@ Update the container matrix in all workflows so the new container builds:
 
 ### 6. Update Dependabot (Optional)
 If your container has dependencies that need monitoring, update `.github/dependabot.yml` to include your container directory.
+
+## License
+
+Licensed under the Apache License, Version 2.0.

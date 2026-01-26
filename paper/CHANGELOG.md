@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/groundsgg/containers/compare/paper@v0.3.0...paper@v0.4.0) (2026-01-26)
+
+
+### Features
+
+* enable accepts-transfers in velocity ([#41](https://github.com/groundsgg/containers/issues/41)) ([5449da1](https://github.com/groundsgg/containers/commit/5449da14dbff77ea1669f224d45d405cc9595828))
+
 ## [0.3.0](https://github.com/groundsgg/containers/compare/paper@v0.2.0...paper@v0.3.0) (2026-01-04)
 
 

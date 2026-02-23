@@ -4,8 +4,7 @@ ARG KEYCLOAK_MINECRAFT_VERSION=1.0.0
 
 WORKDIR /opt/keycloak
 
-RUN curl -fsSL -o /opt/keycloak/providers/keycloak-minecraft.jar \
-      "https://github.com/groundsgg/keycloak-minecraft/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft.jar"
+ADD --chmod=644 "https://github.com/groundsgg/keycloak-minecraft/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft.jar" /opt/keycloak/providers/keycloak-minecraft.jar
 
 RUN /opt/keycloak/bin/kc.sh build
 

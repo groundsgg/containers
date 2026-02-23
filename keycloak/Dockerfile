@@ -1,6 +1,5 @@
-FROM quay.io/keycloak/keycloak:26.5.0 AS builder
+FROM quay.io/keycloak/keycloak:26.5.4 AS builder
 
-# renovate: datasource=github-releases depName=groundsgg/keycloak-minecraft
 ARG KEYCLOAK_MINECRAFT_VERSION=1.0.0
 
 WORKDIR /opt/keycloak
@@ -9,7 +8,7 @@ ADD --chmod=644 "https://github.com/groundsgg/keycloak-minecraft/releases/downlo
 
 RUN /opt/keycloak/bin/kc.sh build --health-enabled=true
 
-FROM quay.io/keycloak/keycloak:26.5.0
+FROM quay.io/keycloak/keycloak:26.5.4
 
 ARG VCS_REVISION
 ARG BUILD_DATE

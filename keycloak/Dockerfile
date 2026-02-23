@@ -1,5 +1,6 @@
 FROM quay.io/keycloak/keycloak:26.1 AS builder
 
+# renovate: datasource=github-releases depName=groundsgg/keycloak-minecraft
 ARG KEYCLOAK_MINECRAFT_VERSION=1.0.0
 
 WORKDIR /opt/keycloak
@@ -24,6 +25,11 @@ LABEL org.opencontainers.image.title="keycloak" \
       org.opencontainers.image.version="$IMAGE_VERSION"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
+
+EXPOSE 8080 8443
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+  CMD bash -c 'exec 3<>/dev/tcp/localhost/8080' || exit 1
 
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
 CMD ["start", "--optimized"]

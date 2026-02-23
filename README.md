@@ -2,27 +2,6 @@
 
 A collection of Docker containers for development and deployment, published to GitHub Container Registry (ghcr.io).
 
-## Available Containers
-
-### dev-container-node
-- **Description**: A Node.js container used for development in our DevSpace environment
-- **Registry**: `ghcr.io/groundsgg/containers/dev-container-node`
-- **Documentation**: [dev-container-node/README.md](./dev-container-node/README.md)
-- **Features**:
-  - Node.js 24.11.0 on Alpine Linux
-  - PNPM package manager pre-installed
-  - Development tools (wget, curl, nano, bash)
-  - DevSpace integration with startup script
-
-### keycloak
-- **Description**: Custom Keycloak image with the keycloak-minecraft extension
-- **Registry**: `ghcr.io/groundsgg/containers/keycloak`
-- **Documentation**: [keycloak/README.md](./keycloak/README.md)
-- **Features**:
-  - Keycloak 26.1
-  - keycloak-minecraft extension pre-installed
-  - Optimized build for production use
-
 ## Adding a New Container
 
 Follow these steps to add a new container to this repository:

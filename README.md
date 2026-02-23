@@ -14,6 +14,15 @@ A collection of Docker containers for development and deployment, published to G
   - Development tools (wget, curl, nano, bash)
   - DevSpace integration with startup script
 
+### keycloak
+- **Description**: Custom Keycloak image with the keycloak-minecraft extension
+- **Registry**: `ghcr.io/groundsgg/containers/keycloak`
+- **Documentation**: [keycloak/README.md](./keycloak/README.md)
+- **Features**:
+  - Keycloak 26.1
+  - keycloak-minecraft extension pre-installed
+  - Optimized build for production use
+
 ## Adding a New Container
 
 Follow these steps to add a new container to this repository:

@@ -2,6 +2,12 @@
 
 Custom Keycloak image with the [keycloak-minecraft](https://github.com/groundsgg/keycloak-minecraft) extension pre-installed and optimized.
 
+## Pull
+
+```bash
+docker pull ghcr.io/groundsgg/keycloak:latest
+```
+
 ## Build
 
 ```bash
@@ -18,7 +24,7 @@ docker build -f keycloak/Dockerfile --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.0
 
 This image runs Keycloak in optimized mode (`start --optimized`). All Keycloak configuration should be provided via environment variables at runtime. See the [Keycloak Server Configuration](https://www.keycloak.org/server/all-config) documentation for available options.
 
-Common configuration:
+Required configuration:
 
 | Variable | Description |
 |---|---|
@@ -27,3 +33,7 @@ Common configuration:
 | `KC_DB_USERNAME` | Database username |
 | `KC_DB_PASSWORD` | Database password |
 | `KC_HOSTNAME` | Hostname for the Keycloak server |
+
+## Dependency Updates
+
+The base Keycloak image (`quay.io/keycloak/keycloak`) is tracked by Dependabot. The `KEYCLOAK_MINECRAFT_VERSION` build argument is **not** automatically tracked by Dependabot and must be updated manually when a new release of [keycloak-minecraft](https://github.com/groundsgg/keycloak-minecraft) is available.

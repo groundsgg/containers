@@ -2,18 +2,6 @@
 
 A collection of Docker containers for development and deployment, published to GitHub Container Registry (ghcr.io).
 
-## Available Containers
-
-### dev-container-node
-- **Description**: A Node.js container used for development in our DevSpace environment
-- **Registry**: `ghcr.io/groundsgg/containers/dev-container-node`
-- **Documentation**: [dev-container-node/README.md](./dev-container-node/README.md)
-- **Features**:
-  - Node.js 24.11.0 on Alpine Linux
-  - PNPM package manager pre-installed
-  - Development tools (wget, curl, nano, bash)
-  - DevSpace integration with startup script
-
 ## Adding a New Container
 
 Follow these steps to add a new container to this repository:

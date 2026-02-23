@@ -22,6 +22,7 @@ jobs:
           - dev-container-node
           - velocity
           - paper
+          - keycloak
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v6

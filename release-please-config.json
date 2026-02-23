@@ -13,6 +13,10 @@
       "paper": {
         "release-type": "simple",
         "package-name": "paper"
+      },
+      "keycloak": {
+        "release-type": "simple",
+        "package-name": "keycloak"
       }
   }
 }

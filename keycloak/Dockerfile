@@ -6,7 +6,7 @@ WORKDIR /opt/keycloak
 
 ADD --chmod=644 "https://github.com/groundsgg/keycloak-minecraft/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft.jar" /opt/keycloak/providers/keycloak-minecraft.jar
 
-RUN /opt/keycloak/bin/kc.sh build --health-enabled=true
+RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true
 
 FROM quay.io/keycloak/keycloak:26.5.4
 

@@ -32,7 +32,7 @@ jobs:
 
       - name: 🐳 Set up Docker Buildx
         if: ${{ env.MATCHES_REF == 'true' }}
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: 🔐 Login to GitHub Container Registry
         if: ${{ env.MATCHES_REF == 'true' }}

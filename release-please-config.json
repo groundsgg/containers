@@ -17,6 +17,10 @@
       "keycloak": {
         "release-type": "simple",
         "package-name": "keycloak"
+      },
+      "minestom-lobby": {
+        "release-type": "simple",
+        "package-name": "minestom-lobby"
       }
   }
 }

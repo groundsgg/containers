@@ -30,6 +30,13 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "fix"
+  - package-ecosystem: "docker"
+    directory: "/minestom-lobby"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "fix"
 
   # Monitor GitHub Actions
   - package-ecosystem: "github-actions"

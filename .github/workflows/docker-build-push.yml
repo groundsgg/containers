@@ -22,6 +22,7 @@ jobs:
           - velocity
           - paper
           - keycloak
+          - minestom-lobby
     env:
       TAG_TYPE: ${{ startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) && 'release' || 'edge' }}
       MATCHES_REF: ${{ github.ref_type != 'tag' || startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) }}
@@ -70,6 +71,7 @@ jobs:
             BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+            GITHUB_USER=${{ github.actor }}
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
 

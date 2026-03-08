@@ -23,6 +23,7 @@ jobs:
           - velocity
           - paper
           - keycloak
+          - minestom-lobby
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
@@ -53,5 +54,6 @@ jobs:
             BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=ci-test
+            GITHUB_USER=${{ github.actor }}
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}

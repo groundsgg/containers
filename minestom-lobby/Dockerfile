@@ -3,7 +3,7 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG MINESTOM_LOBBY_VERSION=0.1.0
+ARG MINESTOM_LOBBY_VERSION=0.1.1
 
 LABEL org.opencontainers.image.title="minestom-lobby" \
       org.opencontainers.image.description="A small Docker image for running a Minestom lobby server." \

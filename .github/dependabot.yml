@@ -38,9 +38,6 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 5
     groups:
-      github-actions-minor-patch:
+      github-actions-all:
         patterns:
           - "*"
-        update-types:
-          - "minor"
-          - "patch"

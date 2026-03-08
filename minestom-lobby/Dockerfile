@@ -1,31 +1,9 @@
-FROM eclipse-temurin:25-jdk AS build
-
-ARG GITHUB_USER
-ARG MINESTOM_LOBBY_REF=main
-
-WORKDIR /workspace
-
-RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
-
-RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
-    --mount=type=cache,target=/root/.gradle/wrapper,sharing=locked \
-    --mount=type=secret,id=github_token,required=true \
-    set -eux; \
-    : "${GITHUB_USER:?GITHUB_USER build arg is required}"; \
-    token="$(cat /run/secrets/github_token)"; \
-    git clone --depth 1 --branch "$MINESTOM_LOBBY_REF" \
-      "https://${GITHUB_USER}:${token}@github.com/groundsgg/minestom-lobby.git" .; \
-    rm -rf .git; \
-    ./gradlew --no-daemon --stacktrace \
-      -Pgithub.user="${GITHUB_USER}" \
-      -Pgithub.token="${token}" \
-      build -x test
-
 FROM eclipse-temurin:25-jre-alpine
 
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
+ARG MINESTOM_LOBBY_VERSION=0.1.0
 
 LABEL org.opencontainers.image.title="minestom-lobby" \
       org.opencontainers.image.description="A small Docker image for running a Minestom lobby server." \
@@ -38,13 +16,17 @@ LABEL org.opencontainers.image.title="minestom-lobby" \
 
 WORKDIR /app
 
-RUN set -eux; \
-    apk add --no-cache netcat-openbsd; \
+RUN --mount=type=secret,id=github_token \
+    set -eux; \
+    apk add --no-cache curl netcat-openbsd; \
+    curl -fsSL \
+      -H "Authorization: Bearer $(cat /run/secrets/github_token)" \
+      -o /app/minestom-lobby.jar \
+      "https://maven.pkg.github.com/groundsgg/minestom-lobby/gg/grounds/minestom-lobby/${MINESTOM_LOBBY_VERSION}/minestom-lobby-${MINESTOM_LOBBY_VERSION}.jar"; \
+    apk del curl; \
     addgroup -S minestom; \
     adduser -S -G minestom -h /app minestom; \
     chown -R minestom:minestom /app
-
-COPY --from=build --chown=minestom:minestom /workspace/build/libs/*.jar /app/minestom-lobby.jar
 
 USER minestom
 

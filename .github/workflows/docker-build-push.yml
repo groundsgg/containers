@@ -71,7 +71,6 @@ jobs:
             BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-            GITHUB_USER=${{ github.actor }}
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
 

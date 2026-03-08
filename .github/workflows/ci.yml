@@ -23,6 +23,7 @@ jobs:
           - velocity
           - paper
           - keycloak
+          - minestom-lobby
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v6

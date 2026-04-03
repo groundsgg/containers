@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.5.6 AS builder
+FROM quay.io/keycloak/keycloak:26.5.7 AS builder
 
 ARG KEYCLOAK_MINECRAFT_VERSION=1.0.0
 
@@ -8,7 +8,7 @@ ADD --chmod=644 "https://github.com/groundsgg/keycloak-minecraft/releases/downlo
 
 RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true
 
-FROM quay.io/keycloak/keycloak:26.5.6
+FROM quay.io/keycloak/keycloak:26.5.7
 
 ARG VCS_REVISION
 ARG BUILD_DATE

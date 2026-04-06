@@ -1,21 +1,32 @@
-FROM quay.io/keycloak/keycloak:26.5.6 AS builder
+FROM alpine:3.23 AS downloader
 
-ARG KEYCLOAK_MINECRAFT_VERSION=1.0.0
+ARG KEYCLOAK_MINECRAFT_VERSION=1.0.1
+
+RUN set -eux; \
+    apk add --no-cache curl; \
+    [ -n "$KEYCLOAK_MINECRAFT_VERSION" ] || { echo "Keycloak Minecraft IDP version must be set" >&2; exit 1; }; \
+    artifact_url="https://github.com/groundsgg/keycloak-minecraft-idp/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft-idp-${KEYCLOAK_MINECRAFT_VERSION}.jar"; \
+    output_file="/tmp/provider.jar"; \
+    curl -fsSL -o "$output_file" "$artifact_url"; \
+    [ -s "$output_file" ] || { echo "Downloaded Keycloak Minecraft IDP provider is empty (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }; \
+    head -c 4 "$output_file" | grep -q '^PK' || { echo "Downloaded Keycloak Minecraft IDP provider is not a valid JAR (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }
+
+FROM quay.io/keycloak/keycloak:26.5.7 AS builder
 
 WORKDIR /opt/keycloak
 
-ADD --chmod=644 "https://github.com/groundsgg/keycloak-minecraft/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft.jar" /opt/keycloak/providers/keycloak-minecraft.jar
+COPY --from=downloader --chmod=644 /tmp/provider.jar /opt/keycloak/providers/keycloak-minecraft-idp.jar
 
 RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true
 
-FROM quay.io/keycloak/keycloak:26.5.6
+FROM quay.io/keycloak/keycloak:26.5.7
 
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
 
 LABEL org.opencontainers.image.title="keycloak" \
-      org.opencontainers.image.description="Custom Keycloak image with keycloak-minecraft extension." \
+      org.opencontainers.image.description="Custom Keycloak image with keycloak-minecraft-idp extension." \
       org.opencontainers.image.vendor="grounds.gg" \
       org.opencontainers.image.authors="grounds.gg <hi@grounds.gg>" \
       org.opencontainers.image.source="https://github.com/groundsgg/containers" \

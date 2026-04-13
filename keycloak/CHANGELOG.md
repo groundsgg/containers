@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/groundsgg/containers/compare/keycloak@v0.1.0...keycloak@v0.2.0) (2026-04-13)
+
+
+### Features
+
+* **keycloak:** enable metrics endpoint ([#72](https://github.com/groundsgg/containers/issues/72)) ([4a03031](https://github.com/groundsgg/containers/commit/4a030313c29c9e3167b0c937203088e93067a760))
+
+
+### Bug Fixes
+
+* bump keycloak/keycloak from 26.5.7 to 26.6.0 in /keycloak ([#70](https://github.com/groundsgg/containers/issues/70)) ([0fe2cbd](https://github.com/groundsgg/containers/commit/0fe2cbd026e536ba42b6bdb3dd02e5a8c3ea931a))
+
 ## [0.1.0](https://github.com/groundsgg/containers/compare/keycloak@v0.0.1...keycloak@v0.1.0) (2026-04-06)
 
 

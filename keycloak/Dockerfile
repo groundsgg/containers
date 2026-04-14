@@ -23,7 +23,7 @@ RUN /opt/keycloak/bin/kc.sh build \
       --metrics-enabled=true \
       --features=user-event-metrics \
       --event-metrics-user-enabled=true \
-      --event-metrics-user-tags=realm,idp
+      --event-metrics-user-tags=realm,idp,clientId
 
 FROM quay.io/keycloak/keycloak:26.6.0
 

@@ -17,7 +17,7 @@ WORKDIR /opt/keycloak
 
 COPY --from=downloader --chmod=644 /tmp/provider.jar /opt/keycloak/providers/keycloak-minecraft-idp.jar
 
-RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true --metrics-enabled=true
+RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true --metrics-enabled=true --features=user-event-metrics
 
 FROM quay.io/keycloak/keycloak:26.6.0
 

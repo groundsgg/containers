@@ -3,5 +3,5 @@
   "dev-container-node": "0.1.7",
   "velocity": "0.6.0",
   "paper": "0.4.0",
-  "keycloak": "0.3.0"
+  "keycloak": "0.4.0"
 }

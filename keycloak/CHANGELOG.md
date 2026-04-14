@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/groundsgg/containers/compare/keycloak@v0.3.0...keycloak@v0.4.0) (2026-04-14)
+
+
+### Features
+
+* **keycloak:** bake user-event-metrics enable flags into build ([#76](https://github.com/groundsgg/containers/issues/76)) ([1796725](https://github.com/groundsgg/containers/commit/17967252a27527e3ea79cb0d79450d1ec22bc139))
+
 ## [0.3.0](https://github.com/groundsgg/containers/compare/keycloak@v0.2.0...keycloak@v0.3.0) (2026-04-14)
 
 

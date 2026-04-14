@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/groundsgg/containers/compare/keycloak@v0.2.0...keycloak@v0.3.0) (2026-04-14)
+
+
+### Features
+
+* **keycloak:** enable metrics endpoint + user-event-metrics ([#74](https://github.com/groundsgg/containers/issues/74)) ([c6ae37f](https://github.com/groundsgg/containers/commit/c6ae37f1947f5d735dd3af222c2d4cbe07ee6d38))
+
 ## [0.2.0](https://github.com/groundsgg/containers/compare/keycloak@v0.1.0...keycloak@v0.2.0) (2026-04-13)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/groundsgg/containers/compare/paper@v0.4.0...paper@v0.4.1) (2026-04-19)
+
+
+### Bug Fixes
+
+* update plugin-agones and paper build ([#81](https://github.com/groundsgg/containers/issues/81)) ([6fcaad8](https://github.com/groundsgg/containers/commit/6fcaad8392d0e1cfa31fe0615e938e3ee34c1ecc))
+
 ## [0.4.0](https://github.com/groundsgg/containers/compare/paper@v0.3.0...paper@v0.4.0) (2026-01-26)
 
 

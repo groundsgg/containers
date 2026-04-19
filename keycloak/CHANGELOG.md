@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/groundsgg/containers/compare/keycloak@v0.4.0...keycloak@v0.4.1) (2026-04-19)
+
+
+### Bug Fixes
+
+* bump keycloak/keycloak from 26.6.0 to 26.6.1 in /keycloak ([#78](https://github.com/groundsgg/containers/issues/78)) ([2b0cb77](https://github.com/groundsgg/containers/commit/2b0cb77e45694f7366d9b006e18e81999eac9dc3))
+
 ## [0.4.0](https://github.com/groundsgg/containers/compare/keycloak@v0.3.0...keycloak@v0.4.0) (2026-04-14)
 
 

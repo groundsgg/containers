@@ -11,7 +11,7 @@ RUN set -eux; \
     [ -s "$output_file" ] || { echo "Downloaded Keycloak Minecraft IDP provider is empty (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }; \
     head -c 4 "$output_file" | grep -q '^PK' || { echo "Downloaded Keycloak Minecraft IDP provider is not a valid JAR (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }
 
-FROM quay.io/keycloak/keycloak:26.6.0 AS builder
+FROM quay.io/keycloak/keycloak:26.6.1 AS builder
 
 WORKDIR /opt/keycloak
 
@@ -25,7 +25,7 @@ RUN /opt/keycloak/bin/kc.sh build \
       --event-metrics-user-enabled=true \
       --event-metrics-user-tags=realm,idp,clientId
 
-FROM quay.io/keycloak/keycloak:26.6.0
+FROM quay.io/keycloak/keycloak:26.6.1
 
 ARG VCS_REVISION
 ARG BUILD_DATE

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/groundsgg/containers/compare/keycloak@v0.4.1...keycloak@v0.4.2) (2026-04-28)
+
+
+### Bug Fixes
+
+* **keycloak:** update keycloak minecraft idp plugin to 1.0.3 ([#86](https://github.com/groundsgg/containers/issues/86)) ([d9a50bc](https://github.com/groundsgg/containers/commit/d9a50bc5a19ec8400664278f8b34db8cae4dfa42))
+
 ## [0.4.1](https://github.com/groundsgg/containers/compare/keycloak@v0.4.0...keycloak@v0.4.1) (2026-04-19)
 
 

@@ -18,7 +18,7 @@ To use a specific extension version:
 
 ```bash
 docker build -f keycloak/Dockerfile \
-  --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.1 \
+  --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.3 \
   -t keycloak-custom .
 ```
 

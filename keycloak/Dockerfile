@@ -1,6 +1,6 @@
 FROM alpine:3.23 AS downloader
 
-ARG KEYCLOAK_MINECRAFT_VERSION=1.0.1
+ARG KEYCLOAK_MINECRAFT_VERSION=1.0.3
 
 RUN set -eux; \
     apk add --no-cache curl; \

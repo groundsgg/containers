@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/groundsgg/containers/compare/paper@v0.4.2...paper@v0.4.3) (2026-04-29)
+
+
+### Bug Fixes
+
+* **paper:** drop -XX:SurvivorRatio=32 (incompatible with JDK 21) ([#88](https://github.com/groundsgg/containers/issues/88)) ([9d60f3b](https://github.com/groundsgg/containers/commit/9d60f3bede9bd57193c37249891fb9ee0f4e2cba))
+
 ## [0.4.2](https://github.com/groundsgg/containers/compare/paper@v0.4.1...paper@v0.4.2) (2026-04-19)
 
 

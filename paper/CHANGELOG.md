@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/groundsgg/containers/compare/paper@v0.4.3...paper@v0.5.0) (2026-05-05)
+
+
+### Features
+
+* **paper:** bundle plugin-grounds-platform v0.1.0 ([#90](https://github.com/groundsgg/containers/issues/90)) ([f0526fd](https://github.com/groundsgg/containers/commit/f0526fd3159c7553c1eeccf65f52f01ab5622e3e))
+
 ## [0.4.3](https://github.com/groundsgg/containers/compare/paper@v0.4.2...paper@v0.4.3) (2026-04-29)
 
 

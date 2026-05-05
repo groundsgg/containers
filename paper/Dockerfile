@@ -7,6 +7,12 @@ ARG PAPER_VERSION=1.21.11
 ARG PAPER_BUILD=130
 ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 ARG PLUGINS="plugin-agones:plugin-agones-paper:0.2.1"
+# Project-aware MOTD + whitelist sync against grounds-forge. Distributed
+# as a public GitHub Release asset rather than GitHub Packages Maven, so
+# we fetch it directly with curl below. When the plugin starts publishing
+# to GHCR Maven this argument can move into the PLUGINS list and the
+# extra curl step can disappear.
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.1.0"
 
 LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.description="A small Docker image for running a Paper Minecraft server." \
@@ -41,6 +47,11 @@ RUN --mount=type=secret,id=github_token \
     mkdir -p /app/plugins; \
     if [ -n "$PLUGINS" ]; then \
       PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
+    fi; \
+    if [ -n "$GROUNDS_PLATFORM_PLUGIN_VERSION" ]; then \
+      grounds_platform_url="https://github.com/groundsgg/plugin-grounds-platform/releases/download/v${GROUNDS_PLATFORM_PLUGIN_VERSION}/plugin-grounds-platform-${GROUNDS_PLATFORM_PLUGIN_VERSION}-all.jar"; \
+      echo "Downloading grounds-platform plugin (${GROUNDS_PLATFORM_PLUGIN_VERSION})..."; \
+      curl -fsSL -o /app/plugins/plugin-grounds-platform.jar "$grounds_platform_url"; \
     fi; \
     rm -f /app/download-plugins.sh; \
     apk del curl jq; \

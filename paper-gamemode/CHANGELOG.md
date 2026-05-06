@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/groundsgg/containers/compare/paper-gamemode@v0.3.0...paper-gamemode@v0.3.1) (2026-05-06)
+
+
+### Bug Fixes
+
+* **paper,paper-gamemode:** authenticate against Mojang directly ([#107](https://github.com/groundsgg/containers/issues/107)) ([82290fa](https://github.com/groundsgg/containers/commit/82290fa796ae7815f1c81a3a4764d103cb2cb839))
+
 ## [0.3.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v0.2.0...paper-gamemode@v0.3.0) (2026-05-06)
 
 

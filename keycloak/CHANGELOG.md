@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/groundsgg/containers/compare/keycloak@v0.4.2...keycloak@v0.5.0) (2026-05-06)
+
+
+### Features
+
+* **paper:** release without bundled plugin-agones-paper ([41b6d66](https://github.com/groundsgg/containers/commit/41b6d66e14f837b11486a709c93f5d8126327de6))
+
 ## [0.4.2](https://github.com/groundsgg/containers/compare/keycloak@v0.4.1...keycloak@v0.4.2) (2026-04-28)
 
 

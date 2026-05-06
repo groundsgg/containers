@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/groundsgg/containers/compare/paper@v0.6.0...paper@v0.7.0) (2026-05-06)
+
+
+### Features
+
+* **paper,paper-gamemode:** bump plugin-grounds-platform to 0.1.1 ([#98](https://github.com/groundsgg/containers/issues/98)) ([fc58f29](https://github.com/groundsgg/containers/commit/fc58f29e7997724b57e030783dc755daf0e764b4))
+
 ## [0.6.0](https://github.com/groundsgg/containers/compare/paper@v0.5.0...paper@v0.6.0) (2026-05-06)
 
 

@@ -6,7 +6,15 @@ ARG IMAGE_VERSION
 ARG PAPER_VERSION=1.21.11
 ARG PAPER_BUILD=130
 ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
-ARG PLUGINS="plugin-agones:plugin-agones-paper:0.2.1"
+# Empty by default. The paper baseImage is used exclusively by
+# `type: plugin-paper` workloads, which forge renders as plain
+# Deployments — never as Agones GameServers. The Agones SDK sidecar
+# is only injected on GameServer-managed pods, so plugin-agones-paper
+# in this image would be permanently inert (no sidecar to talk to,
+# ever) and just adds boot-time noise on every pod. If a future
+# `type: gamemode` baseImage based on Paper lands, plugin-agones-paper
+# belongs in that image — not this one.
+ARG PLUGINS=""
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing

@@ -14,6 +14,12 @@
         "release-type": "simple",
         "package-name": "paper"
       },
+      "paper-gamemode": {
+        "release-type": "simple",
+        "package-name": "paper-gamemode",
+        "bump-minor-pre-major": true,
+        "release-as": "0.1.0"
+      },
       "keycloak": {
         "release-type": "simple",
         "package-name": "keycloak"

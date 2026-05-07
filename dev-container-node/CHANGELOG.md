@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.7...dev-container-node@v0.2.0) (2026-05-07)
+
+
+### Features
+
+* **paper:** release without bundled plugin-agones-paper ([41b6d66](https://github.com/groundsgg/containers/commit/41b6d66e14f837b11486a709c93f5d8126327de6))
+
+
+### Bug Fixes
+
+* bump node in /dev-container-node ([#111](https://github.com/groundsgg/containers/issues/111)) ([ae4a5c1](https://github.com/groundsgg/containers/commit/ae4a5c151225b625cdfd8c62254900a348a1d0ab))
+* bump node in /dev-container-node ([#53](https://github.com/groundsgg/containers/issues/53)) ([ae48cd3](https://github.com/groundsgg/containers/commit/ae48cd3da7585fe6f70b732d8214057e6a5154bc))
+* bump node in /dev-container-node ([#67](https://github.com/groundsgg/containers/issues/67)) ([9c06d9c](https://github.com/groundsgg/containers/commit/9c06d9cb78588f1c14f10a62b5229fb8226fec36))
+
 ## [0.1.7](https://github.com/groundsgg/containers/compare/dev-container-node@v0.1.6...dev-container-node@v0.1.7) (2026-01-26)
 
 

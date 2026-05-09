@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/groundsgg/containers/compare/paper@v0.8.2...paper@v0.8.3) (2026-05-09)
+
+
+### Bug Fixes
+
+* update platform plugin ([#122](https://github.com/groundsgg/containers/issues/122)) ([58b5291](https://github.com/groundsgg/containers/commit/58b5291cc46ba6aa203c0f9a266f92c76cbeca60))
+
 ## [0.8.2](https://github.com/groundsgg/containers/compare/paper@v0.8.1...paper@v0.8.2) (2026-05-09)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/groundsgg/containers/compare/paper@v0.8.1...paper@v0.8.2) (2026-05-09)
+
+
+### Bug Fixes
+
+* **paper:** bump grounds platform plugin to 0.1.3 ([#116](https://github.com/groundsgg/containers/issues/116)) ([70e1a1e](https://github.com/groundsgg/containers/commit/70e1a1e04bc478fa5579dcaf7c7ed9b5e78b3a3d))
+
 ## [0.8.1](https://github.com/groundsgg/containers/compare/paper@v0.8.0...paper@v0.8.1) (2026-05-06)
 
 

@@ -3,8 +3,8 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG PAPER_VERSION=1.21.11
-ARG PAPER_BUILD=130
+ARG PAPER_VERSION=26.1.2
+ARG PAPER_BUILD=63
 ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 # Bundled by default. paper-gamemode is consumed by `type: gamemode`
 # workloads (forge renders these as Agones Fleets), so the SDK sidecar
@@ -18,7 +18,7 @@ ARG PLUGINS="plugin-agones:plugin-agones-paper:0.4.0"
 # we fetch it directly with curl below. When the plugin starts publishing
 # to GHCR Maven this argument can move into the PLUGINS list and the
 # extra curl step can disappear.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.1.3"
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.2.1"
 
 LABEL org.opencontainers.image.title="paper-gamemode" \
       org.opencontainers.image.description="Paper Minecraft server bundled with plugin-agones-paper, intended for type=gamemode workloads (Agones Fleet)." \

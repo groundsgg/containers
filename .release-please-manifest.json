@@ -3,6 +3,6 @@
   "dev-container-node": "0.1.7",
   "velocity": "0.6.0",
   "paper": "0.8.3",
-  "paper-gamemode": "0.3.1",
+  "paper-gamemode": "1.0.0",
   "keycloak": "0.4.2"
 }

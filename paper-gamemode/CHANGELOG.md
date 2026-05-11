@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v0.3.1...paper-gamemode@v1.0.0) (2026-05-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* update Paper containers to 26.1.2 ([#124](https://github.com/groundsgg/containers/issues/124))
+
+### Features
+
+* update Paper containers to 26.1.2 ([#124](https://github.com/groundsgg/containers/issues/124)) ([059f6fe](https://github.com/groundsgg/containers/commit/059f6fe02120a7254dfbfb3705af0fa895d928d2))
+
+
+### Bug Fixes
+
+* **paper:** bump grounds platform plugin to 0.1.3 ([#116](https://github.com/groundsgg/containers/issues/116)) ([70e1a1e](https://github.com/groundsgg/containers/commit/70e1a1e04bc478fa5579dcaf7c7ed9b5e78b3a3d))
+
 ## [0.3.1](https://github.com/groundsgg/containers/compare/paper-gamemode@v0.3.0...paper-gamemode@v0.3.1) (2026-05-06)
 
 

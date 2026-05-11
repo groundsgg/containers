@@ -18,7 +18,7 @@ ARG PLUGINS="plugin-agones:plugin-agones-paper:0.4.0"
 # we fetch it directly with curl below. When the plugin starts publishing
 # to GHCR Maven this argument can move into the PLUGINS list and the
 # extra curl step can disappear.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.1.4"
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.2.1"
 
 LABEL org.opencontainers.image.title="paper-gamemode" \
       org.opencontainers.image.description="Paper Minecraft server bundled with plugin-agones-paper, intended for type=gamemode workloads (Agones Fleet)." \

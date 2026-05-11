@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/groundsgg/containers/compare/paper@v0.8.3...paper@v1.0.0) (2026-05-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* update Paper containers to 26.1.2 ([#124](https://github.com/groundsgg/containers/issues/124))
+
+### Features
+
+* update Paper containers to 26.1.2 ([#124](https://github.com/groundsgg/containers/issues/124)) ([059f6fe](https://github.com/groundsgg/containers/commit/059f6fe02120a7254dfbfb3705af0fa895d928d2))
+
 ## [0.8.3](https://github.com/groundsgg/containers/compare/paper@v0.8.2...paper@v0.8.3) (2026-05-09)
 
 

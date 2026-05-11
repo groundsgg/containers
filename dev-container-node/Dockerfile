@@ -15,13 +15,9 @@ LABEL org.opencontainers.image.title="dev-container-node" \
       org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.version="$IMAGE_VERSION"
 
-# Disable download prompt for pnpm
-ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-
-# Install system dependencies and enable corepack for pnpm
+# Install system dependencies and pnpm
 RUN apk add --no-cache wget curl nano bash && \
-    corepack enable && \
-    corepack prepare pnpm@10.26 --activate
+    npm install --global --no-fund --no-update-notifier pnpm@10.26.2
 
 # Set working directory
 WORKDIR /app

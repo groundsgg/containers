@@ -12,7 +12,7 @@ ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/ground
 # socket to talk to. The 0.4.0 release stays inert when the env var
 # isn't set, which is fine for any pod that somehow ends up using
 # this image without an Agones wrapper.
-ARG PLUGINS="plugin-agones:plugin-agones-paper:0.4.0"
+ARG PLUGINS="plugin-agones:plugin-agones-paper:0.5.0"
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing

@@ -9,10 +9,10 @@ ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/ground
 # Bundled by default. paper-gamemode is consumed by `type: gamemode`
 # workloads (forge renders these as Agones Fleets), so the SDK sidecar
 # IS injected on every pod and plugin-agones-paper has a real local
-# socket to talk to. The 0.4.0 release stays inert when the env var
+# socket to talk to. The bundled plugin stays inert when the env var
 # isn't set, which is fine for any pod that somehow ends up using
 # this image without an Agones wrapper.
-ARG PLUGINS="plugin-agones:plugin-agones-paper:0.4.0"
+ARG PLUGINS="plugin-agones:plugin-agones-paper:0.5.0"
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing

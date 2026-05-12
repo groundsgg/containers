@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/groundsgg/containers/compare/velocity@v0.6.0...velocity@v0.7.0) (2026-05-12)
+
+
+### Features
+
+* **paper:** release without bundled plugin-agones-paper ([41b6d66](https://github.com/groundsgg/containers/commit/41b6d66e14f837b11486a709c93f5d8126327de6))
+
 ## [0.6.0](https://github.com/groundsgg/containers/compare/velocity@v0.5.0...velocity@v0.6.0) (2026-01-04)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.0.0...paper-gamemode@v1.1.0) (2026-05-12)
+
+
+### Features
+
+* update agones plugin ([#130](https://github.com/groundsgg/containers/issues/130)) ([6af7e4e](https://github.com/groundsgg/containers/commit/6af7e4ef0253e72bb189e061fc17a1fd69fd04b8))
+
 ## [1.0.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v0.3.1...paper-gamemode@v1.0.0) (2026-05-11)
 
 

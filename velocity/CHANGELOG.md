@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/groundsgg/containers/compare/velocity@v0.7.0...velocity@v0.8.0) (2026-05-12)
+
+
+### Features
+
+* update agones plugin ([#130](https://github.com/groundsgg/containers/issues/130)) ([6af7e4e](https://github.com/groundsgg/containers/commit/6af7e4ef0253e72bb189e061fc17a1fd69fd04b8))
+
 ## [0.7.0](https://github.com/groundsgg/containers/compare/velocity@v0.6.0...velocity@v0.7.0) (2026-05-12)
 
 

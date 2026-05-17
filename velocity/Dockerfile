@@ -25,7 +25,7 @@ COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 RUN --mount=type=secret,id=github_token \
     set -eux; \
-    apk add --no-cache curl netcat-openbsd; \
+    apk add --no-cache curl jq netcat-openbsd; \
     if [ -z "$VELOCITY_BUILD" ]; then \
       echo "Velocity build must be set" >&2; \
       exit 1; \
@@ -36,33 +36,17 @@ RUN --mount=type=secret,id=github_token \
     mkdir -p /opt/grounds; \
     grounds_runtime_url="https://github.com/groundsgg/plugin-grounds-runtime/releases/download/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/plugin-grounds-runtime-velocity-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
     curl -fsSL -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
-    printf '%s\n' \
-      '{' \
-      '  "schemaVersion": 1,' \
-      '  "runtime": {' \
-      '    "id": "plugin-grounds-runtime-velocity",' \
-      '    "name": "plugin-grounds-runtime",' \
-      "    \"version\": \"${GROUNDS_RUNTIME_PLUGIN_VERSION}\"," \
-      '    "platform": "velocity"' \
-      '  },' \
-      '  "libraries": [' \
-      '    {"group": "org.jetbrains.kotlin", "name": "kotlin-stdlib", "version": "2.3.0"},' \
-      '    {"group": "org.jetbrains.kotlin", "name": "kotlin-stdlib-jdk8", "version": "2.3.0"},' \
-      '    {"group": "org.jetbrains.kotlinx", "name": "kotlinx-coroutines-core", "version": "1.10.2"},' \
-      '    {"group": "com.google.protobuf", "name": "protobuf-java", "version": "4.34.1"},' \
-      '    {"group": "io.grpc", "name": "grpc-api", "version": "1.81.0"},' \
-      '    {"group": "io.grpc", "name": "grpc-core", "version": "1.81.0"},' \
-      '    {"group": "io.grpc", "name": "grpc-context", "version": "1.81.0"},' \
-      '    {"group": "io.grpc", "name": "grpc-stub", "version": "1.81.0"},' \
-      '    {"group": "io.grpc", "name": "grpc-protobuf", "version": "1.81.0"},' \
-      '    {"group": "io.grpc", "name": "grpc-netty-shaded", "version": "1.81.0"}' \
-      '  ]' \
-      '}' > /opt/grounds/runtime-manifest.json; \
+    grounds_runtime_catalog_url="https://raw.githubusercontent.com/groundsgg/plugin-grounds-runtime/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/common/src/main/resources/grounds-runtime-libraries.json"; \
+    curl -fsSL -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; \
+    jq \
+      --arg version "$GROUNDS_RUNTIME_PLUGIN_VERSION" \
+      'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-velocity", name: "plugin-grounds-runtime", version: $version, platform: "velocity"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \
+      /tmp/grounds-runtime-libraries.json > /opt/grounds/runtime-manifest.json; \
     if [ -n "$PLUGINS" ]; then \
       PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
     fi; \
-    rm -f /app/download-plugins.sh; \
-    apk del curl; \
+    rm -f /app/download-plugins.sh /tmp/grounds-runtime-libraries.json; \
+    apk del curl jq; \
     addgroup -S velocity; \
     adduser -S -G velocity -h /app velocity; \
     chown -R velocity:velocity /app

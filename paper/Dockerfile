@@ -15,6 +15,7 @@ ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/ground
 # `type: gamemode` baseImage based on Paper lands, plugin-agones-paper
 # belongs in that image — not this one.
 ARG PLUGINS=""
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.0"
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing
@@ -29,7 +30,8 @@ LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.source="https://github.com/groundsgg/containers" \
       org.opencontainers.image.revision="$VCS_REVISION" \
       org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.version="$IMAGE_VERSION"
+      org.opencontainers.image.version="$IMAGE_VERSION" \
+      gg.grounds.runtime.manifest.path="/opt/grounds/runtime-manifest.json"
 
 WORKDIR /app
 
@@ -53,6 +55,31 @@ RUN --mount=type=secret,id=github_token \
       -H "User-Agent: ${PAPER_DOWNLOAD_USER_AGENT}" \
       "$download_url"; \
     mkdir -p /app/plugins; \
+    mkdir -p /opt/grounds; \
+    grounds_runtime_url="https://github.com/groundsgg/plugin-grounds-runtime/releases/download/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/plugin-grounds-runtime-paper-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
+    curl -fsSL -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
+    printf '%s\n' \
+      '{' \
+      '  "schemaVersion": 1,' \
+      '  "runtime": {' \
+      '    "id": "plugin-grounds-runtime-paper",' \
+      '    "name": "plugin-grounds-runtime",' \
+      "    \"version\": \"${GROUNDS_RUNTIME_PLUGIN_VERSION}\"," \
+      '    "platform": "paper"' \
+      '  },' \
+      '  "libraries": [' \
+      '    {"group": "org.jetbrains.kotlin", "name": "kotlin-stdlib", "version": "2.3.0"},' \
+      '    {"group": "org.jetbrains.kotlin", "name": "kotlin-stdlib-jdk8", "version": "2.3.0"},' \
+      '    {"group": "org.jetbrains.kotlinx", "name": "kotlinx-coroutines-core", "version": "1.10.2"},' \
+      '    {"group": "com.google.protobuf", "name": "protobuf-java", "version": "4.34.1"},' \
+      '    {"group": "io.grpc", "name": "grpc-api", "version": "1.81.0"},' \
+      '    {"group": "io.grpc", "name": "grpc-core", "version": "1.81.0"},' \
+      '    {"group": "io.grpc", "name": "grpc-context", "version": "1.81.0"},' \
+      '    {"group": "io.grpc", "name": "grpc-stub", "version": "1.81.0"},' \
+      '    {"group": "io.grpc", "name": "grpc-protobuf", "version": "1.81.0"},' \
+      '    {"group": "io.grpc", "name": "grpc-netty-shaded", "version": "1.81.0"}' \
+      '  ]' \
+      '}' > /opt/grounds/runtime-manifest.json; \
     if [ -n "$PLUGINS" ]; then \
       PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
     fi; \

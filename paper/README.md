@@ -32,8 +32,8 @@ echo "$GITHUB_TOKEN" | docker build -f paper/Dockerfile --secret id=github_token
 
 Plugins are downloaded from the GitHub Packages Maven Repository (`maven.pkg.github.com/groundsgg`) during the Docker build process. They are installed in the `/app/plugins` directory and will be automatically loaded when the server starts.
 
-`plugin-grounds-runtime` is downloaded from GitHub Releases using `GROUNDS_RUNTIME_PLUGIN_VERSION` and is installed as `/app/plugins/plugin-grounds-runtime.jar`.
-The runtime manifest is generated from the `grounds-runtime-libraries.json` catalog in the matching `plugin-grounds-runtime` Git tag.
+`plugin-grounds-runtime` is downloaded from the `plugin-grounds-runtime` GitHub Packages Maven repository using `GROUNDS_RUNTIME_PLUGIN_VERSION` and is installed as `/app/plugins/plugin-grounds-runtime.jar`.
+The runtime manifest is generated from the `grounds-runtime-catalog` artifact with the same version.
 
 The plugin format follows Maven coordinates:
 - **Repository**: GitHub repository name (e.g., `plugin-server-discovery`)

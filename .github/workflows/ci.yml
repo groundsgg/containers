@@ -54,6 +54,5 @@ jobs:
             BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=ci-test
-            SKIP_GROUNDS_RUNTIME_DOWNLOAD=true
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}

@@ -22,7 +22,6 @@ ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.0"
 # to GHCR Maven this argument can move into the PLUGINS list and the
 # extra curl step can disappear.
 ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.2.1"
-ARG SKIP_GROUNDS_RUNTIME_DOWNLOAD="false"
 
 LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.description="A small Docker image for running a Paper Minecraft server." \
@@ -37,7 +36,6 @@ LABEL org.opencontainers.image.title="paper" \
 WORKDIR /app
 
 COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
-COPY runtime/grounds-runtime-libraries.json /opt/grounds/runtime-catalog-fallback.json
 
 RUN --mount=type=secret,id=github_token \
     set -eux; \
@@ -58,24 +56,19 @@ RUN --mount=type=secret,id=github_token \
       "$download_url"; \
     mkdir -p /app/plugins; \
     mkdir -p /opt/grounds; \
-    if [ "$SKIP_GROUNDS_RUNTIME_DOWNLOAD" = "true" ]; then \
-      echo "Skipped grounds runtime download (version=${GROUNDS_RUNTIME_PLUGIN_VERSION})" >&2; \
-      cp /opt/grounds/runtime-catalog-fallback.json /tmp/grounds-runtime-libraries.json; \
-    else \
-      grounds_runtime_url="https://github.com/groundsgg/plugin-grounds-runtime/releases/download/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/plugin-grounds-runtime-paper-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
-      curl -fsSL -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
-      grounds_runtime_catalog_url="https://raw.githubusercontent.com/groundsgg/plugin-grounds-runtime/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/common/src/main/resources/grounds-runtime-libraries.json"; \
-      if ! curl -fsSL -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; then \
-        echo "Falling back to bundled runtime catalog (version=${GROUNDS_RUNTIME_PLUGIN_VERSION})" >&2; \
-        cp /opt/grounds/runtime-catalog-fallback.json /tmp/grounds-runtime-libraries.json; \
-      fi; \
-    fi; \
+    github_token="$(cat /run/secrets/github_token)"; \
+    grounds_runtime_repository_url="https://maven.pkg.github.com/groundsgg/plugin-grounds-runtime/gg/grounds"; \
+    grounds_runtime_artifact_id="plugin-grounds-runtime-paper"; \
+    grounds_runtime_url="${grounds_runtime_repository_url}/${grounds_runtime_artifact_id}/${GROUNDS_RUNTIME_PLUGIN_VERSION}/${grounds_runtime_artifact_id}-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
+    grounds_runtime_catalog_url="${grounds_runtime_repository_url}/grounds-runtime-catalog/${GROUNDS_RUNTIME_PLUGIN_VERSION}/grounds-runtime-catalog-${GROUNDS_RUNTIME_PLUGIN_VERSION}.json"; \
+    curl -fsSL -H "Authorization: Bearer ${github_token}" -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
+    curl -fsSL -H "Authorization: Bearer ${github_token}" -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; \
     jq \
-      --arg version "${GROUNDS_RUNTIME_PLUGIN_VERSION:-ci-test}" \
+      --arg version "$GROUNDS_RUNTIME_PLUGIN_VERSION" \
       'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-paper", name: "plugin-grounds-runtime", version: $version, platform: "paper"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \
       /tmp/grounds-runtime-libraries.json > /opt/grounds/runtime-manifest.json; \
     if [ -n "$PLUGINS" ]; then \
-      PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
+      PLUGINS="$PLUGINS" GITHUB_TOKEN="$github_token" /app/download-plugins.sh; \
     fi; \
     if [ -n "$GROUNDS_PLATFORM_PLUGIN_VERSION" ]; then \
       grounds_platform_url="https://github.com/groundsgg/plugin-grounds-platform/releases/download/v${GROUNDS_PLATFORM_PLUGIN_VERSION}/plugin-grounds-platform-${GROUNDS_PLATFORM_PLUGIN_VERSION}-all.jar"; \

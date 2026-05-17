@@ -22,6 +22,7 @@ WORKDIR /app
 
 COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
 COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
+COPY runtime/grounds-runtime-libraries.json /opt/grounds/runtime-catalog-fallback.json
 
 RUN --mount=type=secret,id=github_token \
     set -eux; \
@@ -37,7 +38,10 @@ RUN --mount=type=secret,id=github_token \
     grounds_runtime_url="https://github.com/groundsgg/plugin-grounds-runtime/releases/download/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/plugin-grounds-runtime-velocity-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
     curl -fsSL -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
     grounds_runtime_catalog_url="https://raw.githubusercontent.com/groundsgg/plugin-grounds-runtime/v${GROUNDS_RUNTIME_PLUGIN_VERSION}/common/src/main/resources/grounds-runtime-libraries.json"; \
-    curl -fsSL -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; \
+    if ! curl -fsSL -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; then \
+      echo "Falling back to bundled runtime catalog (version=${GROUNDS_RUNTIME_PLUGIN_VERSION})" >&2; \
+      cp /opt/grounds/runtime-catalog-fallback.json /tmp/grounds-runtime-libraries.json; \
+    fi; \
     jq \
       --arg version "$GROUNDS_RUNTIME_PLUGIN_VERSION" \
       'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-velocity", name: "plugin-grounds-runtime", version: $version, platform: "velocity"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \

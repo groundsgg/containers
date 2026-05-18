@@ -15,7 +15,7 @@ ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/ground
 # `type: gamemode` baseImage based on Paper lands, plugin-agones-paper
 # belongs in that image — not this one.
 ARG PLUGINS=""
-ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.0"
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing

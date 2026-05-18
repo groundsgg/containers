@@ -6,7 +6,7 @@ ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=3.4.0-SNAPSHOT
 ARG VELOCITY_BUILD=558
 ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.0"
-ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.0"
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \

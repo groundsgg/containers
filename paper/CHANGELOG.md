@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/groundsgg/containers/compare/paper@v1.0.0...paper@v1.1.0) (2026-05-19)
+
+
+### Features
+
+* install grounds runtime from platform packages ([#133](https://github.com/groundsgg/containers/issues/133)) ([0117ee9](https://github.com/groundsgg/containers/commit/0117ee906b61422ccada1e64d98d7c52915df0a7))
+
 ## [1.0.0](https://github.com/groundsgg/containers/compare/paper@v0.8.3...paper@v1.0.0) (2026-05-11)
 
 

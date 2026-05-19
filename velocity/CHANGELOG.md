@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/groundsgg/containers/compare/velocity@v0.8.0...velocity@v0.9.0) (2026-05-19)
+
+
+### Features
+
+* install grounds runtime from platform packages ([#133](https://github.com/groundsgg/containers/issues/133)) ([0117ee9](https://github.com/groundsgg/containers/commit/0117ee906b61422ccada1e64d98d7c52915df0a7))
+
 ## [0.8.0](https://github.com/groundsgg/containers/compare/velocity@v0.7.0...velocity@v0.8.0) (2026-05-12)
 
 

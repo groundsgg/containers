@@ -15,6 +15,7 @@ ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/ground
 # `type: gamemode` baseImage based on Paper lands, plugin-agones-paper
 # belongs in that image — not this one.
 ARG PLUGINS=""
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # Project-aware MOTD + whitelist sync against grounds-forge. Distributed
 # as a public GitHub Release asset rather than GitHub Packages Maven, so
 # we fetch it directly with curl below. When the plugin starts publishing
@@ -29,7 +30,8 @@ LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.source="https://github.com/groundsgg/containers" \
       org.opencontainers.image.revision="$VCS_REVISION" \
       org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.version="$IMAGE_VERSION"
+      org.opencontainers.image.version="$IMAGE_VERSION" \
+      gg.grounds.runtime.manifest.path="/opt/grounds/runtime-manifest.json"
 
 WORKDIR /app
 
@@ -53,15 +55,27 @@ RUN --mount=type=secret,id=github_token \
       -H "User-Agent: ${PAPER_DOWNLOAD_USER_AGENT}" \
       "$download_url"; \
     mkdir -p /app/plugins; \
+    mkdir -p /opt/grounds; \
+    github_token="$(cat /run/secrets/github_token)"; \
+    grounds_runtime_repository_url="https://maven.pkg.github.com/groundsgg/plugin-grounds-runtime/gg/grounds"; \
+    grounds_runtime_artifact_id="plugin-grounds-runtime-paper"; \
+    grounds_runtime_url="${grounds_runtime_repository_url}/${grounds_runtime_artifact_id}/${GROUNDS_RUNTIME_PLUGIN_VERSION}/${grounds_runtime_artifact_id}-${GROUNDS_RUNTIME_PLUGIN_VERSION}.jar"; \
+    grounds_runtime_catalog_url="${grounds_runtime_repository_url}/grounds-runtime-catalog/${GROUNDS_RUNTIME_PLUGIN_VERSION}/grounds-runtime-catalog-${GROUNDS_RUNTIME_PLUGIN_VERSION}.json"; \
+    curl -fsSL -H "Authorization: Bearer ${github_token}" -o /app/plugins/plugin-grounds-runtime.jar "$grounds_runtime_url"; \
+    curl -fsSL -H "Authorization: Bearer ${github_token}" -o /tmp/grounds-runtime-libraries.json "$grounds_runtime_catalog_url"; \
+    jq \
+      --arg version "$GROUNDS_RUNTIME_PLUGIN_VERSION" \
+      'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-paper", name: "plugin-grounds-runtime", version: $version, platform: "paper"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \
+      /tmp/grounds-runtime-libraries.json > /opt/grounds/runtime-manifest.json; \
     if [ -n "$PLUGINS" ]; then \
-      PLUGINS="$PLUGINS" GITHUB_TOKEN="$(cat /run/secrets/github_token)" /app/download-plugins.sh; \
+      PLUGINS="$PLUGINS" GITHUB_TOKEN="$github_token" /app/download-plugins.sh; \
     fi; \
     if [ -n "$GROUNDS_PLATFORM_PLUGIN_VERSION" ]; then \
       grounds_platform_url="https://github.com/groundsgg/plugin-grounds-platform/releases/download/v${GROUNDS_PLATFORM_PLUGIN_VERSION}/plugin-grounds-platform-${GROUNDS_PLATFORM_PLUGIN_VERSION}-all.jar"; \
       echo "Downloading grounds-platform plugin (${GROUNDS_PLATFORM_PLUGIN_VERSION})..."; \
       curl -fsSL -o /app/plugins/plugin-grounds-platform.jar "$grounds_platform_url"; \
     fi; \
-    rm -f /app/download-plugins.sh; \
+    rm -f /app/download-plugins.sh /tmp/grounds-runtime-libraries.json; \
     apk del curl jq; \
     addgroup -S paper; \
     adduser -S -G paper -h /app paper; \

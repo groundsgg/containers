@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/groundsgg/containers/compare/keycloak@v0.5.1...keycloak@v0.5.2) (2026-06-03)
+
+
+### Bug Fixes
+
+* **keycloak:** update minecraft login plugin ([#143](https://github.com/groundsgg/containers/issues/143)) ([0e73ebb](https://github.com/groundsgg/containers/commit/0e73ebb5c9998cb0e58f2257829d7e74570fceee))
+
 ## [0.5.1](https://github.com/groundsgg/containers/compare/keycloak@v0.5.0...keycloak@v0.5.1) (2026-05-21)
 
 

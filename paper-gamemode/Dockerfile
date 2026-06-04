@@ -65,7 +65,7 @@ RUN --mount=type=secret,id=github_token \
     adduser -S -G paper -h /app paper; \
     chown -R paper:paper /app
 
-COPY --chown=paper:paper --chmod=755 paper/scripts/start.sh /app/start.sh
+COPY --chown=paper:paper --chmod=755 paper-gamemode/scripts/start.sh /app/start.sh
 COPY --chown=paper:paper paper/config/paper-global.yml /app/config/paper-global.yml
 COPY --chown=paper:paper paper/config/server.properties /app/server.properties
 

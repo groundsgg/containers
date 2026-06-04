@@ -3,8 +3,9 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG VELOCITY_VERSION=3.4.0-SNAPSHOT
-ARG VELOCITY_BUILD=558
+ARG VELOCITY_VERSION=3.5.0-SNAPSHOT
+ARG VELOCITY_BUILD=601
+ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 
@@ -30,8 +31,13 @@ RUN --mount=type=secret,id=github_token \
       echo "Velocity build must be set" >&2; \
       exit 1; \
     fi; \
+    builds_api_url="https://fill.papermc.io/v3/projects/velocity/versions/${VELOCITY_VERSION}/builds"; \
+    builds_response="$(curl -fsSL -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" "$builds_api_url")"; \
+    download_url="$(echo "$builds_response" | jq -r --argjson build "${VELOCITY_BUILD}" 'first(.[] | select(.id == $build or .number == $build) | .downloads["server:default"].url) // empty')"; \
+    [ -n "$download_url" ] || { echo "Failed to resolve Velocity download URL (version=${VELOCITY_VERSION}, build=${VELOCITY_BUILD})" >&2; exit 1; }; \
     curl -fsSL -o /app/velocity.jar \
-      "https://api.papermc.io/v2/projects/velocity/versions/${VELOCITY_VERSION}/builds/${VELOCITY_BUILD}/downloads/velocity-${VELOCITY_VERSION}-${VELOCITY_BUILD}.jar"; \
+      -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" \
+      "$download_url"; \
     mkdir -p /app/plugins; \
     mkdir -p /opt/grounds; \
     github_token="$(cat /run/secrets/github_token)"; \

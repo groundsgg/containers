@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.1.0...paper-gamemode@v1.2.0) (2026-06-04)
+
+
+### Features
+
+* update platform plugin to 0.3.0 ([#136](https://github.com/groundsgg/containers/issues/136)) ([cf98d1c](https://github.com/groundsgg/containers/commit/cf98d1cf7c67ec8ded4fe40df444bc433e4c58c9))
+
+
+### Bug Fixes
+
+* **paper-gamemode:** wire Velocity modern-forwarding secret from env ([#149](https://github.com/groundsgg/containers/issues/149)) ([cda4482](https://github.com/groundsgg/containers/commit/cda448297ae065c7ed01fa9acdc3099924cd158e))
+* **paper-gamemode:** wire Velocity modern-forwarding secret from env ([#150](https://github.com/groundsgg/containers/issues/150)) ([08a65c5](https://github.com/groundsgg/containers/commit/08a65c51c2cdd20246862c3d376bc4b4026160b0))
+
 ## [1.1.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.0.0...paper-gamemode@v1.1.0) (2026-05-12)
 
 

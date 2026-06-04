@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.0...paper-gamemode@v1.2.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* **paper-gamemode:** bake the gamemode start.sh (Velocity forwarding) into the image ([#151](https://github.com/groundsgg/containers/issues/151)) ([6db864b](https://github.com/groundsgg/containers/commit/6db864ba018a892e2d516e6a6ece0dded73d1c2b))
+
 ## [1.2.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.1.0...paper-gamemode@v1.2.0) (2026-06-04)
 
 

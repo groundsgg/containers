@@ -3,6 +3,11 @@ set -eu
 
 CUSTOM_SYSTEM_PROPERTIES="-Dcom.mojang.eula.agree=true"
 
+# World type: flat by default → near-instant world-gen (fast spawn on the dev
+# platform; the empty default world is fine for gamemode dev). Override per-app
+# via the LEVEL_TYPE env (e.g. LEVEL_TYPE=normal). Mirrors paper/scripts/start.sh.
+sed -i "s/^level-type=.*/level-type=${LEVEL_TYPE:-flat}/" /app/server.properties
+
 # Behind a Velocity proxy (modern player-info forwarding): when the shared
 # secret is injected, enable Velocity forwarding + write the secret into
 # paper-global.yml, and hand player auth to the proxy (offline backend). The

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/groundsgg/containers/compare/velocity@v0.9.1...velocity@v0.9.2) (2026-06-04)
+
+
+### Bug Fixes
+
+* **velocity:** bump Velocity to 3.5.0-SNAPSHOT (601) for MC 26.1.2 support ([#153](https://github.com/groundsgg/containers/issues/153)) ([322ff06](https://github.com/groundsgg/containers/commit/322ff06472e44306c41e5754641eabed0bcb89c5))
+
 ## [0.9.1](https://github.com/groundsgg/containers/compare/velocity@v0.9.0...velocity@v0.9.1) (2026-06-04)
 
 

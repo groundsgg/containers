@@ -8,6 +8,10 @@ ARG VELOCITY_BUILD=601
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
+# grounds-platform velocity build: proxy-side whitelist gate + MOTD. 0.4.0 is
+# the first release with a velocity module (Paper bakes the same version's
+# paper artifact). Gated on the arg so it can be disabled.
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.4.0"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \
@@ -53,6 +57,11 @@ RUN --mount=type=secret,id=github_token \
       /tmp/grounds-runtime-libraries.json > /opt/grounds/runtime-manifest.json; \
     if [ -n "$PLUGINS" ]; then \
       PLUGINS="$PLUGINS" GITHUB_TOKEN="$github_token" /app/download-plugins.sh; \
+    fi; \
+    if [ -n "$GROUNDS_PLATFORM_PLUGIN_VERSION" ]; then \
+      grounds_platform_url="https://github.com/groundsgg/plugin-grounds-platform/releases/download/v${GROUNDS_PLATFORM_PLUGIN_VERSION}/plugin-grounds-platform-velocity-${GROUNDS_PLATFORM_PLUGIN_VERSION}-all.jar"; \
+      echo "Downloading grounds-platform velocity plugin (${GROUNDS_PLATFORM_PLUGIN_VERSION})..."; \
+      curl -fsSL -o /app/plugins/plugin-grounds-platform.jar "$grounds_platform_url"; \
     fi; \
     rm -f /app/download-plugins.sh /tmp/grounds-runtime-libraries.json; \
     apk del curl jq; \

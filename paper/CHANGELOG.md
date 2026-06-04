@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/groundsgg/containers/compare/paper@v1.2.0...paper@v1.3.0) (2026-06-04)
+
+
+### Features
+
+* **paper:** default world to flat for near-instant spawn ([#145](https://github.com/groundsgg/containers/issues/145)) ([bc0ad41](https://github.com/groundsgg/containers/commit/bc0ad416bf5c32b873042641157845d84b25df0d))
+
 ## [1.2.0](https://github.com/groundsgg/containers/compare/paper@v1.1.0...paper@v1.2.0) (2026-05-19)
 
 

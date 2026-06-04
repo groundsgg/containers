@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/groundsgg/containers/compare/velocity@v0.9.0...velocity@v0.9.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* **velocity:** materialize forwarding secret file at boot ([#147](https://github.com/groundsgg/containers/issues/147)) ([207798d](https://github.com/groundsgg/containers/commit/207798dcdec119d0abd9da8453689b438b2dd31d))
+
 ## [0.9.0](https://github.com/groundsgg/containers/compare/velocity@v0.8.0...velocity@v0.9.0) (2026-05-19)
 
 

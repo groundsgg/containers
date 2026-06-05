@@ -4,7 +4,7 @@ ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG PAPER_VERSION=26.1.2
-ARG PAPER_BUILD=63
+ARG PAPER_BUILD=69
 ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 # Empty by default. The paper baseImage is used exclusively by
 # `type: plugin-paper` workloads, which forge renders as plain

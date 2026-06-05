@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.2...paper-gamemode@v1.2.3) (2026-06-05)
+
+
+### Bug Fixes
+
+* update paper version ([#163](https://github.com/groundsgg/containers/issues/163)) ([c00477e](https://github.com/groundsgg/containers/commit/c00477e4d25a63e0816fcda03f3c7b1a18ab6585))
+
 ## [1.2.2](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.1...paper-gamemode@v1.2.2) (2026-06-05)
 
 

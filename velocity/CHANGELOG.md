@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.10.0](https://github.com/groundsgg/containers/compare/velocity@v0.9.2...velocity@v0.10.0) (2026-06-05)
+
+
+### Features
+
+* **velocity:** bake grounds-platform velocity plugin (whitelist + MOTD) ([#155](https://github.com/groundsgg/containers/issues/155)) ([4fb0a49](https://github.com/groundsgg/containers/commit/4fb0a49bc095568396975fa52835415a3c634c5b))
+
+
+### Bug Fixes
+
+* update platform plugin to 0.5.0 ([#160](https://github.com/groundsgg/containers/issues/160)) ([3defd01](https://github.com/groundsgg/containers/commit/3defd01e5edcee58b7b6cf766109b47808dc5053))
+* **velocity:** bump grounds-platform plugin to 0.4.1 ([#158](https://github.com/groundsgg/containers/issues/158)) ([c4a25fd](https://github.com/groundsgg/containers/commit/c4a25fdc6507a9bd88cac8bde0e5bd9707f8777f))
+* **velocity:** bump plugin-agones-velocity to 0.5.1 ([#157](https://github.com/groundsgg/containers/issues/157)) ([5657d37](https://github.com/groundsgg/containers/commit/5657d374ad8349ba3dfd4ca9f7ad5f7c90c8c079))
+
 ## [0.9.2](https://github.com/groundsgg/containers/compare/velocity@v0.9.1...velocity@v0.9.2) (2026-06-04)
 
 

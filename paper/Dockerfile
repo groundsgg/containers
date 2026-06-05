@@ -21,7 +21,7 @@ ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # we fetch it directly with curl below. When the plugin starts publishing
 # to GHCR Maven this argument can move into the PLUGINS list and the
 # extra curl step can disappear.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.3.0"
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.5.0"
 
 LABEL org.opencontainers.image.title="paper" \
       org.opencontainers.image.description="A small Docker image for running a Paper Minecraft server." \

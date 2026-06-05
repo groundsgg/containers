@@ -8,10 +8,9 @@ ARG VELOCITY_BUILD=601
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.1"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
-# grounds-platform velocity build: proxy-side whitelist gate + MOTD. 0.4.0 is
-# the first release with a velocity module (Paper bakes the same version's
-# paper artifact). Gated on the arg so it can be disabled.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.4.1"
+# grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
+# platform command execution. Gated on the arg so it can be disabled.
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.5.0"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \

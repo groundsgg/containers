@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/groundsgg/containers/compare/paper@v1.3.1...paper@v1.3.2) (2026-06-05)
+
+
+### Bug Fixes
+
+* update paper version ([#163](https://github.com/groundsgg/containers/issues/163)) ([c00477e](https://github.com/groundsgg/containers/commit/c00477e4d25a63e0816fcda03f3c7b1a18ab6585))
+
 ## [1.3.1](https://github.com/groundsgg/containers/compare/paper@v1.3.0...paper@v1.3.1) (2026-06-05)
 
 

@@ -6,7 +6,7 @@ ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=3.5.0-SNAPSHOT
 ARG VELOCITY_BUILD=601
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.1"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate + MOTD. 0.4.0 is
 # the first release with a velocity module (Paper bakes the same version's

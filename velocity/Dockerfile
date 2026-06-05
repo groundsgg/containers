@@ -11,7 +11,7 @@ ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate + MOTD. 0.4.0 is
 # the first release with a velocity module (Paper bakes the same version's
 # paper artifact). Gated on the arg so it can be disabled.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.4.0"
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.4.1"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \

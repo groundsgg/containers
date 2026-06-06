@@ -14,7 +14,7 @@ permissions:
 jobs:
   docker-build:
     name: 🐳 Build ${{ matrix.container }}
-    runs-on: ubuntu-latest
+    runs-on: arc-dind
     strategy:
       fail-fast: false
       matrix:

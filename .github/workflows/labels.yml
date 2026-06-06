@@ -18,7 +18,7 @@ permissions:
 jobs:
   sync-labels:
     name: 🏷️ Sync repository labels
-    runs-on: ubuntu-latest
+    runs-on: arc-linux
     steps:
       - name: 📦 Download labels.yml
         run: |

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.3](https://github.com/groundsgg/containers/compare/keycloak@v0.5.2...keycloak@v0.5.3) (2026-06-10)
+
+
+### Bug Fixes
+
+* bump alpine from 3.23 to 3.24 in /keycloak ([#168](https://github.com/groundsgg/containers/issues/168)) ([8a4e5cc](https://github.com/groundsgg/containers/commit/8a4e5cc53cf97b41583c7167a244bf840780dfde))
+* bump keycloak/keycloak from 26.6.2 to 26.6.3 in /keycloak ([#159](https://github.com/groundsgg/containers/issues/159)) ([ac5aaf0](https://github.com/groundsgg/containers/commit/ac5aaf0d26faadb43ec1087093eb28403ae82ecb))
+
 ## [0.5.2](https://github.com/groundsgg/containers/compare/keycloak@v0.5.1...keycloak@v0.5.2) (2026-06-03)
 
 

@@ -21,10 +21,6 @@
       "keycloak": {
         "release-type": "simple",
         "package-name": "keycloak"
-      },
-      "sentry": {
-        "release-type": "simple",
-        "package-name": "sentry"
       }
   }
 }

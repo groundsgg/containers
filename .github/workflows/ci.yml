@@ -24,7 +24,6 @@ jobs:
           - paper
           - paper-gamemode
           - keycloak
-          - sentry
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v7

@@ -1,4 +1,4 @@
-FROM node:26.1.0-alpine
+FROM node:26.5.0-alpine
 
 # Build arguments for metadata
 ARG VCS_REVISION

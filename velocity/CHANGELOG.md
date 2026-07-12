@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.11.0](https://github.com/groundsgg/containers/compare/velocity@v0.10.0...velocity@v0.11.0) (2026-07-12)
+
+
+### Features
+
+* **velocity:** platform plugin 0.6.0 (server icon) ([#179](https://github.com/groundsgg/containers/issues/179)) ([541ea18](https://github.com/groundsgg/containers/commit/541ea18589358ed1d5e55acd5b026f1334950d0b))
+
+
+### Bug Fixes
+
+* **velocity:** upgrade the proxy to 3.5.1 for Minecraft 26.2 ([#181](https://github.com/groundsgg/containers/issues/181)) ([da311f0](https://github.com/groundsgg/containers/commit/da311f08c7f1ab13b067dfe20737d81d2fbafccb))
+
 ## [0.10.0](https://github.com/groundsgg/containers/compare/velocity@v0.9.2...velocity@v0.10.0) (2026-06-05)
 
 

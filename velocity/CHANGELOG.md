@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/groundsgg/containers/compare/velocity@v0.12.0...velocity@v0.12.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **velocity:** plugin-agones 0.7.1 — the proxy can find a pushed gamemode ([#184](https://github.com/groundsgg/containers/issues/184)) ([d293a1f](https://github.com/groundsgg/containers/commit/d293a1fd6012f52fe92bfe3948c232c9a699e201))
+
 ## [0.12.0](https://github.com/groundsgg/containers/compare/velocity@v0.11.0...velocity@v0.12.0) (2026-07-13)
 
 

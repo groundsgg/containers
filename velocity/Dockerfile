@@ -6,7 +6,7 @@ ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=3.5.1
 ARG VELOCITY_BUILD=615
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.1,plugin-permissions:plugin-permissions-velocity:0.3.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.5.1,plugin-permissions:plugin-permissions-velocity:0.4.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

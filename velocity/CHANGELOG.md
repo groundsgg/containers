@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/groundsgg/containers/compare/velocity@v0.11.0...velocity@v0.12.0) (2026-07-13)
+
+
+### Features
+
+* **velocity:** bake plugin-permissions into the proxy image ([#182](https://github.com/groundsgg/containers/issues/182)) ([d21d688](https://github.com/groundsgg/containers/commit/d21d688925f86400ee9a29734b3cb531c68dd095))
+
 ## [0.11.0](https://github.com/groundsgg/containers/compare/velocity@v0.10.0...velocity@v0.11.0) (2026-07-12)
 
 

@@ -48,7 +48,8 @@ grep -Fq "kc.spi-events-listener-permissions-events-nats-url =  nats://nats:4222
 grep -Fq "kc.spi-events-listener-permissions-events-realm =  grounds" <<<"$config"
 grep -Fq "kc.spi-events-listener-permissions-events-subject =  minecraft-identity.changed" <<<"$config"
 
-cat >"${tmp_dir}/grounds-realm.json" <<'EOF'
+mkdir -p "${tmp_dir}/import"
+cat >"${tmp_dir}/import/grounds-realm.json" <<'EOF'
 {
   "realm": "grounds",
   "enabled": true,
@@ -97,10 +98,9 @@ if ! docker exec "$postgres_container" pg_isready -U keycloak -d keycloak >/dev/
   exit 1
 fi
 
-keycloak_container="$(docker run -d \
+keycloak_container="$(docker create \
   --memory 768m \
   --network "$network" \
-  -v "${tmp_dir}/grounds-realm.json:/opt/keycloak/data/import/grounds-realm.json:ro" \
   -e KC_DB=postgres \
   -e KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak \
   -e KC_DB_USERNAME=keycloak \
@@ -111,6 +111,8 @@ keycloak_container="$(docker run -d \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM=grounds \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT=minecraft-identity.changed \
   "$image" start --optimized --import-realm)"
+docker cp "${tmp_dir}/import" "${keycloak_container}:/opt/keycloak/data/"
+docker start "$keycloak_container" >/dev/null
 
 for _ in {1..90}; do
   if ! docker inspect -f '{{.State.Running}}' "$keycloak_container" 2>/dev/null | grep -Fxq true; then

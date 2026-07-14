@@ -56,3 +56,17 @@ jobs:
             IMAGE_VERSION=ci-test
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔨 Build Keycloak smoke-test image
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
+        run: |
+          docker buildx build \
+            --file keycloak/Dockerfile \
+            --load \
+            --platform linux/amd64 \
+            --tag grounds-keycloak:ci-test \
+            .
+
+      - name: 🔍 Smoke test Keycloak providers
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
+        run: keycloak/scripts/smoke-test.sh grounds-keycloak:ci-test

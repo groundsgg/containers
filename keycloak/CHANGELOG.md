@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0](https://github.com/groundsgg/containers/compare/keycloak@v0.5.4...keycloak@v0.6.0) (2026-07-14)
+
+
+### Features
+
+* **keycloak:** install permissions event listener ([a4bd315](https://github.com/groundsgg/containers/commit/a4bd315e2cfddc95fd6ab45a51dab1da1cf64a18))
+
+
+### Bug Fixes
+
+* bump keycloak/keycloak from 26.6.4 to 26.7.0 in /keycloak ([#178](https://github.com/groundsgg/containers/issues/178)) ([c44ca3e](https://github.com/groundsgg/containers/commit/c44ca3e5938587c2390dff84390b04c53117b635))
+
 ## [0.5.4](https://github.com/groundsgg/containers/compare/keycloak@v0.5.3...keycloak@v0.5.4) (2026-06-29)
 
 

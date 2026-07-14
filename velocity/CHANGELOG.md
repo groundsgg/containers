@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.2](https://github.com/groundsgg/containers/compare/velocity@v0.12.1...velocity@v0.12.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* **velocity:** bump plugin-permissions to 0.5.0 so permission checks work ([#186](https://github.com/groundsgg/containers/issues/186)) ([b84a0f9](https://github.com/groundsgg/containers/commit/b84a0f940f57515ee8aeab5be7deed3755c572c9))
+
 ## [0.12.1](https://github.com/groundsgg/containers/compare/velocity@v0.12.0...velocity@v0.12.1) (2026-07-13)
 
 

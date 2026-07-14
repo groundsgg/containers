@@ -57,14 +57,16 @@ cat >"${tmp_dir}/grounds-realm.json" <<'EOF'
 EOF
 
 docker network create "$network" >/dev/null
-postgres_container="$(docker run -d --rm \
+postgres_container="$(docker run -d \
+  --memory 256m \
   --network "$network" \
   --network-alias postgres \
   -e POSTGRES_DB=keycloak \
   -e POSTGRES_USER=keycloak \
   -e POSTGRES_PASSWORD=keycloak \
   postgres:17-alpine)"
-nats_container="$(docker run -d --rm \
+nats_container="$(docker run -d \
+  --memory 128m \
   --network "$network" \
   --network-alias nats \
   nats:2.11-alpine -js)"
@@ -77,7 +79,8 @@ for _ in {1..30}; do
 done
 if ! docker logs "$nats_container" 2>&1 | grep -Fq "Server is ready"; then
   docker logs "$nats_container" >&2 || true
-  echo "Keycloak provider runtime verification failed (reason=nats_not_ready)" >&2
+  container_state="$(docker inspect -f 'running={{.State.Running}}, exitCode={{.State.ExitCode}}, oomKilled={{.State.OOMKilled}}, error={{.State.Error}}' "$nats_container" 2>/dev/null || echo 'unavailable')"
+  echo "Keycloak provider runtime verification failed (reason=nats_not_ready, ${container_state})" >&2
   exit 1
 fi
 
@@ -88,11 +91,14 @@ for _ in {1..30}; do
   sleep 1
 done
 if ! docker exec "$postgres_container" pg_isready -U keycloak -d keycloak >/dev/null 2>&1; then
-  echo "Keycloak provider runtime verification failed (reason=postgres_not_ready)" >&2
+  docker logs "$postgres_container" >&2 || true
+  container_state="$(docker inspect -f 'running={{.State.Running}}, exitCode={{.State.ExitCode}}, oomKilled={{.State.OOMKilled}}, error={{.State.Error}}' "$postgres_container" 2>/dev/null || echo 'unavailable')"
+  echo "Keycloak provider runtime verification failed (reason=postgres_not_ready, ${container_state})" >&2
   exit 1
 fi
 
-keycloak_container="$(docker run -d --rm \
+keycloak_container="$(docker run -d \
+  --memory 768m \
   --network "$network" \
   -v "${tmp_dir}/grounds-realm.json:/opt/keycloak/data/import/grounds-realm.json:ro" \
   -e KC_DB=postgres \
@@ -109,7 +115,8 @@ keycloak_container="$(docker run -d --rm \
 for _ in {1..90}; do
   if ! docker inspect -f '{{.State.Running}}' "$keycloak_container" 2>/dev/null | grep -Fxq true; then
     docker logs "$keycloak_container" >&2 || true
-    echo "Keycloak provider runtime verification failed (reason=keycloak_exited)" >&2
+    container_state="$(docker inspect -f 'exitCode={{.State.ExitCode}}, oomKilled={{.State.OOMKilled}}, error={{.State.Error}}' "$keycloak_container" 2>/dev/null || echo 'unavailable')"
+    echo "Keycloak provider runtime verification failed (reason=keycloak_exited, ${container_state})" >&2
     exit 1
   fi
   if docker exec "$keycloak_container" bash -c \

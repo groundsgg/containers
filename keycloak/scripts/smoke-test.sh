@@ -86,12 +86,12 @@ if ! docker logs "$nats_container" 2>&1 | grep -Fq "Server is ready"; then
 fi
 
 for _ in {1..30}; do
-  if docker exec "$postgres_container" pg_isready -U keycloak -d keycloak >/dev/null 2>&1; then
+  if [[ "$(docker exec "$postgres_container" psql -U keycloak -d keycloak -tAc 'SELECT 1' 2>/dev/null)" == "1" ]]; then
     break
   fi
   sleep 1
 done
-if ! docker exec "$postgres_container" pg_isready -U keycloak -d keycloak >/dev/null 2>&1; then
+if [[ "$(docker exec "$postgres_container" psql -U keycloak -d keycloak -tAc 'SELECT 1' 2>/dev/null)" != "1" ]]; then
   docker logs "$postgres_container" >&2 || true
   container_state="$(docker inspect -f 'running={{.State.Running}}, exitCode={{.State.ExitCode}}, oomKilled={{.State.OOMKilled}}, error={{.State.Error}}' "$postgres_container" 2>/dev/null || echo 'unavailable')"
   echo "Keycloak provider runtime verification failed (reason=postgres_not_ready, ${container_state})" >&2

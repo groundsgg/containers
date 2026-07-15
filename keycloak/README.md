@@ -54,10 +54,14 @@ The permissions event listener also requires:
 | Variable                                                    | Required | Default                      | Description                            |
 |-------------------------------------------------------------|----------|------------------------------|----------------------------------------|
 | `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL`        | Yes      | -                            | NATS server URL with JetStream enabled |
-| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`           | Yes      | -                            | Accepted Keycloak realm ID or name     |
+| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`           | Yes      | -                            | Comma-separated accepted realm IDs     |
 | `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT`         | No       | `minecraft-identity.changed` | NATS subject for invalidation events   |
 
 Enable the `permissions-events` event listener in the target realm. The configured subject must be retained by a JetStream stream before Keycloak publishes identity invalidations.
+
+### Permissions listener 0.2 migration
+
+Version 0.2.0 matches events by Keycloak realm ID only and no longer accepts realm names. Before deploying this image, replace any realm names in `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM` with their corresponding realm IDs. Multiple realm IDs can be provided as a comma-separated list.
 
 ## Dependency Updates
 

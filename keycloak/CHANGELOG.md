@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/groundsgg/containers/compare/keycloak@v0.6.0...keycloak@v0.7.0) (2026-07-15)
+
+
+### Features
+
+* **keycloak:** update permissions listener to 0.2.0 ([#193](https://github.com/groundsgg/containers/issues/193)) ([021ed24](https://github.com/groundsgg/containers/commit/021ed2449a94adc78c385a7c80270e01a9b79db7))
+
+
+### Bug Fixes
+
+* **keycloak:** wait for initialized smoke database ([#190](https://github.com/groundsgg/containers/issues/190)) ([3c1725a](https://github.com/groundsgg/containers/commit/3c1725aa2c5ab169714d6a8b2bcfe2bb0ed4ce32))
+
 ## [0.6.0](https://github.com/groundsgg/containers/compare/keycloak@v0.5.4...keycloak@v0.6.0) (2026-07-14)
 
 

@@ -19,7 +19,7 @@ Provider versions are independent build arguments:
 | Provider | Build argument | Default version |
 | --- | --- | --- |
 | Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION` | `1.1.2` |
-| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.1.0` |
+| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.0` |
 
 The listener asset is also pinned by `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256`. Override the version and checksum together when updating it.
 
@@ -28,8 +28,8 @@ To override either provider version:
 ```bash
 docker build -f keycloak/Dockerfile \
   --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.3 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.1.0 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=31a34dbae8a337b2e6cff2629dd399a9b0f338287da6e3199a2338e877f2b446 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.0 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=a4199070744638b0c593d4e16a5e2a920cb76439e677894349a9d879ae97ea34 \
   -t keycloak-custom .
 ```
 

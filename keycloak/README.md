@@ -19,7 +19,7 @@ Provider versions are independent build arguments:
 | Provider | Build argument | Default version |
 | --- | --- | --- |
 | Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION` | `1.1.2` |
-| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.1.0` |
+| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.0` |
 
 The listener asset is also pinned by `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256`. Override the version and checksum together when updating it.
 
@@ -28,8 +28,8 @@ To override either provider version:
 ```bash
 docker build -f keycloak/Dockerfile \
   --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.3 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.1.0 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=31a34dbae8a337b2e6cff2629dd399a9b0f338287da6e3199a2338e877f2b446 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.0 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=a4199070744638b0c593d4e16a5e2a920cb76439e677894349a9d879ae97ea34 \
   -t keycloak-custom .
 ```
 
@@ -54,10 +54,14 @@ The permissions event listener also requires:
 | Variable                                                    | Required | Default                      | Description                            |
 |-------------------------------------------------------------|----------|------------------------------|----------------------------------------|
 | `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL`        | Yes      | -                            | NATS server URL with JetStream enabled |
-| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`           | Yes      | -                            | Accepted Keycloak realm ID or name     |
+| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`           | Yes      | -                            | Comma-separated accepted realm IDs     |
 | `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT`         | No       | `minecraft-identity.changed` | NATS subject for invalidation events   |
 
 Enable the `permissions-events` event listener in the target realm. The configured subject must be retained by a JetStream stream before Keycloak publishes identity invalidations.
+
+### Permissions listener 0.2 migration
+
+Version 0.2.0 matches events by Keycloak realm ID only and no longer accepts realm names. Before deploying this image, replace any realm names in `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM` with their corresponding realm IDs. Multiple realm IDs can be provided as a comma-separated list.
 
 ## Dependency Updates
 

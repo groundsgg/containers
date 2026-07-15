@@ -39,18 +39,19 @@ fi
 
 config="$(docker run --rm \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL="nats://nats:4222" \
-  -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM="grounds" \
+  -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM="grounds-realm-id" \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT="minecraft-identity.changed" \
   "$image" show-config)"
 
 grep -Fq "kc.provider.file.keycloak-permissions-event-listener.jar.last-modified" <<<"$config"
 grep -Fq "kc.spi-events-listener-permissions-events-nats-url =  nats://nats:4222" <<<"$config"
-grep -Fq "kc.spi-events-listener-permissions-events-realm =  grounds" <<<"$config"
+grep -Fq "kc.spi-events-listener-permissions-events-realm =  grounds-realm-id" <<<"$config"
 grep -Fq "kc.spi-events-listener-permissions-events-subject =  minecraft-identity.changed" <<<"$config"
 
 mkdir -p "${tmp_dir}/import"
 cat >"${tmp_dir}/import/grounds-realm.json" <<'EOF'
 {
+  "id": "grounds-realm-id",
   "realm": "grounds",
   "enabled": true,
   "eventsListeners": ["jboss-logging", "permissions-events"]
@@ -108,7 +109,7 @@ keycloak_container="$(docker create \
   -e KC_HOSTNAME_STRICT=false \
   -e KC_HTTP_ENABLED=true \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL=nats://nats:4222 \
-  -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM=grounds \
+  -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM=grounds-realm-id \
   -e KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT=minecraft-identity.changed \
   "$image" start --optimized --import-realm)"
 docker cp "${tmp_dir}/import" "${keycloak_container}:/opt/keycloak/data/"

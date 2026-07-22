@@ -14,7 +14,7 @@ permissions:
 jobs:
   docker-build:
     name: 🐳 Build ${{ matrix.container }}
-    runs-on: arc-dind
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       fail-fast: false
       matrix:

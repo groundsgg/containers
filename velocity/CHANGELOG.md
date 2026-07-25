@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.3](https://github.com/groundsgg/containers/compare/velocity@v0.12.2...velocity@v0.12.3) (2026-07-25)
+
+
+### Bug Fixes
+
+* **velocity:** bake plugin-agones 0.7.2 so /agones counts the network ([#195](https://github.com/groundsgg/containers/issues/195)) ([4107794](https://github.com/groundsgg/containers/commit/4107794e968ccab57b9e18d298cf9f0fc4758ff8))
+* **velocity:** secure build secret and update permissions plugin ([#197](https://github.com/groundsgg/containers/issues/197)) ([b495464](https://github.com/groundsgg/containers/commit/b495464d4376064647ab82af58edd08e806e00f7))
+
 ## [0.12.2](https://github.com/groundsgg/containers/compare/velocity@v0.12.1...velocity@v0.12.2) (2026-07-14)
 
 

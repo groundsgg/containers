@@ -32,7 +32,7 @@ COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
 COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 RUN --mount=type=secret,id=github_token \
-    set -eux; \
+    set -eu; \
     apk add --no-cache curl jq netcat-openbsd; \
     if [ -z "$VELOCITY_BUILD" ]; then \
       echo "Velocity build must be set" >&2; \

@@ -39,3 +39,8 @@ The plugin format follows Maven coordinates:
 - **Repository**: GitHub repository name (e.g., `plugin-server-discovery`)
 - **Artifact ID**: Maven artifact ID (e.g., `plugin-server-discovery-velocity`)
 - **Version**: Plugin version (e.g., `0.1.0`)
+
+The default image includes the REST-only permissions plugin. In Kubernetes,
+Forge and the `grounds-velocity` chart provide `PERMISSIONS_SERVICE_URL` and
+`PERMISSIONS_TOKEN_FILE` together with the projected workload token. Partial
+configuration is rejected by the plugin during startup.

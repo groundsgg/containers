@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/groundsgg/containers/compare/velocity@v0.12.3...velocity@v0.13.0) (2026-07-27)
+
+
+### Features
+
+* **velocity:** bundle permissions REST client ([#198](https://github.com/groundsgg/containers/issues/198)) ([74bf138](https://github.com/groundsgg/containers/commit/74bf1380cc8a94d8b57969e1bda105494c51eb78))
+
 ## [0.12.3](https://github.com/groundsgg/containers/compare/velocity@v0.12.2...velocity@v0.12.3) (2026-07-25)
 
 

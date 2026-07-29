@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/groundsgg/containers/compare/keycloak@v0.7.0...keycloak@v0.7.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* **keycloak:** update permissions listener to 0.2.1 ([#200](https://github.com/groundsgg/containers/issues/200)) ([6155706](https://github.com/groundsgg/containers/commit/61557067bdd0bdca9a3a64c71327186b8ddf78cb))
+
 ## [0.7.0](https://github.com/groundsgg/containers/compare/keycloak@v0.6.0...keycloak@v0.7.0) (2026-07-15)
 
 

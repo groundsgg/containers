@@ -11,10 +11,15 @@ permissions:
   pull-requests: read
   packages: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   docker-build:
     name: 🐳 Build ${{ matrix.container }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:

@@ -18,7 +18,7 @@ permissions:
 jobs:
   sync-labels:
     name: 🏷️ Sync repository labels
-    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: 📦 Download labels.yml
         run: |

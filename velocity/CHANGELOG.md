@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.1](https://github.com/groundsgg/containers/compare/velocity@v0.14.0...velocity@v0.14.1) (2026-08-02)
+
+
+### Bug Fixes
+
+* **velocity:** bake plugin-agones 0.8.1 — no transfers out of running rounds ([#206](https://github.com/groundsgg/containers/issues/206)) ([511faa5](https://github.com/groundsgg/containers/commit/511faa559c407feb1797b9dc0636325ac4e2b947))
+
 ## [0.14.0](https://github.com/groundsgg/containers/compare/velocity@v0.13.0...velocity@v0.14.0) (2026-08-02)
 
 

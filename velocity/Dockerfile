@@ -10,7 +10,7 @@ ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/gro
 # Before it, the command read Velocity's playersConnected — the players on the
 # proxy running the command — so with two proxies in front of one lobby each of
 # them confidently reported half of it.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.8.0,plugin-permissions:plugin-permissions-velocity:0.7.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.8.1,plugin-permissions:plugin-permissions-velocity:0.7.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

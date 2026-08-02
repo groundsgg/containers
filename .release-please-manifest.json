@@ -2,7 +2,7 @@
   ".": "0.0.1",
   "dev-container-node": "0.2.1",
   "paper-gamemode": "1.2.3",
-  "velocity": "0.14.1",
+  "velocity": "0.14.2",
   "paper": "1.3.2",
   "keycloak": "0.7.1"
 }

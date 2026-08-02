@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/groundsgg/containers/compare/velocity@v0.13.0...velocity@v0.14.0) (2026-08-02)
+
+
+### Features
+
+* **velocity:** bake plugin-agones 0.8.0 ([#204](https://github.com/groundsgg/containers/issues/204)) ([3ea2552](https://github.com/groundsgg/containers/commit/3ea25523155bec891f6e9c7cad19c1e02f1270fe))
+
 ## [0.13.0](https://github.com/groundsgg/containers/compare/velocity@v0.12.3...velocity@v0.13.0) (2026-07-27)
 
 

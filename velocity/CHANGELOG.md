@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.2](https://github.com/groundsgg/containers/compare/velocity@v0.14.1...velocity@v0.14.2) (2026-08-02)
+
+
+### Bug Fixes
+
+* **velocity:** stop baking plugin-permissions into the image ([#208](https://github.com/groundsgg/containers/issues/208)) ([d77147f](https://github.com/groundsgg/containers/commit/d77147f062cc23f0d4f6410e12ea47d2813b6ea5))
+
 ## [0.14.1](https://github.com/groundsgg/containers/compare/velocity@v0.14.0...velocity@v0.14.1) (2026-08-02)
 
 

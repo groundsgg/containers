@@ -10,7 +10,13 @@ ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/gro
 # Before it, the command read Velocity's playersConnected — the players on the
 # proxy running the command — so with two proxies in front of one lobby each of
 # them confidently reported half of it.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.8.1,plugin-permissions:plugin-permissions-velocity:0.7.0"
+# plugin-permissions is deliberately NOT baked. The chart fetches it per
+# deployment, and two jars with the same plugin id made Velocity log
+# "Refusing to load plugin ... since we already loaded a plugin with the same
+# ID" on every single boot. Which of the two won came down to the filename
+# sorting ahead of the other, which is not a thing to leave a permission
+# system resting on.
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:0.8.1"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.
@@ -29,12 +35,11 @@ LABEL org.opencontainers.image.title="velocity" \
 WORKDIR /app
 
 COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
-COPY --chmod=755 velocity/scripts/verify-permissions-rest-jar.sh /app/verify-permissions-rest-jar.sh
 COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
 
 RUN --mount=type=secret,id=github_token \
     set -eu; \
-    apk add --no-cache curl jq netcat-openbsd unzip; \
+    apk add --no-cache curl jq netcat-openbsd; \
     if [ -z "$VELOCITY_BUILD" ]; then \
       echo "Velocity build must be set" >&2; \
       exit 1; \
@@ -62,14 +67,13 @@ RUN --mount=type=secret,id=github_token \
     if [ -n "$PLUGINS" ]; then \
       PLUGINS="$PLUGINS" GITHUB_TOKEN="$github_token" /app/download-plugins.sh; \
     fi; \
-    /app/verify-permissions-rest-jar.sh /app/plugins/plugin-permissions-velocity.jar; \
     if [ -n "$GROUNDS_PLATFORM_PLUGIN_VERSION" ]; then \
       grounds_platform_url="https://github.com/groundsgg/plugin-grounds-platform/releases/download/v${GROUNDS_PLATFORM_PLUGIN_VERSION}/plugin-grounds-platform-velocity-${GROUNDS_PLATFORM_PLUGIN_VERSION}-all.jar"; \
       echo "Downloading grounds-platform velocity plugin (${GROUNDS_PLATFORM_PLUGIN_VERSION})..."; \
       curl -fsSL -o /app/plugins/plugin-grounds-platform.jar "$grounds_platform_url"; \
     fi; \
-    rm -f /app/download-plugins.sh /app/verify-permissions-rest-jar.sh /tmp/grounds-runtime-libraries.json; \
-    apk del curl jq unzip; \
+    rm -f /app/download-plugins.sh /tmp/grounds-runtime-libraries.json; \
+    apk del curl jq; \
     addgroup -S velocity; \
     adduser -S -G velocity -h /app velocity; \
     chown -R velocity:velocity /app

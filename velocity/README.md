@@ -44,3 +44,27 @@ The default image includes the REST-only permissions plugin. In Kubernetes,
 Forge and the `grounds-velocity` chart provide `PERMISSIONS_SERVICE_URL` and
 `PERMISSIONS_TOKEN_FILE` together with the projected workload token. Partial
 configuration is rejected by the plugin during startup.
+
+## Runtime environment variables
+
+| Variable | Effect |
+|----------|--------|
+| `VELOCITY_FORWARDING_SECRET` | Written to `/app/forwarding.secret` at boot, byte-for-byte. Modern player-info forwarding needs the same secret on the backends. |
+| `VELOCITY_ONLINE_MODE` | Set to the literal `false` to turn off Mojang authentication. Anything else (unset, empty, `true`, `False`) leaves the baked config alone. |
+
+### `VELOCITY_ONLINE_MODE=false` — load testing only
+
+Bot swarms have no Mojang account, so an online-mode proxy rejects them during
+login and no load ever reaches the backends. This switch turns off `online-mode`
+and `force-key-authentication` in `/app/velocity.toml` at boot, which is what
+lets a load generator connect.
+
+It also means **anyone can join as any username, including staff names**. A
+proxy started this way must not be reachable from the public internet — give the
+load-test environment its own proxy release and its own hostname, and leave the
+player-facing one untouched. The container prints three `WARNING` lines at boot
+so a proxy that has it on by accident is visible in the logs.
+
+If the sed cannot find `online-mode` in the config (an upstream rename), the
+container exits instead of quietly starting in online mode — a bot swarm being
+rejected looks like a network fault and is expensive to debug.

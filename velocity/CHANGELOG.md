@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/groundsgg/containers/compare/velocity@v0.14.2...velocity@v0.15.0) (2026-08-02)
+
+
+### Features
+
+* **velocity:** add opt-in VELOCITY_ONLINE_MODE=false for load testing ([#210](https://github.com/groundsgg/containers/issues/210)) ([7c05ea4](https://github.com/groundsgg/containers/commit/7c05ea415600c57146728d60d2b928e3f5fe162b))
+
 ## [0.14.2](https://github.com/groundsgg/containers/compare/velocity@v0.14.1...velocity@v0.14.2) (2026-08-02)
 
 

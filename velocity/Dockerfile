@@ -24,7 +24,7 @@ ARG PLUGINS="plugin-agones:plugin-agones-velocity:1.0.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.
-ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.6.0"
+ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.6.1"
 
 LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.description="A small Docker image for running a Velocity proxy." \

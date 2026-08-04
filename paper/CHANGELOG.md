@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/groundsgg/containers/compare/paper@v1.3.2...paper@v1.3.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* pin grounds platform plugin 0.6.1 ([#216](https://github.com/groundsgg/containers/issues/216)) ([bd9cb91](https://github.com/groundsgg/containers/commit/bd9cb91dfbfd32083eb4414770a6e9d499dc6443))
+
 ## [1.3.2](https://github.com/groundsgg/containers/compare/paper@v1.3.1...paper@v1.3.2) (2026-06-05)
 
 

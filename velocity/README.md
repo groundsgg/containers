@@ -51,6 +51,7 @@ configuration is rejected by the plugin during startup.
 |----------|--------|
 | `VELOCITY_FORWARDING_SECRET` | Written to `/app/forwarding.secret` at boot, byte-for-byte. Modern player-info forwarding needs the same secret on the backends. |
 | `VELOCITY_ONLINE_MODE` | Set to the literal `false` to turn off Mojang authentication. Anything else (unset, empty, `true`, `False`) leaves the baked config alone. |
+| `VELOCITY_LOGIN_RATELIMIT` | Milliseconds between logins from one source IP (`0` disables). Unset keeps Velocity's 3000. Load testing only. |
 
 ### `VELOCITY_ONLINE_MODE=false` — load testing only
 
@@ -68,3 +69,20 @@ so a proxy that has it on by accident is visible in the logs.
 If the sed cannot find `online-mode` in the config (an upstream rename), the
 container exits instead of quietly starting in online mode — a bot swarm being
 rejected looks like a network fault and is expensive to debug.
+
+### `VELOCITY_LOGIN_RATELIMIT` — load testing only
+
+Velocity allows one login per source IP every `login-ratelimit` milliseconds,
+3000 by default. A bot fleet shares one pod IP per worker, so that ceiling *is*
+the ramp rate: one bot per 3 s per worker. 750 bots over four workers takes
+eleven minutes before the test has started.
+
+What makes it worth a knob is how it fails. It does not error — bots connect,
+get kicked with "You are logging in too fast", the fleet replaces them, and the
+whole run churns at a few hundred connected while looking like a server-side
+problem.
+
+Lowering it makes the proxy easier to flood with login attempts, so it belongs
+on a load-test proxy and not on a player-facing one. Values below Velocity's
+default print a warning at boot; a non-numeric value refuses to start rather
+than silently falling back to 3000 and re-creating the symptom above.

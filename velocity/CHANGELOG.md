@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/groundsgg/containers/compare/velocity@v0.15.0...velocity@v0.16.0) (2026-08-04)
+
+
+### Features
+
+* **velocity:** add opt-in VELOCITY_LOGIN_RATELIMIT for load testing ([#214](https://github.com/groundsgg/containers/issues/214)) ([924bc09](https://github.com/groundsgg/containers/commit/924bc09bc6316435073802560a556ef0d899e17e))
+
 ## [0.15.0](https://github.com/groundsgg/containers/compare/velocity@v0.14.2...velocity@v0.15.0) (2026-08-02)
 
 

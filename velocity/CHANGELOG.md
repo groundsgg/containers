@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.1](https://github.com/groundsgg/containers/compare/velocity@v0.16.0...velocity@v0.16.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* pin grounds platform plugin 0.6.1 ([#216](https://github.com/groundsgg/containers/issues/216)) ([bd9cb91](https://github.com/groundsgg/containers/commit/bd9cb91dfbfd32083eb4414770a6e9d499dc6443))
+
 ## [0.16.0](https://github.com/groundsgg/containers/compare/velocity@v0.15.0...velocity@v0.16.0) (2026-08-04)
 
 

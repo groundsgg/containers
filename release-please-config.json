@@ -21,6 +21,16 @@
       "keycloak": {
         "release-type": "simple",
         "package-name": "keycloak"
+      },
+      "geyser": {
+        "release-type": "simple",
+        "package-name": "geyser",
+        "initial-version": "0.1.0"
+      },
+      "plugin-floodgate": {
+        "release-type": "simple",
+        "package-name": "plugin-floodgate",
+        "initial-version": "0.1.0"
       }
   }
 }

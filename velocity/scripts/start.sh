@@ -30,4 +30,22 @@ if [ -n "${VELOCITY_FORCE_KEY_AUTHENTICATION:-}" ]; then
     }
 fi
 
+# Floodgate reads its key from its own plugin data directory, and it also
+# CREATES a config.yml there on first start. Mounting the Secret straight onto
+# plugins/floodgate would make that directory read-only and the plugin would
+# fail to initialise — the same trap Geyser has with its config.
+#
+# So the Secret is mounted somewhere neutral and copied in, leaving the
+# directory writable. Geyser and Floodgate have to see byte-identical keys:
+# the key is what Geyser signs Bedrock player data with, and Floodgate rejects
+# every login whose signature it cannot verify.
+if [ -n "${FLOODGATE_KEY_FILE:-}" ]; then
+    if [ ! -f "$FLOODGATE_KEY_FILE" ]; then
+        echo "FLOODGATE_KEY_FILE is set to '${FLOODGATE_KEY_FILE}' but no such file exists" >&2
+        exit 1
+    fi
+    mkdir -p /app/plugins/floodgate
+    cp "$FLOODGATE_KEY_FILE" /app/plugins/floodgate/key.pem
+fi
+
 exec java -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:MaxInlineLevel=15 -jar /app/velocity.jar

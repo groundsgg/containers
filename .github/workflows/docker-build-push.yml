@@ -11,10 +11,15 @@ permissions:
   contents: write
   packages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-push-sbom:
     name: 🔨 Build & Push ${{ matrix.container }}
-    runs-on: arc-dind
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       matrix:
         container:

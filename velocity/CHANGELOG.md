@@ -1,5 +1,76 @@
 # Changelog
 
+## [0.16.1](https://github.com/groundsgg/containers/compare/velocity@v0.16.0...velocity@v0.16.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* pin grounds platform plugin 0.6.1 ([#216](https://github.com/groundsgg/containers/issues/216)) ([bd9cb91](https://github.com/groundsgg/containers/commit/bd9cb91dfbfd32083eb4414770a6e9d499dc6443))
+
+## [0.16.0](https://github.com/groundsgg/containers/compare/velocity@v0.15.0...velocity@v0.16.0) (2026-08-04)
+
+
+### Features
+
+* **velocity:** add opt-in VELOCITY_LOGIN_RATELIMIT for load testing ([#214](https://github.com/groundsgg/containers/issues/214)) ([924bc09](https://github.com/groundsgg/containers/commit/924bc09bc6316435073802560a556ef0d899e17e))
+
+## [0.15.0](https://github.com/groundsgg/containers/compare/velocity@v0.14.2...velocity@v0.15.0) (2026-08-02)
+
+
+### Features
+
+* **velocity:** add opt-in VELOCITY_ONLINE_MODE=false for load testing ([#210](https://github.com/groundsgg/containers/issues/210)) ([7c05ea4](https://github.com/groundsgg/containers/commit/7c05ea415600c57146728d60d2b928e3f5fe162b))
+
+## [0.14.2](https://github.com/groundsgg/containers/compare/velocity@v0.14.1...velocity@v0.14.2) (2026-08-02)
+
+
+### Bug Fixes
+
+* **velocity:** stop baking plugin-permissions into the image ([#208](https://github.com/groundsgg/containers/issues/208)) ([d77147f](https://github.com/groundsgg/containers/commit/d77147f062cc23f0d4f6410e12ea47d2813b6ea5))
+
+## [0.14.1](https://github.com/groundsgg/containers/compare/velocity@v0.14.0...velocity@v0.14.1) (2026-08-02)
+
+
+### Bug Fixes
+
+* **velocity:** bake plugin-agones 0.8.1 — no transfers out of running rounds ([#206](https://github.com/groundsgg/containers/issues/206)) ([511faa5](https://github.com/groundsgg/containers/commit/511faa559c407feb1797b9dc0636325ac4e2b947))
+
+## [0.14.0](https://github.com/groundsgg/containers/compare/velocity@v0.13.0...velocity@v0.14.0) (2026-08-02)
+
+
+### Features
+
+* **velocity:** bake plugin-agones 0.8.0 ([#204](https://github.com/groundsgg/containers/issues/204)) ([3ea2552](https://github.com/groundsgg/containers/commit/3ea25523155bec891f6e9c7cad19c1e02f1270fe))
+
+## [0.13.0](https://github.com/groundsgg/containers/compare/velocity@v0.12.3...velocity@v0.13.0) (2026-07-27)
+
+
+### Features
+
+* **velocity:** bundle permissions REST client ([#198](https://github.com/groundsgg/containers/issues/198)) ([74bf138](https://github.com/groundsgg/containers/commit/74bf1380cc8a94d8b57969e1bda105494c51eb78))
+
+## [0.12.3](https://github.com/groundsgg/containers/compare/velocity@v0.12.2...velocity@v0.12.3) (2026-07-25)
+
+
+### Bug Fixes
+
+* **velocity:** bake plugin-agones 0.7.2 so /agones counts the network ([#195](https://github.com/groundsgg/containers/issues/195)) ([4107794](https://github.com/groundsgg/containers/commit/4107794e968ccab57b9e18d298cf9f0fc4758ff8))
+* **velocity:** secure build secret and update permissions plugin ([#197](https://github.com/groundsgg/containers/issues/197)) ([b495464](https://github.com/groundsgg/containers/commit/b495464d4376064647ab82af58edd08e806e00f7))
+
+## [0.12.2](https://github.com/groundsgg/containers/compare/velocity@v0.12.1...velocity@v0.12.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* **velocity:** bump plugin-permissions to 0.5.0 so permission checks work ([#186](https://github.com/groundsgg/containers/issues/186)) ([b84a0f9](https://github.com/groundsgg/containers/commit/b84a0f940f57515ee8aeab5be7deed3755c572c9))
+
+## [0.12.1](https://github.com/groundsgg/containers/compare/velocity@v0.12.0...velocity@v0.12.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **velocity:** plugin-agones 0.7.1 — the proxy can find a pushed gamemode ([#184](https://github.com/groundsgg/containers/issues/184)) ([d293a1f](https://github.com/groundsgg/containers/commit/d293a1fd6012f52fe92bfe3948c232c9a699e201))
+
 ## [0.12.0](https://github.com/groundsgg/containers/compare/velocity@v0.11.0...velocity@v0.12.0) (2026-07-13)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/groundsgg/containers/compare/velocity@v0.16.1...velocity@v0.17.0) (2026-08-13)
+
+
+### Features
+
+* **geyser:** bedrock entry point and floodgate delivery ([#223](https://github.com/groundsgg/containers/issues/223)) ([1de7739](https://github.com/groundsgg/containers/commit/1de77390339f177edf20eb698a789911a39df022))
+
 ## [0.16.1](https://github.com/groundsgg/containers/compare/velocity@v0.16.0...velocity@v0.16.1) (2026-08-04)
 
 

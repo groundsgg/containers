@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.4...paper-gamemode@v1.3.0) (2026-08-22)
+
+
+### Features
+
+* **paper,paper-gamemode:** update Paper to 26.2 ([#227](https://github.com/groundsgg/containers/issues/227)) ([879c934](https://github.com/groundsgg/containers/commit/879c934543c95007ac30c75b86b49c21087bab22))
+
 ## [1.2.4](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.3...paper-gamemode@v1.2.4) (2026-08-04)
 
 

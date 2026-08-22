@@ -3,8 +3,8 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG PAPER_VERSION=26.1.2
-ARG PAPER_BUILD=69
+ARG PAPER_VERSION=26.2
+ARG PAPER_BUILD=87
 ARG PAPER_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 # Bundled by default. paper-gamemode is consumed by `type: gamemode`
 # workloads (forge renders these as Agones Fleets), so the SDK sidecar

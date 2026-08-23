@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.3.0...paper-gamemode@v1.3.1) (2026-08-23)
+
+
+### Bug Fixes
+
+* **paper:** preserve forwarding secret bytes ([#234](https://github.com/groundsgg/containers/issues/234)) ([aadb5e6](https://github.com/groundsgg/containers/commit/aadb5e6a29225b92c8b11a1acfd9e7c0989d4050))
+* **paper:** support chart forwarding secret ([#231](https://github.com/groundsgg/containers/issues/231)) ([45a76e0](https://github.com/groundsgg/containers/commit/45a76e07c9025c73047c82211b2423724190cb6c))
+
 ## [1.3.0](https://github.com/groundsgg/containers/compare/paper-gamemode@v1.2.4...paper-gamemode@v1.3.0) (2026-08-22)
 
 

@@ -14,8 +14,12 @@ sed -i "s/^level-type=.*/level-type=${LEVEL_TYPE:-flat}/" /app/server.properties
 velocity_secret=${PAPER_VELOCITY_SECRET:-${VELOCITY_FORWARDING_SECRET:-}}
 if [ -n "$velocity_secret" ]; then
     sed -i 's/^online-mode=.*/online-mode=false/' /app/server.properties
-    awk -v sec="$velocity_secret" '
-        BEGIN { q = "\047" }
+    PAPER_FORWARDING_SECRET="$velocity_secret" awk '
+        BEGIN {
+            q = "\047"
+            sec = ENVIRON["PAPER_FORWARDING_SECRET"]
+            gsub(q, q q, sec)
+        }
         /^  velocity:/ { invel = 1; print; next }
         invel && /^[a-zA-Z]/ { invel = 0 }
         invel && /^    enabled:/ { print "    enabled: true"; next }

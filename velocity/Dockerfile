@@ -6,9 +6,9 @@ ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=3.5.1
 ARG VELOCITY_BUILD=615
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
-# plugin-agones 1.0.0 spreads joins across lobbies instead of packing one until
-# a soft cap. GROUNDS_AGONES_LOBBY_SOFT_CAP is gone with it — a deployment that
-# still sets it keeps working, the value is just ignored.
+# plugin-agones 1.1.0 adds shared static backend discovery and preserves a
+# player's static backend during automatic proxy drain transfers. It also keeps
+# drain deferral restricted to actual game and match rounds.
 #
 # plugin-agones 0.7.2 is what makes /agones report the *network* player count.
 # Before it, the command read Velocity's playersConnected — the players on the
@@ -20,7 +20,7 @@ ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/gro
 # ID" on every single boot. Which of the two won came down to the filename
 # sorting ahead of the other, which is not a thing to leave a permission
 # system resting on.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:1.0.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:1.1.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

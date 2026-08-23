@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/groundsgg/containers/compare/paper@v1.4.1...paper@v1.4.2) (2026-08-23)
+
+
+### Bug Fixes
+
+* **paper:** preserve forwarding secret bytes ([#234](https://github.com/groundsgg/containers/issues/234)) ([aadb5e6](https://github.com/groundsgg/containers/commit/aadb5e6a29225b92c8b11a1acfd9e7c0989d4050))
+
 ## [1.4.1](https://github.com/groundsgg/containers/compare/paper@v1.4.0...paper@v1.4.1) (2026-08-23)
 
 

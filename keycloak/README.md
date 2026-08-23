@@ -18,8 +18,8 @@ Provider versions are independent build arguments:
 
 | Provider | Build argument | Default version |
 | --- | --- | --- |
-| Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION` | `1.1.2` |
-| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.1` |
+| Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION` | `1.1.4` |
+| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.2` |
 
 The listener asset is also pinned by `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256`. Override the version and checksum together when updating it.
 
@@ -28,8 +28,8 @@ To override either provider version:
 ```bash
 docker build -f keycloak/Dockerfile \
   --build-arg KEYCLOAK_MINECRAFT_VERSION=1.0.3 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.1 \
-  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=955b34541541562e77e81dcacb60f12b681bd22204c4f3cf4cde8ae8248cd034 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.2 \
+  --build-arg KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=1ad0806552d8e975441aa355bbdcb4f737b4c3083f693fac358cad629e10fb51 \
   -t keycloak-custom .
 ```
 
@@ -61,7 +61,7 @@ Enable the `permissions-events` event listener in the target realm. The configur
 
 ### Permissions listener 0.2 migration
 
-Version 0.2.1 still filters configured realms by their stable Keycloak realm IDs, while published identity-change events include both the realm ID and realm name. Before deploying this image, replace any realm names in `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM` with their corresponding realm IDs. Multiple realm IDs can be provided as a comma-separated list.
+Version 0.2.2 still filters configured realms by their stable Keycloak realm IDs, while published identity-change events include both the realm ID and realm name. Before deploying this image, replace any realm names in `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM` with their corresponding realm IDs. Multiple realm IDs can be provided as a comma-separated list.
 
 ## Dependency Updates
 

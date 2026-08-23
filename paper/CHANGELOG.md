@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/groundsgg/containers/compare/paper@v1.4.0...paper@v1.4.1) (2026-08-23)
+
+
+### Bug Fixes
+
+* **paper:** support chart forwarding secret ([#231](https://github.com/groundsgg/containers/issues/231)) ([45a76e0](https://github.com/groundsgg/containers/commit/45a76e07c9025c73047c82211b2423724190cb6c))
+
 ## [1.4.0](https://github.com/groundsgg/containers/compare/paper@v1.3.3...paper@v1.4.0) (2026-08-22)
 
 

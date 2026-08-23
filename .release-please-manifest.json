@@ -3,7 +3,7 @@
   "dev-container-node": "0.2.1",
   "paper-gamemode": "1.3.0",
   "velocity": "0.17.0",
-  "paper": "1.4.0",
+  "paper": "1.4.1",
   "keycloak": "0.7.1",
   "plugin-floodgate": "0.1.0",
   "geyser": "0.1.0"

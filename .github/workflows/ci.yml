@@ -16,6 +16,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  paper-start-test:
+    name: Paper start scripts
+    runs-on: ubuntu-24.04
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v7
+
+      - name: Test Paper startup modes
+        run: scripts/test-paper-start.sh
+
   docker-build:
     name: 🐳 Build ${{ matrix.container }}
     runs-on: ubuntu-24.04

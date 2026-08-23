@@ -8,14 +8,13 @@ CUSTOM_SYSTEM_PROPERTIES="-Dcom.mojang.eula.agree=true"
 # via the LEVEL_TYPE env (e.g. LEVEL_TYPE=normal). Mirrors paper/scripts/start.sh.
 sed -i "s/^level-type=.*/level-type=${LEVEL_TYPE:-flat}/" /app/server.properties
 
-# Behind a Velocity proxy (modern player-info forwarding): when the shared
-# secret is injected, enable Velocity forwarding + write the secret into
-# paper-global.yml, and hand player auth to the proxy (offline backend). The
-# same secret is on the Velocity side via VELOCITY_FORWARDING_SECRET; a
-# gamemode GameServer is only reachable through the proxy, never directly.
-if [ -n "${VELOCITY_FORWARDING_SECRET:-}" ]; then
+# Paper charts inject PAPER_VELOCITY_SECRET. Keep the older
+# VELOCITY_FORWARDING_SECRET name as a compatibility alias for existing
+# workloads that use this image directly.
+velocity_secret=${PAPER_VELOCITY_SECRET:-${VELOCITY_FORWARDING_SECRET:-}}
+if [ -n "$velocity_secret" ]; then
     sed -i 's/^online-mode=.*/online-mode=false/' /app/server.properties
-    awk -v sec="$VELOCITY_FORWARDING_SECRET" '
+    awk -v sec="$velocity_secret" '
         BEGIN { q = "\047" }
         /^  velocity:/ { invel = 1; print; next }
         invel && /^[a-zA-Z]/ { invel = 0 }

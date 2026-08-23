@@ -23,25 +23,24 @@ set -eu
 grep -Fx 'level-type=flat' /app/server.properties >/dev/null
 
 expected_online_mode=$(cat /app/.expected-online-mode)
-expected_secret=$(cat /app/.expected-secret)
 grep -Fx "online-mode=$expected_online_mode" /app/server.properties >/dev/null
 
 if [ "$expected_online_mode" = false ]; then
     grep -Fx '    enabled: true' /app/config/paper-global.yml >/dev/null
-    grep -Fx "    secret: '$expected_secret'" /app/config/paper-global.yml >/dev/null
+    grep -Fxf /app/.expected-yaml-secret /app/config/paper-global.yml >/dev/null
 else
     grep -Fx '    enabled: false' /app/config/paper-global.yml >/dev/null
     grep -Fx "    secret: ''" /app/config/paper-global.yml >/dev/null
 fi
 EOF
     printf '%s' "$expected_online_mode" > "$test_dir/.expected-online-mode"
-    printf '%s' 'stage-forwarding-secret' > "$test_dir/.expected-secret"
+    printf '%s\n' "    secret: 'stage''forwarding\secret'" > "$test_dir/.expected-yaml-secret"
     chmod -R a+rwX "$test_dir"
     chmod a+x "$test_dir/start.sh" "$test_dir/test-bin/java"
 
     docker_args="--rm --entrypoint sh -e PATH=/app/test-bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin -v $test_dir:/app"
     if [ -n "$secret_name" ]; then
-        docker_args="$docker_args -e $secret_name=stage-forwarding-secret"
+        docker_args="$docker_args -e $secret_name=stage'forwarding\secret"
     fi
 
     # shellcheck disable=SC2086 # Docker arguments are intentionally assembled as words.

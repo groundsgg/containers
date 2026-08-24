@@ -30,7 +30,7 @@ jobs:
           - keycloak
           - geyser
           - plugin-floodgate
-    env:
+          - buildserver
       TAG_TYPE: ${{ startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) && 'release' || 'edge' }}
       MATCHES_REF: ${{ github.ref_type != 'tag' || startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) }}
     steps:

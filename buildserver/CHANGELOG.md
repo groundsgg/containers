@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/groundsgg/containers/compare/buildserver@v0.2.0...buildserver@v0.3.0) (2026-08-24)
+
+
+### Features
+
+* **buildserver:** pin buildsystem with /map pull ([#241](https://github.com/groundsgg/containers/issues/241)) ([5add661](https://github.com/groundsgg/containers/commit/5add6619cf5e9459b325566ffc32234765c54708))
+
 ## [0.2.0](https://github.com/groundsgg/containers/compare/buildserver@v0.1.0...buildserver@v0.2.0) (2026-08-24)
 
 

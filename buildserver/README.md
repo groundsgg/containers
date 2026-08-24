@@ -31,6 +31,8 @@ Copy a world folder onto the PVC (e.g. under `/data/` then into the Paper layout
 
 ## Build locally
 
+`buildsystem` is currently amd64-only, so CI builds `buildserver` for `linux/amd64` only until the base is multi-arch.
+
 ```bash
 docker buildx build -f buildserver/Dockerfile -t ghcr.io/groundsgg/buildserver:local --load .
 docker run --rm --entrypoint sh ghcr.io/groundsgg/buildserver:local -c 'ls /app/plugins | sort'

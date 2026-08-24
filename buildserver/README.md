@@ -4,7 +4,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:<immutable>` (currently `sha-9e29bb9`). That layer already has BuildSystem, GroundsMaps, and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:<immutable>` (currently `sha-2eb0086`). That layer already has BuildSystem, GroundsMaps (including `/map pull`), and plugin-permissions.
 
 ## Tool plugins (build-time pins)
 

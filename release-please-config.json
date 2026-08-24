@@ -31,6 +31,11 @@
         "release-type": "simple",
         "package-name": "plugin-floodgate",
         "initial-version": "0.1.0"
+      },
+      "buildserver": {
+        "release-type": "simple",
+        "package-name": "buildserver",
+        "initial-version": "0.1.0"
       }
   }
 }

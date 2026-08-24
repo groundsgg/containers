@@ -30,6 +30,7 @@ jobs:
           - keycloak
           - geyser
           - plugin-floodgate
+          - buildserver
     env:
       TAG_TYPE: ${{ startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) && 'release' || 'edge' }}
       MATCHES_REF: ${{ github.ref_type != 'tag' || startsWith(github.ref, format('refs/tags/{0}@', matrix.container)) }}
@@ -73,7 +74,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.container == 'buildserver' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: >
             BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VCS_REVISION=${{ github.sha }}

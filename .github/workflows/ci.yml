@@ -41,6 +41,7 @@ jobs:
           - keycloak
           - geyser
           - plugin-floodgate
+          - buildserver
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v7
@@ -66,7 +67,7 @@ jobs:
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.container == 'buildserver' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}

@@ -24,7 +24,7 @@ RUN set -eux; \
       | grep -Fxq 'gg.grounds.keycloak.permissions.events.PermissionsEventListenerProviderFactory' \
       || { echo "Keycloak permissions event listener validation failed (version=${KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION}, reason=provider_factory_not_registered)" >&2; exit 1; }
 
-FROM quay.io/keycloak/keycloak:26.7.1 AS builder
+FROM quay.io/keycloak/keycloak:26.7.3 AS builder
 
 WORKDIR /opt/keycloak
 
@@ -39,7 +39,7 @@ RUN /opt/keycloak/bin/kc.sh build \
       --event-metrics-user-enabled=true \
       --event-metrics-user-tags=realm,idp,clientId
 
-FROM quay.io/keycloak/keycloak:26.7.1
+FROM quay.io/keycloak/keycloak:26.7.3
 
 ARG VCS_REVISION
 ARG BUILD_DATE

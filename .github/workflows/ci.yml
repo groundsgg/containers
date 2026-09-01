@@ -65,6 +65,8 @@ jobs:
           context: .
           file: ./${{ matrix.container }}/Dockerfile
           push: false
+          load: ${{ matrix.container == 'buildserver' }}
+          tags: ${{ matrix.container == 'buildserver' && 'grounds-buildserver:ci-test' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: ${{ matrix.container == 'buildserver' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
@@ -74,6 +76,10 @@ jobs:
             IMAGE_VERSION=ci-test
           secrets: |
             github_token=${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔍 Smoke test buildserver Scene Editor pin
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'buildserver'
+        run: scripts/test-buildserver-scene-editor-pin.sh grounds-buildserver:ci-test
 
       - name: 🔨 Build Keycloak smoke-test image
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'

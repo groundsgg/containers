@@ -4,7 +4,11 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:<immutable>` (currently `sha-2eb0086`). That layer already has BuildSystem, GroundsMaps (including `/map pull`), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-7c85294@sha256:e81e6f8a6f2e64d450ae9150c6a77fc8bab4ee5ac49345d2abbc7f2546947f23`. That layer already has BuildSystem, GroundsMaps (including `/map pull`), and plugin-permissions.
+
+Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.1.0/plugin-scene-editor-paper-0.1.0.jar`.
+
+Scene Editor SHA-256: `50be2507ddee8fa896abd1571c202cdc63e5aa3a8f905e2546da85576579ef17`.
 
 ## Tool plugins (build-time pins)
 
@@ -16,6 +20,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 | goPaintAdvanced | 1.8.2 | |
 | CreativeUtilities | 1.5.0 | |
 | EasyArmorStands | 3.3.0 | |
+| Grounds Scene Editor | 0.1.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 

@@ -3,7 +3,7 @@
 # Grounds buildserver: BuildSystem stack + pinned builder tools.
 # Tool JARs are fetched at image build with SHA256 checks — never at pod start.
 
-ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-2eb0086
+ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-7c85294@sha256:e81e6f8a6f2e64d450ae9150c6a77fc8bab4ee5ac49345d2abbc7f2546947f23
 
 FROM alpine:3.24 AS plugins
 RUN apk add --no-cache curl
@@ -20,9 +20,12 @@ ARG CREATIVE_URL=https://cdn.modrinth.com/data/zAcZq5oV/versions/K9wWSuIr/creati
 ARG CREATIVE_SHA256=0cd7c566e63ddd2ac7c0741ca0bcb3abfbafba7fddf0838d77ed742cbd1831e9
 ARG EAS_URL=https://cdn.modrinth.com/data/8DDI76SG/versions/CdGnJlay/EasyArmorStands-3.3.0.jar
 ARG EAS_SHA256=1a6f428876e2a00cb4ed4feaa10646b5101bd5c25e103c7b6c3f0054dbdda39c
+ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.1.0/plugin-scene-editor-paper-0.1.0.jar
+ARG SCENE_EDITOR_SHA256=50be2507ddee8fa896abd1571c202cdc63e5aa3a8f905e2546da85576579ef17
 
 WORKDIR /jars
-RUN set -eux; \
+RUN --mount=type=secret,id=github_token \
+    set -eu; \
     download() { \
       url="$1"; sha="$2"; out="$3"; \
       curl -fsSL -A "grounds-containers/buildserver" -o "$out" "$url"; \
@@ -33,7 +36,11 @@ RUN set -eux; \
     download "$AXIOM_URL" "$AXIOM_SHA256" AxiomPaper.jar; \
     download "$GOPAINT_URL" "$GOPAINT_SHA256" goPaintAdvanced.jar; \
     download "$CREATIVE_URL" "$CREATIVE_SHA256" CreativeUtilities.jar; \
-    download "$EAS_URL" "$EAS_SHA256" EasyArmorStands.jar
+    download "$EAS_URL" "$EAS_SHA256" EasyArmorStands.jar; \
+    curl -fsSL -A "grounds-containers/buildserver" \
+      -H "Authorization: Bearer $(cat /run/secrets/github_token)" \
+      -o GroundsSceneEditor.jar "$SCENE_EDITOR_URL"; \
+    echo "$SCENE_EDITOR_SHA256  GroundsSceneEditor.jar" | sha256sum -c -
 
 FROM ${BUILD_SYSTEM_IMAGE}
 

@@ -12,23 +12,36 @@ scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/
 scene_editor_sha256='50be2507ddee8fa896abd1571c202cdc63e5aa3a8f905e2546da85576579ef17'
 
 fail=0
-require_text() {
+require_arg() {
+    file=$1
+    name=$2
+    expected=$3
+    description=$4
+    values=$(awk -v prefix="ARG $name=" 'index($0, prefix) == 1 { print substr($0, length(prefix) + 1) }' "$file")
+    count=$(printf '%s\n' "$values" | sed '/^$/d' | wc -l | tr -d ' ')
+    if [ "$count" -ne 1 ] || [ "$values" != "$expected" ]; then
+        echo "$description must have exactly one operative ARG with value $expected in $file" >&2
+        fail=1
+    fi
+}
+
+require_readme_line() {
     file=$1
     text=$2
     description=$3
-    matches=$(grep -Foc "$text" "$file" || true)
+    matches=$(grep -Fxc "$text" "$file" || true)
     if [ "$matches" -ne 1 ]; then
         echo "expected one $description in $file, found $matches" >&2
         fail=1
     fi
 }
 
-require_text "$ROOT_DIR/buildserver/Dockerfile" "ARG BUILD_SYSTEM_IMAGE=$base_image" 'immutable BuildSystem pin'
-require_text "$ROOT_DIR/buildserver/Dockerfile" "ARG SCENE_EDITOR_URL=$scene_editor_url" 'Scene Editor Maven URL pin'
-require_text "$ROOT_DIR/buildserver/Dockerfile" "ARG SCENE_EDITOR_SHA256=$scene_editor_sha256" 'Scene Editor SHA-256 pin'
-require_text "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`" 'README immutable BuildSystem pin'
-require_text "$ROOT_DIR/buildserver/README.md" "\`$scene_editor_url\`" 'README Scene Editor Maven URL pin'
-require_text "$ROOT_DIR/buildserver/README.md" "\`$scene_editor_sha256\`" 'README Scene Editor SHA-256 pin'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" BUILD_SYSTEM_IMAGE "$base_image" 'immutable BuildSystem pin'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_URL "$scene_editor_url" 'Scene Editor Maven URL pin'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_SHA256 "$scene_editor_sha256" 'Scene Editor SHA-256 pin'
+require_readme_line "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`. That layer already has BuildSystem, GroundsMaps (including \`/map pull\`), and plugin-permissions." 'README immutable BuildSystem pin'
+require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor Maven URL: \`$scene_editor_url\`." 'README Scene Editor Maven URL pin'
+require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor SHA-256: \`$scene_editor_sha256\`." 'README Scene Editor SHA-256 pin'
 
 plugin_listing=$(docker run --rm --entrypoint sh "$IMAGE" -c 'find /app/plugins -maxdepth 1 -type f -name "*.jar" -exec basename {} \; | sort')
 plugin_count() {

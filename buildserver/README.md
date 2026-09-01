@@ -39,6 +39,14 @@ Copy a world folder onto the PVC (e.g. under `/data/` then into the Paper layout
 `buildsystem` is currently amd64-only, so CI builds `buildserver` for `linux/amd64` only until the base is multi-arch.
 
 ```bash
-docker buildx build -f buildserver/Dockerfile -t ghcr.io/groundsgg/buildserver:local --load .
+gh auth token | docker buildx build \
+  --platform linux/amd64 \
+  --secret id=github_token,src=/dev/stdin \
+  -f buildserver/Dockerfile \
+  -t ghcr.io/groundsgg/buildserver:local \
+  --load .
 docker run --rm --entrypoint sh ghcr.io/groundsgg/buildserver:local -c 'ls /app/plugins | sort'
 ```
+
+`gh auth token` streams the authenticated GitHub CLI token directly to the
+BuildKit secret mount; it is neither printed nor written to a file.

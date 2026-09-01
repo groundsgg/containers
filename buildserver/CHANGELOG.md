@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/groundsgg/containers/compare/buildserver@v0.3.0...buildserver@v0.4.0) (2026-09-01)
+
+
+### Features
+
+* **buildserver:** pin scene editor plugin ([#246](https://github.com/groundsgg/containers/issues/246)) ([fcf2f7c](https://github.com/groundsgg/containers/commit/fcf2f7cf9bc44b0351ba4d51a6c931fb8bd4dc93))
+
 ## [0.3.0](https://github.com/groundsgg/containers/compare/buildserver@v0.2.0...buildserver@v0.3.0) (2026-08-24)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/groundsgg/containers/compare/buildserver@v0.4.0...buildserver@v0.4.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **buildserver:** update Paper to build 121 and Axiom to 6.0.0 ([#248](https://github.com/groundsgg/containers/issues/248)) ([ce7370d](https://github.com/groundsgg/containers/commit/ce7370d038e80a68cb76ebea967acbf8cbda88ae))
+
 ## [0.4.0](https://github.com/groundsgg/containers/compare/buildserver@v0.3.0...buildserver@v0.4.0) (2026-09-01)
 
 

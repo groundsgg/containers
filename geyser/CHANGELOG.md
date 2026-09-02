@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/groundsgg/containers/compare/geyser@v0.1.0...geyser@v0.1.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **geyser:** support Bedrock through 26.45 ([#250](https://github.com/groundsgg/containers/issues/250)) ([f3eb64f](https://github.com/groundsgg/containers/commit/f3eb64fc5217f550b19effe8059b898084a4d257))
+
 ## 0.1.0 (2026-08-21)
 
 

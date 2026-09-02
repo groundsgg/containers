@@ -10,13 +10,19 @@ Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-edi
 
 Scene Editor SHA-256: `50be2507ddee8fa896abd1571c202cdc63e5aa3a8f905e2546da85576579ef17`.
 
+## Paper
+
+Paper **26.2 build 121** replaces the server JAR inherited from BuildSystem.
+The official download URL and SHA-256 are pinned in this image's Dockerfile,
+so updating the buildserver does not require rebuilding the shared Paper base.
+
 ## Tool plugins (build-time pins)
 
 | Plugin | Version | Notes |
 |---|---|---|
 | FastAsyncWorldEdit | 2.15.4 | Modrinth |
 | FastAsyncVoxelSniper | 3.2.5 | Requires FAWE |
-| Axiom Paper | 5.0.4+26.2 | Client mod separate; multiplayer needs Axiom commercial license / whitelist (account-side, not a K8s secret). Grant `axiom.default`. |
+| Axiom Paper | 6.0.0+26.2 | Client mod separate; multiplayer needs Axiom commercial license / whitelist (account-side, not a K8s secret). Grant `axiom.default`. |
 | goPaintAdvanced | 1.8.2 | |
 | CreativeUtilities | 1.5.0 | |
 | EasyArmorStands | 3.3.0 | |
@@ -25,6 +31,11 @@ Scene Editor SHA-256: `50be2507ddee8fa896abd1571c202cdc63e5aa3a8f905e2546da85576
 | HeadDatabase | — | Pending Spigot vendor jar |
 
 SHA256 pins live as `ARG`s in the Dockerfile.
+
+All tool versions were checked against stable Minecraft 26.2 releases on
+2026-09-02. FAWE, FAVS, goPaintAdvanced, CreativeUtilities, and EasyArmorStands
+were already current. The inherited GroundsPlatform 0.6.1, GroundsPluginRuntime
+0.1.1, and GroundsPermissions 0.11.0 are the latest published releases.
 
 ## Persistence
 

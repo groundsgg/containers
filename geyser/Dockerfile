@@ -4,9 +4,9 @@ FROM alpine:3.24 AS downloader
 # every six weeks, and a floating build would turn any unrelated rebuild into an
 # unannounced protocol upgrade. Worse, it would do so silently — a Geyser one
 # version behind rejects every client that already auto-updated.
-ARG GEYSER_VERSION=2.11.1
-ARG GEYSER_BUILD=1219
-ARG GEYSER_SHA256=b7f1875bfff183a9f27f8bdfea0d289e030516c8d7b7c37678733a79883a9451
+ARG GEYSER_VERSION=2.11.2
+ARG GEYSER_BUILD=1233
+ARG GEYSER_SHA256=f1a4c6a5cad7ee4820b03c27cd3805680e8c06bd66ce7244f96335d83b652e0e
 
 RUN set -eux; \
     apk add --no-cache curl; \
@@ -23,8 +23,8 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG GEYSER_VERSION=2.11.1
-ARG GEYSER_BUILD=1219
+ARG GEYSER_VERSION=2.11.2
+ARG GEYSER_BUILD=1233
 
 LABEL org.opencontainers.image.title="geyser" \
       org.opencontainers.image.description="Geyser Standalone — Bedrock UDP entry point that translates to the Java-protocol Velocity proxy." \

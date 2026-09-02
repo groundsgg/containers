@@ -8,12 +8,16 @@ ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-7c85294@sha256:e81e6f8a
 FROM alpine:3.24 AS plugins
 RUN apk add --no-cache curl
 
+# Update Paper independently of the BuildSystem image's inherited server JAR.
+ARG PAPER_URL=https://fill-data.papermc.io/v1/objects/0de30efb024bc8b83c9c7d507d11802897ad8056b6110ec09fe1a91d126ccb54/paper-26.2-121.jar
+ARG PAPER_SHA256=0de30efb024bc8b83c9c7d507d11802897ad8056b6110ec09fe1a91d126ccb54
+
 ARG FAWE_URL=https://cdn.modrinth.com/data/z4HZZnLr/versions/5TOYHuQr/FastAsyncWorldEdit-Paper-2.15.4.jar
 ARG FAWE_SHA256=bbb1875e823ca01591bd23427e86f490e17cd82fe769dcb7e82a955dd8371acc
 ARG FAVS_URL=https://cdn.modrinth.com/data/D7XBSI1y/versions/AnYq3r1h/fastasyncvoxelsniper-3.2.5.jar
 ARG FAVS_SHA256=485e8b5694df0dbda96038049cb9a73bee4e37d9ec8c7f589af5e8a590fca2e9
-ARG AXIOM_URL=https://cdn.modrinth.com/data/evkiwA7V/versions/Ow8CJ6pP/AxiomPaper-5.0.4-for-MC26.2.jar
-ARG AXIOM_SHA256=3d60342dbd37834337ecc4dc43931ec70092cf1b86b04b7b9788df188479e422
+ARG AXIOM_URL=https://cdn.modrinth.com/data/evkiwA7V/versions/BbhoGfI8/AxiomPaperPlugin-6.0.0-for-MC26.2.jar
+ARG AXIOM_SHA256=3ee96af0353866898884673b03dffe12fdcd51b6ddbfc86cf6074bdcba5ee8e1
 ARG GOPAINT_URL=https://cdn.modrinth.com/data/a2wQ6jIv/versions/ICvdclhi/goPaintAdvanced-1.8.2-all.jar
 ARG GOPAINT_SHA256=d9de8159a19e1dfb89e9193c8a3ace89844c7cac8380ae6c063b114d779c8085
 ARG CREATIVE_URL=https://cdn.modrinth.com/data/zAcZq5oV/versions/K9wWSuIr/creative-utilities-1.5.0-all.jar
@@ -31,6 +35,7 @@ RUN --mount=type=secret,id=github_token \
       curl -fsSL -A "grounds-containers/buildserver" -o "$out" "$url"; \
       echo "$sha  $out" | sha256sum -c -; \
     }; \
+    download "$PAPER_URL" "$PAPER_SHA256" /paper.jar; \
     download "$FAWE_URL" "$FAWE_SHA256" FastAsyncWorldEdit.jar; \
     download "$FAVS_URL" "$FAVS_SHA256" FastAsyncVoxelSniper.jar; \
     download "$AXIOM_URL" "$AXIOM_SHA256" AxiomPaper.jar; \
@@ -51,6 +56,7 @@ ARG BUILD_SYSTEM_IMAGE
 
 USER root
 RUN mkdir -p /opt/grounds
+COPY --from=plugins --chown=paper:paper /paper.jar /app/paper.jar
 COPY --from=plugins /jars/*.jar /app/plugins/
 # Preserve the Paper start script from the base image, then install our wrapper.
 RUN cp /app/start.sh /opt/grounds/paper-start.sh

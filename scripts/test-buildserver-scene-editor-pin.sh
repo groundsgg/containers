@@ -8,8 +8,8 @@ ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
 base_image='ghcr.io/groundsgg/buildsystem:sha-7c85294@sha256:e81e6f8a6f2e64d450ae9150c6a77fc8bab4ee5ac49345d2abbc7f2546947f23'
-scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.2.1/plugin-scene-editor-paper-0.2.1.jar'
-scene_editor_sha256='72004edbb9a60be91e22eef2cc68fd12cf3c8470f5d5f7e54828bf6a905c0a2b'
+scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.3.0/plugin-scene-editor-paper-0.3.0.jar'
+scene_editor_sha256='5e5bafbfc9358db5b69d920d6c2520d6026c20225f4a51daf8e0d5326ad3574f'
 
 fail=0
 require_arg() {

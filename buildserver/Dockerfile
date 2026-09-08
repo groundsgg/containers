@@ -45,6 +45,7 @@ RUN --mount=type=secret,id=github_token \
     curl -fsSL -A "grounds-containers/buildserver" \
       -H "Authorization: Bearer $(cat /run/secrets/github_token)" \
       -o GroundsSceneEditor.jar "$SCENE_EDITOR_URL"; \
+    sha256sum GroundsSceneEditor.jar; \
     echo "$SCENE_EDITOR_SHA256  GroundsSceneEditor.jar" | sha256sum -c -
 
 FROM ${BUILD_SYSTEM_IMAGE}

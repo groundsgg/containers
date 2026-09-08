@@ -9,6 +9,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.3.0/plugin-scene-editor-paper-0.3.0.jar`.
 
 Scene Editor SHA-256: `5e5bafbfc9358db5b69d920d6c2520d6026c20225f4a51daf8e0d5326ad3574f`.
+This checksum identifies the published Maven artifact consumed by the image build.
 
 ## Paper
 

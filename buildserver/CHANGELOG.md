@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/groundsgg/containers/compare/buildserver@v0.4.1...buildserver@v0.4.2) (2026-09-08)
+
+
+### Bug Fixes
+
+* **buildserver:** record published scene editor artifact ([#254](https://github.com/groundsgg/containers/issues/254)) ([807de73](https://github.com/groundsgg/containers/commit/807de73a385ba2e0d8590ce61c7568a214b387ca))
+
 ## [0.4.1](https://github.com/groundsgg/containers/compare/buildserver@v0.4.0...buildserver@v0.4.1) (2026-09-07)
 
 

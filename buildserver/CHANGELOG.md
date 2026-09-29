@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/groundsgg/containers/compare/buildserver@v0.5.0...buildserver@v0.6.0) (2026-09-29)
+
+
+### Features
+
+* **buildserver:** let the deployment set the /map import allowlist ([#264](https://github.com/groundsgg/containers/issues/264)) ([c4f6091](https://github.com/groundsgg/containers/commit/c4f6091c8a79e3fed67c3af3360ecadb76ab0597))
+
 ## [0.5.0](https://github.com/groundsgg/containers/compare/buildserver@v0.4.2...buildserver@v0.5.0) (2026-09-29)
 
 

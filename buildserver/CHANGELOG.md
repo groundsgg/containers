@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/groundsgg/containers/compare/buildserver@v0.4.2...buildserver@v0.5.0) (2026-09-29)
+
+
+### Features
+
+* **buildserver:** ship GroundsMaps with /map import ([#262](https://github.com/groundsgg/containers/issues/262)) ([a137b4e](https://github.com/groundsgg/containers/commit/a137b4ec0689879a9647cd98e4fa70d8b878abad))
+
 ## [0.4.2](https://github.com/groundsgg/containers/compare/buildserver@v0.4.1...buildserver@v0.4.2) (2026-09-08)
 
 

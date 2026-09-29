@@ -4,7 +4,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:sha-7c85294@sha256:e81e6f8a6f2e64d450ae9150c6a77fc8bab4ee5ac49345d2abbc7f2546947f23`. That layer already has BuildSystem, GroundsMaps (including `/map pull`), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-efcbc3a@sha256:d535fd5da1fd695b587c6a10f6fe32aaf8f64f5431a1b2e2171e0171d1fc8de9`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import`), and plugin-permissions.
 
 Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.3.0/plugin-scene-editor-paper-0.3.0.jar`.
 
@@ -44,7 +44,7 @@ Mount a PVC at `/data` and set `BUILDSERVER_DATA_ROOT=/data` (optional; default 
 
 ## Seed a world
 
-Copy a world folder onto the PVC (e.g. under `/data/` then into the Paper layout), then in-game `/worlds import <name>`. There is no client upload path.
+In game: `/map login`, then `/map import <https-url> <world> [sha256=<hex>]` fetches a `.zip` or `.tar.zst` and creates a new build world. Only map files are kept (datapacks are dropped), private addresses are refused and size limits apply; see GROUNDS.md in `groundsgg/buildsystem`. Without a network source: copy a world folder onto the PVC, then `/worlds import <name>`.
 
 ## Build locally
 

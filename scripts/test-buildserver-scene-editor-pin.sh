@@ -7,7 +7,7 @@ set -eu
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
-base_image='ghcr.io/groundsgg/buildsystem:sha-efcbc3a@sha256:d535fd5da1fd695b587c6a10f6fe32aaf8f64f5431a1b2e2171e0171d1fc8de9'
+base_image='ghcr.io/groundsgg/buildsystem:sha-e564bc1@sha256:7ed86449527f1df4255af327c50936ed1627268705cdc9a69dc06315a2676080'
 scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.3.0/plugin-scene-editor-paper-0.3.0.jar'
 scene_editor_sha256='5e5bafbfc9358db5b69d920d6c2520d6026c20225f4a51daf8e0d5326ad3574f'
 

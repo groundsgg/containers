@@ -9,8 +9,8 @@ FROM alpine:3.24 AS downloader
 # Pinned for the same reason Geyser is: the two speak a shared key format and
 # player-data schema, so they move together.
 ARG FLOODGATE_VERSION=2.2.5
-ARG FLOODGATE_BUILD=140
-ARG FLOODGATE_SHA256=f5867ad79b90d38abcc72755a685428fbcf423b52c9830a39ffed5203de6936a
+ARG FLOODGATE_BUILD=141
+ARG FLOODGATE_SHA256=649835022de37ff09255fc626d4bfe7bc2a3b926d07b0dfaf1f51e12bf37001d
 
 RUN set -eux; \
     apk add --no-cache curl; \
@@ -28,7 +28,7 @@ ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG FLOODGATE_VERSION=2.2.5
-ARG FLOODGATE_BUILD=140
+ARG FLOODGATE_BUILD=141
 
 LABEL org.opencontainers.image.title="plugin-floodgate" \
       org.opencontainers.image.description="Hosts the Floodgate Velocity JAR so the grounds-velocity proxy can fetch it at startup." \

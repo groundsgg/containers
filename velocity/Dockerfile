@@ -3,8 +3,11 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG VELOCITY_VERSION=3.5.1
-ARG VELOCITY_BUILD=615
+# Minecraft 26.3 (protocol 777) exists only on the Velocity 4 line; 3.5.1 stops
+# at 26.2. Velocity 4 still accepts 26.2 clients, so the proxies can move before
+# the backends do.
+ARG VELOCITY_VERSION=4.2.0
+ARG VELOCITY_BUILD=30
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 # plugin-agones 1.2.0 publishes ServerDisplayQuery so the proxy tab list can
 # show kind plus replica id (Lobby s9fwt) instead of the Agones pod name.

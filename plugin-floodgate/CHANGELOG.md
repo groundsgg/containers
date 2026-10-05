@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/groundsgg/containers/compare/plugin-floodgate@v0.1.0...plugin-floodgate@v0.2.0) (2026-10-05)
+
+
+### Features
+
+* **plugin-floodgate:** bump floodgate to build 141 for minecraft 26.3 ([#268](https://github.com/groundsgg/containers/issues/268)) ([d9fad8b](https://github.com/groundsgg/containers/commit/d9fad8b9aa8455caa41f513594fb69440c243b69))
+
 ## 0.1.0 (2026-08-13)
 
 

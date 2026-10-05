@@ -5,7 +5,7 @@
   "velocity": "0.17.0",
   "paper": "1.4.2",
   "keycloak": "0.7.2",
-  "plugin-floodgate": "0.1.0",
+  "plugin-floodgate": "0.2.0",
   "geyser": "0.1.1",
   "buildserver": "0.6.0"
 }

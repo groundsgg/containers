@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/groundsgg/containers/compare/velocity@v0.17.0...velocity@v0.18.0) (2026-10-05)
+
+
+### Features
+
+* **velocity:** move to velocity 4.2.0 for minecraft 26.3 ([#267](https://github.com/groundsgg/containers/issues/267)) ([4079a7d](https://github.com/groundsgg/containers/commit/4079a7d7233ab19633f022b4876795f847bcf740))
+
 ## [0.17.0](https://github.com/groundsgg/containers/compare/velocity@v0.16.1...velocity@v0.17.0) (2026-08-13)
 
 

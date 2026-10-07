@@ -13,7 +13,7 @@ This checksum identifies the published Maven artifact consumed by the image buil
 
 ## Paper
 
-Paper **26.2 build 121** replaces the server JAR inherited from BuildSystem.
+Paper **26.3 build 159** (BETA channel; the only 26.3 builds so far) replaces the server JAR inherited from BuildSystem.
 The official download URL and SHA-256 are pinned in this image's Dockerfile,
 so updating the buildserver does not require rebuilding the shared Paper base.
 
@@ -21,20 +21,23 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 
 | Plugin | Version | Notes |
 |---|---|---|
-| FastAsyncWorldEdit | 2.15.4 | Modrinth |
-| FastAsyncVoxelSniper | 3.2.5 | Requires FAWE |
-| Axiom Paper | 6.0.0+26.2 | Client mod separate; multiplayer needs Axiom commercial license / whitelist (account-side, not a K8s secret). Grant `axiom.default`. |
-| goPaintAdvanced | 1.8.2 | |
-| CreativeUtilities | 1.5.0 | |
-| EasyArmorStands | 3.3.0 | |
+| FastAsyncWorldEdit | 2.16.0 | Modrinth |
+| FastAsyncVoxelSniper | 3.2.5 | Requires FAWE. No 26.3 release listed; boots and enables on 26.3. |
+| Axiom Paper | 6.0.1+26.3 | Client mod separate; multiplayer needs Axiom commercial license / whitelist (account-side, not a K8s secret). Grant `axiom.default`. |
+| goPaintAdvanced | 1.8.2 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
+| CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
+| EasyArmorStands | 3.3.2 | |
 | Grounds Scene Editor | 0.3.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
-| goBrushAdvanced | — | Deferred (no Paper 26.2 build) |
+| goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 
 SHA256 pins live as `ARG`s in the Dockerfile.
 
-All tool versions were checked against stable Minecraft 26.2 releases on
-2026-09-02. FAWE, FAVS, goPaintAdvanced, CreativeUtilities, and EasyArmorStands
+Moved to Minecraft 26.3 on 2026-10-07 (the network runs 26.3 since 2026-10-06, and
+Velocity 4 cannot hand a 26.3 client to a 26.2 backend). A local boot of the image
+enabled every plugin and reached `Done`; the `No key layers in MapLike[{}]` line at
+world creation appears on the 26.2 image too. Before that, all tool versions were
+checked against stable Minecraft 26.2 releases on 2026-09-02. FAWE, FAVS, goPaintAdvanced, CreativeUtilities, and EasyArmorStands
 were already current. The inherited GroundsPlatform 0.6.1, GroundsPluginRuntime
 0.1.1, and GroundsPermissions 0.11.0 are the latest published releases.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/groundsgg/containers/compare/buildserver@v0.6.0...buildserver@v0.7.0) (2026-10-07)
+
+
+### Features
+
+* **buildserver:** move to Minecraft 26.3 ([#271](https://github.com/groundsgg/containers/issues/271)) ([c3e5b2c](https://github.com/groundsgg/containers/commit/c3e5b2c09e5ee3464bafa1f8d100bb85979706fd))
+
 ## [0.6.0](https://github.com/groundsgg/containers/compare/buildserver@v0.5.0...buildserver@v0.6.0) (2026-09-29)
 
 

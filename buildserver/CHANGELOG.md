@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/groundsgg/containers/compare/buildserver@v0.7.0...buildserver@v0.7.1) (2026-10-11)
+
+
+### Bug Fixes
+
+* **buildserver:** fix BuildSystem menus on Minecraft 26.3 ([#273](https://github.com/groundsgg/containers/issues/273)) ([bfe87f5](https://github.com/groundsgg/containers/commit/bfe87f50ba6aed833ffe8a9baf26df48d84104bb))
+
 ## [0.7.0](https://github.com/groundsgg/containers/compare/buildserver@v0.6.0...buildserver@v0.7.0) (2026-10-07)
 
 

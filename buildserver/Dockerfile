@@ -3,7 +3,7 @@
 # Grounds buildserver: BuildSystem stack + pinned builder tools.
 # Tool JARs are fetched at image build with SHA256 checks — never at pod start.
 
-ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-e564bc1@sha256:7ed86449527f1df4255af327c50936ed1627268705cdc9a69dc06315a2676080
+ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-1f989c4@sha256:5aa6300a3266a37a66dc589b473907533ec48fd894b6f72347bedad759b7141c
 
 FROM alpine:3.24 AS plugins
 RUN apk add --no-cache curl

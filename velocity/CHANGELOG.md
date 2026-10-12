@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://github.com/groundsgg/containers/compare/velocity@v0.18.0...velocity@v0.19.0) (2026-10-12)
+
+
+### Features
+
+* **velocity:** bundle plugin-agones 2.1.0 for lobby drain ([#275](https://github.com/groundsgg/containers/issues/275)) ([1f071da](https://github.com/groundsgg/containers/commit/1f071daa718b8e1ddb13616abd981ef0ad3fbe4f))
+
 ## [0.18.0](https://github.com/groundsgg/containers/compare/velocity@v0.17.0...velocity@v0.18.0) (2026-10-05)
 
 

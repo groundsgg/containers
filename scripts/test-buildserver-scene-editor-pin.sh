@@ -8,8 +8,8 @@ ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
 base_image='ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064'
-scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.5.0/plugin-scene-editor-paper-0.5.0.jar'
-scene_editor_sha256='5eafd86fc3a5f3443cd441ad5f32bea10bc9ea3a8fee527fad12cad232b2784a'
+scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.5.1/plugin-scene-editor-paper-0.5.1.jar'
+scene_editor_sha256='ab513f05c300ef50c5ee58397052f9ff30f6d22139b6250f6d0f7a55e19e352f'
 
 fail=0
 require_arg() {
@@ -42,7 +42,7 @@ require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_SHA256 "$scene_edito
 require_readme_line "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`. That layer already has BuildSystem, GroundsMaps (including \`/map pull\` and \`/map import\` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions." 'README immutable BuildSystem pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor Maven URL: \`$scene_editor_url\`." 'README Scene Editor Maven URL pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor SHA-256: \`$scene_editor_sha256\`." 'README Scene Editor SHA-256 pin'
-require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.5.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
+require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.5.1 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
 
 plugin_listing=$(docker run --rm --entrypoint sh "$IMAGE" -c 'find /app/plugins -maxdepth 1 -type f -name "*.jar" -exec basename {} \; | sort')
 plugin_count() {

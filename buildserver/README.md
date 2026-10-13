@@ -4,11 +4,11 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:sha-1f989c4@sha256:5aa6300a3266a37a66dc589b473907533ec48fd894b6f72347bedad759b7141c`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import`), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
-Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.4.0/plugin-scene-editor-paper-0.4.0.jar`.
+Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.5.0/plugin-scene-editor-paper-0.5.0.jar`.
 
-Scene Editor SHA-256: `f49f20580c58f3b7f51cee629f4157ddc2f068ce76830055b8668c54f78c3f6a`.
+Scene Editor SHA-256: `5eafd86fc3a5f3443cd441ad5f32bea10bc9ea3a8fee527fad12cad232b2784a`.
 This checksum identifies the published Maven artifact consumed by the image build.
 
 ## Paper
@@ -27,7 +27,7 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 | goPaintAdvanced | 1.8.2 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | EasyArmorStands | 3.3.2 | |
-| Grounds Scene Editor | 0.4.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
+| Grounds Scene Editor | 0.5.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 

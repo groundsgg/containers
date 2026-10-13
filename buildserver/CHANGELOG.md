@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/groundsgg/containers/compare/buildserver@v0.8.0...buildserver@v0.9.0) (2026-10-13)
+
+
+### Features
+
+* **buildserver:** author NPC distance and preserve map roundtrips ([#279](https://github.com/groundsgg/containers/issues/279)) ([0b06559](https://github.com/groundsgg/containers/commit/0b06559b85e4343fec8cb03ecdad65ee1e011a34))
+
 ## [0.8.0](https://github.com/groundsgg/containers/compare/buildserver@v0.7.1...buildserver@v0.8.0) (2026-10-13)
 
 

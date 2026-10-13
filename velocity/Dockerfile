@@ -9,6 +9,10 @@ ARG IMAGE_VERSION
 ARG VELOCITY_VERSION=4.2.0
 ARG VELOCITY_BUILD=30
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
+# plugin-agones 2.2.0 paces the proxy drain: transfers go out 20 a second
+# (GROUNDS_DRAIN_TRANSFERS_PER_SECOND) instead of all in one burst, so a full
+# proxy does not land on its replacement as hundreds of simultaneous logins.
+#
 # plugin-agones 2.1.0 drains lobbies: players on a lobby whose GameServerSet was
 # rolled away are moved to a current one, and a kicked lobby player is sent to
 # another lobby instead of being disconnected. It also fixes the proxy drain,
@@ -28,7 +32,7 @@ ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/gro
 # ID" on every single boot. Which of the two won came down to the filename
 # sorting ahead of the other, which is not a thing to leave a permission
 # system resting on.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:2.1.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:2.2.0"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.1.1"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

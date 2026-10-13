@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/groundsgg/containers/compare/buildserver@v0.9.0...buildserver@v0.9.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **buildserver:** load existing scenes on world entry ([#281](https://github.com/groundsgg/containers/issues/281)) ([bdb55fb](https://github.com/groundsgg/containers/commit/bdb55fb5e18e80308411a6591584be8621330cc4))
+
 ## [0.9.0](https://github.com/groundsgg/containers/compare/buildserver@v0.8.0...buildserver@v0.9.0) (2026-10-13)
 
 

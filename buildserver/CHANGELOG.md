@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/groundsgg/containers/compare/buildserver@v0.7.1...buildserver@v0.8.0) (2026-10-13)
+
+
+### Features
+
+* **buildserver:** add NPC collision authoring tools ([#277](https://github.com/groundsgg/containers/issues/277)) ([7271e54](https://github.com/groundsgg/containers/commit/7271e541dcc278ed38e51e7bd41b03431f3a0916))
+
 ## [0.7.1](https://github.com/groundsgg/containers/compare/buildserver@v0.7.0...buildserver@v0.7.1) (2026-10-11)
 
 

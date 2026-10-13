@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/groundsgg/containers/compare/velocity@v0.19.0...velocity@v0.20.0) (2026-10-13)
+
+
+### Features
+
+* **velocity:** bundle plugin-agones 2.2.0 for a paced proxy drain ([#285](https://github.com/groundsgg/containers/issues/285)) ([78a767e](https://github.com/groundsgg/containers/commit/78a767e7903dbb651de2eea5aeb5c598d0b3aee8))
+
 ## [0.19.0](https://github.com/groundsgg/containers/compare/velocity@v0.18.0...velocity@v0.19.0) (2026-10-12)
 
 

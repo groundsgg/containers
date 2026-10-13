@@ -24,8 +24,8 @@ ARG CREATIVE_URL=https://cdn.modrinth.com/data/zAcZq5oV/versions/K9wWSuIr/creati
 ARG CREATIVE_SHA256=0cd7c566e63ddd2ac7c0741ca0bcb3abfbafba7fddf0838d77ed742cbd1831e9
 ARG EAS_URL=https://cdn.modrinth.com/data/8DDI76SG/versions/YIdwIece/EasyArmorStands-3.3.2.jar
 ARG EAS_SHA256=e830257512d3b95557fd3bf2a787015c18e52ff87314478b014ac1c45dff57c3
-ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.3.0/plugin-scene-editor-paper-0.3.0.jar
-ARG SCENE_EDITOR_SHA256=5e5bafbfc9358db5b69d920d6c2520d6026c20225f4a51daf8e0d5326ad3574f
+ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.4.0/plugin-scene-editor-paper-0.4.0.jar
+ARG SCENE_EDITOR_SHA256=f49f20580c58f3b7f51cee629f4157ddc2f068ce76830055b8668c54f78c3f6a
 
 WORKDIR /jars
 RUN --mount=type=secret,id=github_token \

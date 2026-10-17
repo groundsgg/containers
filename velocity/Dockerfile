@@ -38,8 +38,8 @@ ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/gro
 # ID" on every single boot. Which of the two won came down to the filename
 # sorting ahead of the other, which is not a thing to leave a permission
 # system resting on.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.0.1"
-ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.2.2"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.1.0"
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.3.0"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.
 ARG GROUNDS_PLATFORM_PLUGIN_VERSION="0.6.1"

@@ -3,7 +3,7 @@
 # Grounds buildserver: BuildSystem stack + pinned builder tools.
 # Tool JARs are fetched at image build with SHA256 checks — never at pod start.
 
-ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064
+ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b
 
 FROM alpine:3.24 AS plugins
 RUN apk add --no-cache curl jq
@@ -24,10 +24,10 @@ ARG CREATIVE_URL=https://cdn.modrinth.com/data/zAcZq5oV/versions/K9wWSuIr/creati
 ARG CREATIVE_SHA256=0cd7c566e63ddd2ac7c0741ca0bcb3abfbafba7fddf0838d77ed742cbd1831e9
 ARG EAS_URL=https://cdn.modrinth.com/data/8DDI76SG/versions/YIdwIece/EasyArmorStands-3.3.2.jar
 ARG EAS_SHA256=e830257512d3b95557fd3bf2a787015c18e52ff87314478b014ac1c45dff57c3
-ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.2/plugin-scene-editor-paper-0.6.2.jar
-ARG SCENE_EDITOR_SHA256=e0921d6db04b197e482e38b8b4c3111b632d623b593f2e5f7667113822458ac0
-ARG GROUNDS_RUNTIME_PLUGIN_VERSION=0.2.2
-ARG GROUNDS_RUNTIME_PAPER_SHA256=bb67586a8c51e94229cf27f46af7c1562ecc5908ec0d00839773e98f005fb53d
+ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar
+ARG SCENE_EDITOR_SHA256=d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db
+ARG GROUNDS_RUNTIME_PLUGIN_VERSION=0.3.0
+ARG GROUNDS_RUNTIME_PAPER_SHA256=89f973e0388604d37c6bce48e72b3a267041b7c5ba733fd2391f4e456228542b
 ARG GROUNDS_RUNTIME_CATALOG_SHA256=9edfaf236238b41d72d221cf4f7cc7141fc2f13af29485d39736dfeb2cdcef48
 
 WORKDIR /jars

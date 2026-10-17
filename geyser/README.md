@@ -20,9 +20,9 @@ To use a specific Geyser build:
 
 ```bash
 docker build -f geyser/Dockerfile \
-  --build-arg GEYSER_VERSION=2.11.2 \
-  --build-arg GEYSER_BUILD=1233 \
-  --build-arg GEYSER_SHA256=f1a4c6a5cad7ee4820b03c27cd3805680e8c06bd66ce7244f96335d83b652e0e \
+  --build-arg GEYSER_VERSION=2.12.0 \
+  --build-arg GEYSER_BUILD=1264 \
+  --build-arg GEYSER_SHA256=b4ecc3bec2206781013b58350955aedf63ca29e70637d476c92835a3214ff2fd \
   -t geyser .
 ```
 

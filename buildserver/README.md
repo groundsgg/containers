@@ -4,15 +4,15 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
-Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.2/plugin-scene-editor-paper-0.6.2.jar`.
+Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar`.
 
-Scene Editor SHA-256: `e0921d6db04b197e482e38b8b4c3111b632d623b593f2e5f7667113822458ac0`.
+Scene Editor SHA-256: `d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db`.
 This checksum identifies the published Maven artifact consumed by the image build.
 
-GroundsPluginRuntime 0.2.2 provides library-i18n 0.4.4 and the shared Mini-CD renderer.
-Its Paper JAR is pinned to SHA-256 `bb67586a8c51e94229cf27f46af7c1562ecc5908ec0d00839773e98f005fb53d`;
+GroundsPluginRuntime 0.3.0 provides library-i18n 0.4.4 and the shared Mini-CD renderer.
+Its Paper JAR is pinned to SHA-256 `89f973e0388604d37c6bce48e72b3a267041b7c5ba733fd2391f4e456228542b`;
 the matching runtime catalog is pinned to `9edfaf236238b41d72d221cf4f7cc7141fc2f13af29485d39736dfeb2cdcef48`.
 The image contains the corresponding Paper runtime manifest at `/opt/grounds/runtime-manifest.json`.
 
@@ -32,7 +32,7 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 | goPaintAdvanced | 1.8.2 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | EasyArmorStands | 3.3.2 | |
-| Grounds Scene Editor | 0.6.2 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
+| Grounds Scene Editor | 0.7.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 

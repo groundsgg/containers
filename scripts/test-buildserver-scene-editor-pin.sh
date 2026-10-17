@@ -7,10 +7,10 @@ set -eu
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
-base_image='ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064'
-scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.2/plugin-scene-editor-paper-0.6.2.jar'
-scene_editor_sha256='e0921d6db04b197e482e38b8b4c3111b632d623b593f2e5f7667113822458ac0'
-runtime_sha256='bb67586a8c51e94229cf27f46af7c1562ecc5908ec0d00839773e98f005fb53d'
+base_image='ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b'
+scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar'
+scene_editor_sha256='d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db'
+runtime_sha256='89f973e0388604d37c6bce48e72b3a267041b7c5ba733fd2391f4e456228542b'
 
 fail=0
 require_arg() {
@@ -40,12 +40,12 @@ require_readme_line() {
 require_arg "$ROOT_DIR/buildserver/Dockerfile" BUILD_SYSTEM_IMAGE "$base_image" 'immutable BuildSystem pin'
 require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_URL "$scene_editor_url" 'Scene Editor Maven URL pin'
 require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_SHA256 "$scene_editor_sha256" 'Scene Editor SHA-256 pin'
-require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PLUGIN_VERSION '0.2.2' 'Paper runtime version'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PLUGIN_VERSION '0.3.0' 'Paper runtime version'
 require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PAPER_SHA256 "$runtime_sha256" 'Paper runtime SHA-256 pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`. That layer already has BuildSystem, GroundsMaps (including \`/map pull\` and \`/map import\` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions." 'README immutable BuildSystem pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor Maven URL: \`$scene_editor_url\`." 'README Scene Editor Maven URL pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor SHA-256: \`$scene_editor_sha256\`." 'README Scene Editor SHA-256 pin'
-require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.6.2 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
+require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.7.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
 
 plugin_listing=$(docker run --rm --entrypoint sh "$IMAGE" -c 'find /app/plugins -maxdepth 1 -type f -name "*.jar" -exec basename {} \; | sort')
 plugin_count() {
@@ -87,7 +87,7 @@ if ! docker run --rm --entrypoint sh "$IMAGE" -c 'unzip -l /app/plugins/plugin-g
     fail=1
 fi
 
-if ! docker run --rm --entrypoint cat "$IMAGE" /opt/grounds/runtime-manifest.json | python3 -c 'import json, sys; m = json.load(sys.stdin); sys.exit(not (m.get("schemaVersion") == 1 and m.get("runtime", {}).get("id") == "plugin-grounds-runtime-paper" and m["runtime"].get("version") == "0.2.2" and m["runtime"].get("platform") == "paper" and isinstance(m.get("libraries"), list)))'; then
+if ! docker run --rm --entrypoint cat "$IMAGE" /opt/grounds/runtime-manifest.json | python3 -c 'import json, sys; m = json.load(sys.stdin); sys.exit(not (m.get("schemaVersion") == 1 and m.get("runtime", {}).get("id") == "plugin-grounds-runtime-paper" and m["runtime"].get("version") == "0.3.0" and m["runtime"].get("platform") == "paper" and isinstance(m.get("libraries"), list)))'; then
     echo 'Paper runtime manifest does not describe the selected runtime' >&2
     fail=1
 fi

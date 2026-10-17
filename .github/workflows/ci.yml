@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  paper-start-test:
-    name: Paper start scripts
+  startup-contract-tests:
+    name: Container startup contracts
     runs-on: ubuntu-24.04
     steps:
       - name: 📥 Checkout code
@@ -25,6 +25,9 @@ jobs:
 
       - name: Test Paper startup modes
         run: scripts/test-paper-start.sh
+
+      - name: Test Velocity Floodgate startup
+        run: scripts/test-velocity-floodgate-start.sh
 
   docker-build:
     name: 🐳 Build ${{ matrix.container }}

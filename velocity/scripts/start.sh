@@ -114,4 +114,18 @@ if [ -n "${FLOODGATE_KEY_FILE:-}" ]; then
     cp "$FLOODGATE_KEY_FILE" /app/plugins/floodgate/key.pem
 fi
 
+# An explicitly managed Floodgate config is mounted read-only outside the
+# plugin data directory, then copied into Floodgate's writable directory. The
+# container restart reapplies the version selected by the deployment; Floodgate
+# itself can still write its config while the container is running.
+if [ -n "${FLOODGATE_CONFIG_FILE:-}" ]; then
+    if [ ! -f "$FLOODGATE_CONFIG_FILE" ]; then
+        echo "FLOODGATE_CONFIG_FILE is set to '${FLOODGATE_CONFIG_FILE}' but no such file exists" >&2
+        exit 1
+    fi
+    mkdir -p /app/plugins/floodgate
+    cp "$FLOODGATE_CONFIG_FILE" /app/plugins/floodgate/config.yml
+    chmod u+rw /app/plugins/floodgate/config.yml
+fi
+
 exec java -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:MaxInlineLevel=15 -jar /app/velocity.jar

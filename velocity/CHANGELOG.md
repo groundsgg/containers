@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.1](https://github.com/groundsgg/containers/compare/velocity@v0.20.0...velocity@v0.20.1) (2026-10-17)
+
+
+### Bug Fixes
+
+* **chat:** integrate unified messages into proxy and buildserver images ([#288](https://github.com/groundsgg/containers/issues/288)) ([9181244](https://github.com/groundsgg/containers/commit/9181244924c44a9ce338a856ae74cca319c76bbb))
+
 ## [0.20.0](https://github.com/groundsgg/containers/compare/velocity@v0.19.0...velocity@v0.20.0) (2026-10-13)
 
 

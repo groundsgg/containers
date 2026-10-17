@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.0](https://github.com/groundsgg/containers/compare/velocity@v0.20.1...velocity@v0.21.0) (2026-10-17)
+
+
+### Features
+
+* **velocity:** bundle plugin-agones 3.0.0 for fullest-first lobbies ([#291](https://github.com/groundsgg/containers/issues/291)) ([eb153c5](https://github.com/groundsgg/containers/commit/eb153c562af306174ca3ae03de1b8d573aeeeb13))
+
 ## [0.20.1](https://github.com/groundsgg/containers/compare/velocity@v0.20.0...velocity@v0.20.1) (2026-10-17)
 
 

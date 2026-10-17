@@ -52,8 +52,9 @@ They are sent with a white tint so the white lettering stays white. Native E0
 controller icons and the E5 edition icon stay intact. Java's pack and its release
 channels are independent.
 
-`pack-src/rank-badges.properties` is exported display metadata from central Stage
-Permissions roles, not another source of role colours. Keep the identical catalog at
+`pack-src/rank-badges.properties` contains display variants for central Permissions
+roles, not another source of role colours. The approved Moderator variant uses badge
+text `MOD` and moss green `#8F9B72` (U+E603); configure those exact values in the portal. Keep the identical catalog at
 `gg/grounds/display/bedrock-rank-badges.properties` in plugin-permissions/minestom
 and plugin-proxy/velocity. After changing a role label or colour, export its actual
 stored value, regenerate the badge atlas, increase the manifest version, and deploy

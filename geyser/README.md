@@ -54,7 +54,7 @@ channels are independent.
 
 `pack-src/rank-badges.properties` contains display variants for central Permissions
 roles, not another source of role colours. The approved Moderator variant uses badge
-text `MOD` and moss green `#8F9B72` (U+E603); configure those exact values in the portal. Keep the identical catalog at
+text `MOD` and muted petrol `#6F9794` (U+E603); configure those exact values in the portal. Keep the identical catalog at
 `gg/grounds/display/bedrock-rank-badges.properties` in plugin-permissions/minestom
 and plugin-proxy/velocity. After changing a role label or colour, export its actual
 stored value, regenerate the badge atlas, increase the manifest version, and deploy

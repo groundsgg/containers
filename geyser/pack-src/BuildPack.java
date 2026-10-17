@@ -26,7 +26,7 @@ class BuildPack {
         var image = new ByteArrayOutputStream();
         if (!ImageIO.write(atlas, "png", image)) throw new IllegalStateException("PNG writer unavailable");
         String manifest = """
-            {"format_version":2,"header":{"name":"Grounds Nameplates","description":"Rank badges and Bedrock icon for Grounds player names","uuid":"32f559d7-e76a-470e-ac36-8b458b99c84c","version":[0,2,1],"min_engine_version":[1,21,0]},"modules":[{"type":"resources","uuid":"fc7bf96d-c4c7-4212-8b90-211b1d2fa1f0","version":[0,2,1]}]}
+            {"format_version":2,"header":{"name":"Grounds Nameplates","description":"Rank badges and Bedrock icon for Grounds player names","uuid":"32f559d7-e76a-470e-ac36-8b458b99c84c","version":[0,2,2],"min_engine_version":[1,21,0]},"modules":[{"type":"resources","uuid":"fc7bf96d-c4c7-4212-8b90-211b1d2fa1f0","version":[0,2,2]}]}
             """;
         try (var zip = new ZipOutputStream(Files.newOutputStream(Path.of(args[1])))) {
             add(zip, "manifest.json", manifest.getBytes(StandardCharsets.UTF_8));

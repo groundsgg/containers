@@ -43,10 +43,23 @@ The config is mounted as a single file rather than a directory, because Geyser a
 
 ## Mandatory Bedrock nameplate pack
 
-The bundled Bedrock pack supplies the existing Bedrock block icon at U+E500
-(`font/glyph_E5.png`, first 16×16 cell). Minestom maps the Java pack's U+E004
-nameplate icon to this codepoint for Bedrock recipients. It keeps the native E0
-controller-icon page intact. Java's pack and its release channels are independent.
+The bundled Bedrock pack supplies the Bedrock block icon at U+E500
+(`font/glyph_E5.png`, first 16×16 cell) and full-colour rank badges on page E6
+(`font/glyph_E6.png`, 64×64 cells). Both native nameplates and the Bedrock tab list
+select the same badge codepoint by resolved rank label and actual role RGB.
+Badge backgrounds use the same slices and compact white letter pixels as Java's tab list.
+They are sent with a white tint so the white lettering stays white. Native E0
+controller icons and the E5 edition icon stay intact. Java's pack and its release
+channels are independent.
+
+`pack-src/rank-badges.properties` is exported display metadata from central Stage
+Permissions roles, not another source of role colours. Keep the identical catalog at
+`gg/grounds/display/bedrock-rank-badges.properties` in plugin-permissions/minestom
+and plugin-proxy/velocity. After changing a role label or colour, export its actual
+stored value, regenerate the badge atlas, increase the manifest version, and deploy
+pack plus consumers together. Clients reconnect to receive the new mandatory pack.
+Until a new variant is available, a changed/custom role remains readable with its
+actual label and colour; Java glyphs are never sent as a Bedrock substitute.
 
 The committed 16×16 block texture comes from
 [Mojang's Bedrock samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/blocks/bedrock.png)

@@ -35,10 +35,28 @@ Geyser resolves everything relative to its working directory, so these are a con
 | Path | What puts it there |
 |---|---|
 | `/opt/geyser/Geyser.jar` | this image |
+| `/opt/geyser/packs/grounds-bedrock.mcpack` | reproducible build from `pack-src/`; sent by Geyser's existing mandatory pack policy |
 | `/opt/geyser/config.yml` | `grounds-geyser` ConfigMap, mounted read-only via `subPath` |
 | `/opt/geyser/floodgate/key.pem` | the `floodgate-key` Secret |
 
 The config is mounted as a single file rather than a directory, because Geyser also writes caches and logs into this directory at runtime.
+
+## Mandatory Bedrock nameplate pack
+
+The bundled Bedrock pack supplies the existing Bedrock block icon at U+E500
+(`font/glyph_E5.png`, first 16×16 cell). Minestom maps the Java pack's U+E004
+nameplate icon to this codepoint for Bedrock recipients. It keeps the native E0
+controller-icon page intact. Java's pack and its release channels are independent.
+
+The committed 16×16 block texture comes from
+[Mojang's Bedrock samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/blocks/bedrock.png)
+(SHA-256 `20ced86ba8cb89e29e2115f76c758278893e145575a73ca311bcc4305c140d04`).
+Texture copyright belongs to Mojang; see the samples repository's license.
+Build the tiny pack locally with JDK 25:
+
+```sh
+java -Djava.awt.headless=true geyser/pack-src/BuildPack.java geyser/pack-src/bedrock.png /tmp/grounds-bedrock.mcpack
+```
 
 ## Why it is pinned
 

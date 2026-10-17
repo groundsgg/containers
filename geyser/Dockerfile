@@ -18,6 +18,12 @@ RUN set -eux; \
     head -c 4 /tmp/geyser.jar | grep -q '^PK' || { echo "Downloaded Geyser jar is not a valid JAR (version=${GEYSER_VERSION}, build=${GEYSER_BUILD})" >&2; exit 1; }; \
     echo "${GEYSER_SHA256}  /tmp/geyser.jar" | sha256sum -c -
 
+FROM eclipse-temurin:25-jdk-alpine AS bedrock-pack
+
+WORKDIR /build
+COPY geyser/pack-src /build/src
+RUN java -Djava.awt.headless=true /build/src/BuildPack.java /build/src/bedrock.png /build/grounds-bedrock.mcpack
+
 FROM eclipse-temurin:25-jre-alpine
 
 ARG VCS_REVISION
@@ -45,6 +51,7 @@ LABEL org.opencontainers.image.title="geyser" \
 WORKDIR /opt/geyser
 
 COPY --from=downloader /tmp/geyser.jar /opt/geyser/Geyser.jar
+COPY --from=bedrock-pack /build/grounds-bedrock.mcpack /opt/geyser/packs/grounds-bedrock.mcpack
 COPY --chmod=755 geyser/scripts/start.sh /opt/geyser/start.sh
 
 RUN set -eux; \

@@ -6,10 +6,15 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 `FROM ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
-Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.1/plugin-scene-editor-paper-0.6.1.jar`.
+Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.2/plugin-scene-editor-paper-0.6.2.jar`.
 
-Scene Editor SHA-256: `846b7457e2d6f80aec246f2777397acea8e89539d510cb33616f15895cfa4d48`.
+Scene Editor SHA-256: `e0921d6db04b197e482e38b8b4c3111b632d623b593f2e5f7667113822458ac0`.
 This checksum identifies the published Maven artifact consumed by the image build.
+
+GroundsPluginRuntime 0.2.2 provides library-i18n 0.4.4 and the shared Mini-CD renderer.
+Its Paper JAR is pinned to SHA-256 `bb67586a8c51e94229cf27f46af7c1562ecc5908ec0d00839773e98f005fb53d`;
+the matching runtime catalog is pinned to `9edfaf236238b41d72d221cf4f7cc7141fc2f13af29485d39736dfeb2cdcef48`.
+The image contains the corresponding Paper runtime manifest at `/opt/grounds/runtime-manifest.json`.
 
 ## Paper
 
@@ -27,7 +32,7 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 | goPaintAdvanced | 1.8.2 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | EasyArmorStands | 3.3.2 | |
-| Grounds Scene Editor | 0.6.1 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
+| Grounds Scene Editor | 0.6.2 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 
@@ -38,8 +43,7 @@ Velocity 4 cannot hand a 26.3 client to a 26.2 backend). A local boot of the ima
 enabled every plugin and reached `Done`; the `No key layers in MapLike[{}]` line at
 world creation appears on the 26.2 image too. Before that, all tool versions were
 checked against stable Minecraft 26.2 releases on 2026-09-02. FAWE, FAVS, goPaintAdvanced, CreativeUtilities, and EasyArmorStands
-were already current. The inherited GroundsPlatform 0.6.1, GroundsPluginRuntime
-0.1.1, and GroundsPermissions 0.11.0 are the latest published releases.
+were already current. GroundsPluginRuntime is selected by this image so the chat renderer follows the current Mini-CD.
 
 ## Persistence
 

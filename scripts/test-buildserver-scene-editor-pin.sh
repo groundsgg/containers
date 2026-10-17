@@ -8,8 +8,9 @@ ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
 base_image='ghcr.io/groundsgg/buildsystem:sha-a7c169f@sha256:f017450d7f2923df6bd229b738cd5da5b4dd03a4c5033e7caefd3065584f5064'
-scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.1/plugin-scene-editor-paper-0.6.1.jar'
-scene_editor_sha256='846b7457e2d6f80aec246f2777397acea8e89539d510cb33616f15895cfa4d48'
+scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.6.2/plugin-scene-editor-paper-0.6.2.jar'
+scene_editor_sha256='e0921d6db04b197e482e38b8b4c3111b632d623b593f2e5f7667113822458ac0'
+runtime_sha256='bb67586a8c51e94229cf27f46af7c1562ecc5908ec0d00839773e98f005fb53d'
 
 fail=0
 require_arg() {
@@ -39,10 +40,12 @@ require_readme_line() {
 require_arg "$ROOT_DIR/buildserver/Dockerfile" BUILD_SYSTEM_IMAGE "$base_image" 'immutable BuildSystem pin'
 require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_URL "$scene_editor_url" 'Scene Editor Maven URL pin'
 require_arg "$ROOT_DIR/buildserver/Dockerfile" SCENE_EDITOR_SHA256 "$scene_editor_sha256" 'Scene Editor SHA-256 pin'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PLUGIN_VERSION '0.2.2' 'Paper runtime version'
+require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PAPER_SHA256 "$runtime_sha256" 'Paper runtime SHA-256 pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`. That layer already has BuildSystem, GroundsMaps (including \`/map pull\` and \`/map import\` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions." 'README immutable BuildSystem pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor Maven URL: \`$scene_editor_url\`." 'README Scene Editor Maven URL pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor SHA-256: \`$scene_editor_sha256\`." 'README Scene Editor SHA-256 pin'
-require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.6.1 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
+require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.6.2 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
 
 plugin_listing=$(docker run --rm --entrypoint sh "$IMAGE" -c 'find /app/plugins -maxdepth 1 -type f -name "*.jar" -exec basename {} \; | sort')
 plugin_count() {
@@ -65,10 +68,27 @@ assert_plugin_count() {
 assert_plugin_count '^GroundsSceneEditor[^/]*\.jar$' 1 'GroundsSceneEditor'
 assert_plugin_count '^BuildSystem[^/]*\.jar$' 1 'BuildSystem'
 assert_plugin_count '^GroundsMaps[^/]*\.jar$' 1 'GroundsMaps'
+assert_plugin_count '^plugin-grounds-runtime\.jar$' 1 'GroundsPluginRuntime'
 
 editor_sha=$(docker run --rm --entrypoint sh "$IMAGE" -c 'set -eu; editor=$(find /app/plugins -maxdepth 1 -type f -name "GroundsSceneEditor*.jar"); [ "$(printf "%s\\n" "$editor" | wc -l | tr -d " ")" = 1 ]; sha256sum "$editor" | awk "{print \$1}"' 2>/dev/null || true)
 if [ "$editor_sha" != "$scene_editor_sha256" ]; then
     echo "Scene Editor JAR SHA-256 mismatch: expected $scene_editor_sha256, got ${editor_sha:-missing}" >&2
+    fail=1
+fi
+
+runtime_sha=$(docker run --rm --entrypoint sh "$IMAGE" -c 'sha256sum /app/plugins/plugin-grounds-runtime.jar | cut -d " " -f 1')
+if [ "$runtime_sha" != "$runtime_sha256" ]; then
+    echo "Paper runtime JAR SHA-256 mismatch: expected $runtime_sha256, got $runtime_sha" >&2
+    fail=1
+fi
+
+if ! docker run --rm --entrypoint sh "$IMAGE" -c 'unzip -l /app/plugins/plugin-grounds-runtime.jar | grep -q "gg/grounds/i18n/SystemMessageColors.class"'; then
+    echo 'Paper runtime does not contain the shared chat palette' >&2
+    fail=1
+fi
+
+if ! docker run --rm --entrypoint cat "$IMAGE" /opt/grounds/runtime-manifest.json | python3 -c 'import json, sys; m = json.load(sys.stdin); sys.exit(not (m.get("schemaVersion") == 1 and m.get("runtime", {}).get("id") == "plugin-grounds-runtime-paper" and m["runtime"].get("version") == "0.2.2" and m["runtime"].get("platform") == "paper" and isinstance(m.get("libraries"), list)))'; then
+    echo 'Paper runtime manifest does not describe the selected runtime' >&2
     fail=1
 fi
 

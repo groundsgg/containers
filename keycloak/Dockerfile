@@ -1,16 +1,19 @@
 FROM alpine:3.24 AS downloader
 
-ARG KEYCLOAK_MINECRAFT_VERSION=1.1.4
+ARG KEYCLOAK_MINECRAFT_VERSION=1.2.0
+ARG KEYCLOAK_MINECRAFT_SHA256=882db3c6f2048089fed1183db9cba54d0b04f163cb702069453c1fb433052220
 ARG KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.2
 ARG KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256=1ad0806552d8e975441aa355bbdcb4f737b4c3083f693fac358cad629e10fb51
 
 RUN set -eux; \
     apk add --no-cache curl unzip; \
     [ -n "$KEYCLOAK_MINECRAFT_VERSION" ] || { echo "Keycloak Minecraft IDP version must be set" >&2; exit 1; }; \
+    [ -n "$KEYCLOAK_MINECRAFT_SHA256" ] || { echo "Keycloak Minecraft IDP checksum must be set" >&2; exit 1; }; \
     minecraft_artifact_url="https://github.com/groundsgg/keycloak-minecraft-idp/releases/download/v${KEYCLOAK_MINECRAFT_VERSION}/keycloak-minecraft-idp-${KEYCLOAK_MINECRAFT_VERSION}.jar"; \
     minecraft_output_file="/tmp/keycloak-minecraft-idp.jar"; \
     curl -fsSL -o "$minecraft_output_file" "$minecraft_artifact_url"; \
     [ -s "$minecraft_output_file" ] || { echo "Downloaded Keycloak Minecraft IDP provider is empty (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }; \
+    echo "$KEYCLOAK_MINECRAFT_SHA256  $minecraft_output_file" | sha256sum -c -; \
     head -c 4 "$minecraft_output_file" | grep -q '^PK' || { echo "Downloaded Keycloak Minecraft IDP provider is not a valid JAR (version=${KEYCLOAK_MINECRAFT_VERSION})" >&2; exit 1; }; \
     [ -n "$KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION" ] || { echo "Keycloak permissions event listener validation failed (reason=version_not_set)" >&2; exit 1; }; \
     [ -n "$KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256" ] || { echo "Keycloak permissions event listener validation failed (reason=checksum_not_set)" >&2; exit 1; }; \
@@ -44,7 +47,7 @@ FROM quay.io/keycloak/keycloak:26.7.1
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG KEYCLOAK_MINECRAFT_VERSION=1.1.4
+ARG KEYCLOAK_MINECRAFT_VERSION=1.2.0
 ARG KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION=0.2.2
 
 LABEL org.opencontainers.image.title="keycloak" \

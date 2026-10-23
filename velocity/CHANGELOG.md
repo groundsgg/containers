@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.22.0](https://github.com/groundsgg/containers/compare/velocity@v0.21.0...velocity@v0.22.0) (2026-10-23)
+
+
+### Features
+
+* **catalog:** bake manifest-bearing plugins into proxy and buildserver images ([#302](https://github.com/groundsgg/containers/issues/302)) ([c78506f](https://github.com/groundsgg/containers/commit/c78506f67ccaaef75b3ab68b1d907a1828b482b0))
+* **velocity:** bake plugin-agones 3.2.0 ([#313](https://github.com/groundsgg/containers/issues/313)) ([287348e](https://github.com/groundsgg/containers/commit/287348ef05579f0007301424cf1cff520014439d))
+* **velocity:** copy managed Floodgate config ([#303](https://github.com/groundsgg/containers/issues/303)) ([6597609](https://github.com/groundsgg/containers/commit/6597609dd0bdd7c3c029d4fe3f0065767aaf6669))
+
+
+### Bug Fixes
+
+* **chat:** activate context and level colors in runtimes ([#293](https://github.com/groundsgg/containers/issues/293)) ([34f772b](https://github.com/groundsgg/containers/commit/34f772b0c72efc91a4d875999e9fd21a567cef09))
+* **proxy:** protect player proof denial logs in native runtimes ([#308](https://github.com/groundsgg/containers/issues/308)) ([e138f52](https://github.com/groundsgg/containers/commit/e138f529213f9234581c6c168031609956d97d8b))
+
 ## [0.21.0](https://github.com/groundsgg/containers/compare/velocity@v0.20.1...velocity@v0.21.0) (2026-10-17)
 
 

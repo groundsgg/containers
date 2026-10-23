@@ -47,6 +47,11 @@ if [ -d "$DATA_ROOT" ]; then
   done
 fi
 
+# Restore the working copy before Paper opens a world. After the links above, so restored files
+# land wherever a durable path points; a failure exits here and Paper never starts with empty
+# worlds. Does nothing unless GROUNDS_WORKSPACE_SERVER is set.
+java -jar /opt/grounds/workspace-restore.jar
+
 if [ ! -x "$PAPER_START" ]; then
   echo "buildserver: missing $PAPER_START" >&2
   exit 1

@@ -1,4 +1,4 @@
-FROM alpine:3.24 AS downloader
+FROM eclipse-temurin:25-jdk-alpine AS downloader
 
 # Pinned, not "latest": Geyser follows Bedrock's protocol, which changes roughly
 # every six weeks, and a floating build would turn any unrelated rebuild into an
@@ -17,6 +17,9 @@ RUN set -eux; \
     [ -s /tmp/geyser.jar ] || { echo "Downloaded Geyser jar is empty (version=${GEYSER_VERSION}, build=${GEYSER_BUILD})" >&2; exit 1; }; \
     head -c 4 /tmp/geyser.jar | grep -q '^PK' || { echo "Downloaded Geyser jar is not a valid JAR (version=${GEYSER_VERSION}, build=${GEYSER_BUILD})" >&2; exit 1; }; \
     echo "${GEYSER_SHA256}  /tmp/geyser.jar" | sha256sum -c -
+
+COPY scripts/player-access-privacy /privacy
+RUN sh /privacy/build.sh geyser /tmp/geyser.jar /out/geyser.jar "$GEYSER_SHA256"
 
 FROM eclipse-temurin:25-jdk-alpine AS bedrock-pack
 
@@ -41,7 +44,8 @@ LABEL org.opencontainers.image.title="geyser" \
       org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.version="$IMAGE_VERSION" \
       gg.grounds.geyser.version="$GEYSER_VERSION" \
-      gg.grounds.geyser.build="$GEYSER_BUILD"
+      gg.grounds.geyser.build="$GEYSER_BUILD" \
+      gg.grounds.player-access-log-privacy="1"
 
 # Geyser resolves config.yml, its locale cache and its pack directory relative to
 # the working directory, so this path is part of the contract with the chart.
@@ -50,7 +54,7 @@ LABEL org.opencontainers.image.title="geyser" \
 # on startup and cannot do that against a read-only mount. start.sh copies it in.
 WORKDIR /opt/geyser
 
-COPY --from=downloader /tmp/geyser.jar /opt/geyser/Geyser.jar
+COPY --from=downloader /out/geyser.jar /opt/geyser/Geyser.jar
 COPY --from=bedrock-pack /build/grounds-bedrock.mcpack /opt/geyser/packs/grounds-bedrock.mcpack
 COPY --chmod=755 geyser/scripts/start.sh /opt/geyser/start.sh
 

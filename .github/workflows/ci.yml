@@ -16,6 +16,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  player-access-privacy-tests:
+    name: Player access privacy in pinned proxy runtimes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - run: python3 scripts/test-player-access-privacy.py
+
   startup-contract-tests:
     name: Container startup contracts
     runs-on: ubuntu-24.04
@@ -67,6 +79,7 @@ jobs:
           files: |
             ${{ matrix.container }}/**
             ${{ matrix.container == 'buildserver' && 'scripts/test-buildserver-scene-editor-pin.sh' || '' }}
+            ${{ (matrix.container == 'velocity' || matrix.container == 'geyser') && 'scripts/player-access-privacy/**' || '' }}
       - name: 🐳 Set up Docker Buildx
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v4

@@ -1,14 +1,25 @@
+FROM eclipse-temurin:25-jdk-alpine AS privacy-builder
+
+# Minecraft 26.3 (protocol 777) needs Velocity 4; it also accepts 26.2 clients.
+ARG VELOCITY_VERSION=4.2.0
+ARG VELOCITY_BUILD=30
+ARG VELOCITY_SHA256=35a5596a5468a035d8a32c8de5ebb0dc6b8d8f0cc3ff5169d514aca762af8aa8
+ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
+COPY scripts/player-access-privacy /privacy
+RUN set -eu; \
+    apk add --no-cache curl jq; \
+    builds_api_url="https://fill.papermc.io/v3/projects/velocity/versions/${VELOCITY_VERSION}/builds"; \
+    curl -fsSL -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" "$builds_api_url" -o /tmp/builds.json; \
+    download_url="$(jq -r --argjson build "${VELOCITY_BUILD}" 'first(.[] | select(.id == $build or .number == $build) | .downloads["server:default"].url) // empty' /tmp/builds.json)"; \
+    [ -n "$download_url" ] || { echo "Pinned Velocity build was not found" >&2; exit 1; }; \
+    curl -fsSL -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" "$download_url" -o /tmp/velocity-original.jar; \
+    sh /privacy/build.sh velocity /tmp/velocity-original.jar /out/velocity.jar "$VELOCITY_SHA256"
+
 FROM eclipse-temurin:25-jre-alpine
 
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-# Minecraft 26.3 (protocol 777) exists only on the Velocity 4 line; 3.5.1 stops
-# at 26.2. Velocity 4 still accepts 26.2 clients, so the proxies can move before
-# the backends do.
-ARG VELOCITY_VERSION=4.2.0
-ARG VELOCITY_BUILD=30
-ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 # plugin-agones 3.0.0 fills lobbies fullest-first below a per-lobby cap
 # (GROUNDS_LOBBY_PLAYER_CAP, default 100) instead of spreading joins evenly,
 # with per-player reservations so a burst of joins cannot overfill one. It also
@@ -52,27 +63,18 @@ LABEL org.opencontainers.image.title="velocity" \
       org.opencontainers.image.revision="$VCS_REVISION" \
       org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.version="$IMAGE_VERSION" \
-      gg.grounds.runtime.manifest.path="/opt/grounds/runtime-manifest.json"
+      gg.grounds.runtime.manifest.path="/opt/grounds/runtime-manifest.json" \
+      gg.grounds.player-access-log-privacy="1"
 
 WORKDIR /app
 
 COPY --chmod=755 scripts/download-plugins.sh /app/download-plugins.sh
 COPY --chown=velocity:velocity velocity/config/plugins /app/plugins
+COPY --from=privacy-builder /out/velocity.jar /app/velocity.jar
 
 RUN --mount=type=secret,id=github_token \
     set -eu; \
     apk add --no-cache curl jq netcat-openbsd; \
-    if [ -z "$VELOCITY_BUILD" ]; then \
-      echo "Velocity build must be set" >&2; \
-      exit 1; \
-    fi; \
-    builds_api_url="https://fill.papermc.io/v3/projects/velocity/versions/${VELOCITY_VERSION}/builds"; \
-    builds_response="$(curl -fsSL -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" "$builds_api_url")"; \
-    download_url="$(echo "$builds_response" | jq -r --argjson build "${VELOCITY_BUILD}" 'first(.[] | select(.id == $build or .number == $build) | .downloads["server:default"].url) // empty')"; \
-    [ -n "$download_url" ] || { echo "Failed to resolve Velocity download URL (version=${VELOCITY_VERSION}, build=${VELOCITY_BUILD})" >&2; exit 1; }; \
-    curl -fsSL -o /app/velocity.jar \
-      -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" \
-      "$download_url"; \
     mkdir -p /app/plugins; \
     mkdir -p /opt/grounds; \
     github_token="$(cat /run/secrets/github_token)"; \

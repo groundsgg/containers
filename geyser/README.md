@@ -79,3 +79,13 @@ Bedrock changes its protocol roughly every six weeks and Geyser follows. A float
 ## Why there is no healthcheck
 
 Geyser speaks RakNet over UDP and exposes no HTTP endpoint. A UDP port probe cannot tell "listening" from "nothing there", so it would report healthy for a dead process. An honest check needs an unconnected-ping round trip; Kubernetes restarts the pod when the process exits, which covers the case that actually happens.
+
+## Player portal denial privacy
+
+This first-party image modifies one logging operand in the pinned upstream runtime before any logger/filter/appender sees it. A denied Bedrock login may carry a short-lived player portal credential after the reserved `Bedrock player access:` marker. Logs retain safe text before that marker and replace the remainder with `[player portal credentials omitted]`; the original disconnect packet remains unchanged. Ordinary messages retain their original logging behavior.
+
+The build verifies the upstream SHA-256, exact class/method/call shape and patched bytecode, then publishes the patched JAR atomically. Unexpected upstream changes, signed artifacts and partial/double patches fail the build. The helper and version marker reside in the runtime JAR, independent of plugin lifecycle or logging reconfiguration. This is a deliberately modified vendor runtime; updating its pinned version also requires running `python3 scripts/test-player-access-privacy.py` with JDK 25 and checking the privacy boundary.
+
+The real-artifact test first proves that the original runtime exposes a synthetic fixture credential and then verifies the patch under accepting filters and logger reconfiguration. Velocity additionally checks that the actual client packet still contains the proof. Tests also reject checksum/shape/partial-patch changes without overwriting an output file.
+
+Before enabling `PLAYER_ACCESS_BAN_PROOFS_ENABLED` in plugin-chat, deploy and verify patched images for both Velocity and **every** upstream Geyser instance. The proxy can verify its own native marker, but cannot establish the privacy of a separate Geyser process. Private `/portal` command access does not require enabling denial proofs.

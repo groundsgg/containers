@@ -63,6 +63,14 @@ RUN --mount=type=secret,id=github_token,required=true \
       'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-paper", name: "plugin-grounds-runtime", version: $version, platform: "paper"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \
       /tmp/grounds-runtime-libraries.json > /runtime-manifest.json
 
+# The runtime is a JRE, which cannot launch a .java source file (no jdk.compiler), so the
+# working-copy restore is compiled here.
+FROM eclipse-temurin:25-jdk-alpine AS restore
+WORKDIR /src
+COPY buildserver/restore/WorkspaceRestore.java .
+RUN javac -d classes WorkspaceRestore.java && \
+    jar --create --file /workspace-restore.jar --main-class WorkspaceRestore -C classes .
+
 FROM ${BUILD_SYSTEM_IMAGE}
 
 ARG VCS_REVISION
@@ -75,6 +83,7 @@ RUN mkdir -p /opt/grounds
 COPY --from=plugins --chown=paper:paper /paper.jar /app/paper.jar
 COPY --from=plugins /jars/*.jar /app/plugins/
 COPY --from=plugins /runtime-manifest.json /opt/grounds/runtime-manifest.json
+COPY --from=restore /workspace-restore.jar /opt/grounds/workspace-restore.jar
 # Preserve the Paper start script from the base image, then install our wrapper.
 RUN cp /app/start.sh /opt/grounds/paper-start.sh
 COPY --chmod=755 buildserver/scripts/start.sh /app/start.sh

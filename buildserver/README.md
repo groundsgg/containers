@@ -49,6 +49,20 @@ were already current. GroundsPluginRuntime is selected by this image so the chat
 
 Mount a PVC at `/data` and set `BUILDSERVER_DATA_ROOT=/data` (optional; default is `/data`). The start wrapper symlinks durable world/plugin-data dirs from `/app` onto the PVC. Plugin JARs stay on the image.
 
+## Working copy
+
+With `GROUNDS_WORKSPACE_SERVER` set, the start wrapper restores the server's last committed working copy from the map registry (`GET /v1/workspaces/<server>/head`) before Paper starts, after the `/data` links above. Every file is checked against its size and SHA-256 and staged under `/app/.workspace-restore` before anything is moved into place. Only then is `/app/.workspace-head` written, holding the snapshot number, or `none` for a server that has never committed. GroundsMaps does not sync without that marker. Any failure exits the wrapper, so Paper never starts with empty worlds; the crash loop is the retry, and the boot now depends on the registry and Keycloak being reachable.
+
+| Variable | Default |
+|---|---|
+| `GROUNDS_WORKSPACE_SERVER` | unset: no restore, no sync |
+| `GROUNDS_MAPS_CLIENT_SECRET` | required when the server id is set |
+| `GROUNDS_MAPS_REGISTRY_URL` | `https://api.grounds.gg` |
+| `GROUNDS_MAPS_TOKEN_URL` | `https://account.grounds.gg/realms/grounds/protocol/openid-connect/token` |
+| `GROUNDS_MAPS_CLIENT_ID` | `buildserver-maps` |
+
+The restore is `buildserver/restore/WorkspaceRestore.java`, compiled in a JDK build stage because the runtime JRE cannot launch source files. `scripts/test-buildserver-restore.sh` runs it against a local registry fixture. Design: `docs/superpowers/specs/2026-10-23-buildserver-working-copy-design.md` in `groundsgg/service-maps`.
+
 ## Seed a world
 
 In game: `/map login`, then `/map import <https-url> <world> [sha256=<hex>]` fetches a `.zip` or `.tar.zst` and creates a new build world. Only map files are kept (datapacks are dropped), private addresses are refused and size limits apply; see GROUNDS.md in `groundsgg/buildsystem`. Without a network source: copy a world folder onto the PVC, then `/worlds import <name>`.

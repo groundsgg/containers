@@ -41,6 +41,15 @@ jobs:
       - name: Test Velocity Floodgate startup
         run: scripts/test-velocity-floodgate-start.sh
 
+      - name: Set up Java for the buildserver restore
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Test buildserver working-copy restore
+        run: scripts/test-buildserver-restore.sh
+
   docker-build:
     name: 🐳 Build ${{ matrix.container }}
     runs-on: ubuntu-24.04

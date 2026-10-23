@@ -4,7 +4,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-46d2937@sha256:2498777e6d8543d44953c88d29e4715a87040c4f1ca1f88bb63cdaee4ef50a1f`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
 Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar`.
 
@@ -48,6 +48,20 @@ were already current. GroundsPluginRuntime is selected by this image so the chat
 ## Persistence
 
 Mount a PVC at `/data` and set `BUILDSERVER_DATA_ROOT=/data` (optional; default is `/data`). The start wrapper symlinks durable world/plugin-data dirs from `/app` onto the PVC. Plugin JARs stay on the image.
+
+## Working copy
+
+With `GROUNDS_WORKSPACE_SERVER` set, the start wrapper restores the server's last committed working copy from the map registry (`GET /v1/workspaces/<server>/head`) before Paper starts, after the `/data` links above. Every file is checked against its size and SHA-256 and staged under `/app/.workspace-restore` before anything is moved into place. Only then is `/app/.workspace-head` written, holding the snapshot number, or `none` for a server that has never committed. GroundsMaps does not sync without that marker. Any failure exits the wrapper, so Paper never starts with empty worlds; the crash loop is the retry, and the boot now depends on the registry and Keycloak being reachable.
+
+| Variable | Default |
+|---|---|
+| `GROUNDS_WORKSPACE_SERVER` | unset: no restore, no sync |
+| `GROUNDS_MAPS_CLIENT_SECRET` | required when the server id is set |
+| `GROUNDS_MAPS_REGISTRY_URL` | `https://api.grounds.gg` |
+| `GROUNDS_MAPS_TOKEN_URL` | `https://account.grounds.gg/realms/grounds/protocol/openid-connect/token` |
+| `GROUNDS_MAPS_CLIENT_ID` | `buildserver-maps` |
+
+The restore is `buildserver/restore/WorkspaceRestore.java`, compiled in a JDK build stage because the runtime JRE cannot launch source files. `scripts/test-buildserver-restore.sh` runs it against a local registry fixture. Design: `docs/superpowers/specs/2026-10-23-buildserver-working-copy-design.md` in `groundsgg/service-maps`.
 
 ## Seed a world
 

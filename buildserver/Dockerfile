@@ -3,7 +3,7 @@
 # Grounds buildserver: BuildSystem stack + pinned builder tools.
 # Tool JARs are fetched at image build with SHA256 checks — never at pod start.
 
-ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b
+ARG BUILD_SYSTEM_IMAGE=ghcr.io/groundsgg/buildsystem:sha-46d2937@sha256:2498777e6d8543d44953c88d29e4715a87040c4f1ca1f88bb63cdaee4ef50a1f
 
 FROM alpine:3.24 AS plugins
 RUN apk add --no-cache curl jq
@@ -63,6 +63,14 @@ RUN --mount=type=secret,id=github_token,required=true \
       'if (.libraries | type) == "array" then {schemaVersion: 1, runtime: {id: "plugin-grounds-runtime-paper", name: "plugin-grounds-runtime", version: $version, platform: "paper"}, libraries: .libraries} else error("runtime catalog libraries must be an array") end' \
       /tmp/grounds-runtime-libraries.json > /runtime-manifest.json
 
+# The runtime is a JRE, which cannot launch a .java source file (no jdk.compiler), so the
+# working-copy restore is compiled here.
+FROM eclipse-temurin:25-jdk-alpine AS restore
+WORKDIR /src
+COPY buildserver/restore/WorkspaceRestore.java .
+RUN javac -d classes WorkspaceRestore.java && \
+    jar --create --file /workspace-restore.jar --main-class WorkspaceRestore -C classes .
+
 FROM ${BUILD_SYSTEM_IMAGE}
 
 ARG VCS_REVISION
@@ -75,6 +83,7 @@ RUN mkdir -p /opt/grounds
 COPY --from=plugins --chown=paper:paper /paper.jar /app/paper.jar
 COPY --from=plugins /jars/*.jar /app/plugins/
 COPY --from=plugins /runtime-manifest.json /opt/grounds/runtime-manifest.json
+COPY --from=restore /workspace-restore.jar /opt/grounds/workspace-restore.jar
 # Preserve the Paper start script from the base image, then install our wrapper.
 RUN cp /app/start.sh /opt/grounds/paper-start.sh
 COPY --chmod=755 buildserver/scripts/start.sh /app/start.sh

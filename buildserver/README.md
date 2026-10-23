@@ -4,7 +4,7 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 ## Base
 
-`FROM ghcr.io/groundsgg/buildsystem:sha-bb586c8@sha256:2b2622c1290c48fef3a676ec2efb6474c739d4bc62545a0e3231f5aabf4c831b`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
+`FROM ghcr.io/groundsgg/buildsystem:sha-46d2937@sha256:2498777e6d8543d44953c88d29e4715a87040c4f1ca1f88bb63cdaee4ef50a1f`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
 Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar`.
 

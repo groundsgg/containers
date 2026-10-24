@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/groundsgg/containers/compare/keycloak@v0.7.2...keycloak@v0.8.0) (2026-10-23)
+
+
+### Features
+
+* **keycloak:** use verified Bedrock identity provider 1.2.0 ([#306](https://github.com/groundsgg/containers/issues/306)) ([f70fb2a](https://github.com/groundsgg/containers/commit/f70fb2a36c9d879c6ffdbfe82c97c12e12abf797))
+
 ## [0.7.2](https://github.com/groundsgg/containers/compare/keycloak@v0.7.1...keycloak@v0.7.2) (2026-08-23)
 
 

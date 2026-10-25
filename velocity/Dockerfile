@@ -20,6 +20,10 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
+# plugin-agones 3.2.1 drains through plugin-player's session handoff, so the
+# proxy that takes a draining player over finds the handoff cookie instead of
+# refusing with "This transfer could not be verified".
+#
 # plugin-agones 3.2.0 also treats a lobby that retired itself (GameServer label
 # agones.dev/sdk-grounds-retired=true, set when its map is re-pinned) as
 # outdated: no new joins, and its players are moved to a current lobby.
@@ -53,7 +57,7 @@ ARG IMAGE_VERSION
 # ID" on every single boot. Which of the two won came down to the filename
 # sorting ahead of the other, which is not a thing to leave a permission
 # system resting on.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.2.0"
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.2.1"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.3.0"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

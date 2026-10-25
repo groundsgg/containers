@@ -29,8 +29,8 @@ ARG SCENE_EDITOR_SHA256=d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273
 ARG CHAT_URL=https://maven.pkg.github.com/groundsgg/plugin-chat/gg/grounds/plugin-chat-paper/2.12.0/plugin-chat-paper-2.12.0.jar
 ARG CHAT_SHA256=13f466c8658eadd430ab1528169220d5a885711eac646fc7a2ec2cf811e731c1
 # /settings, the same menu the lobby and games show (plugin-player's Paper plugin).
-ARG SETTINGS_URL=https://maven.pkg.github.com/groundsgg/plugin-player/gg/grounds/plugin-player-paper/1.6.0/plugin-player-paper-1.6.0.jar
-ARG SETTINGS_SHA256=1b889cbfa0884d5769d5a7a7ae3acfe565e9fb2cced5c402a6c76f4b8894a22b
+ARG SETTINGS_URL=https://maven.pkg.github.com/groundsgg/plugin-player/gg/grounds/plugin-player-paper/1.7.0/plugin-player-paper-1.7.0.jar
+ARG SETTINGS_SHA256=87cc5d9ceae385f8e6b4c661aee74b5b7030385d36e84fa03177de273878fc32
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION=0.3.0
 ARG GROUNDS_RUNTIME_PAPER_SHA256=89f973e0388604d37c6bce48e72b3a267041b7c5ba733fd2391f4e456228542b
 ARG GROUNDS_RUNTIME_CATALOG_SHA256=9edfaf236238b41d72d221cf4f7cc7141fc2f13af29485d39736dfeb2cdcef48

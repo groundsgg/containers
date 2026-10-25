@@ -101,7 +101,7 @@ jobs:
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=ci-test
           secrets: |
-            github_token=${{ secrets.GITHUB_TOKEN }}
+            github_token=${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: 🔍 Smoke test buildserver Scene Editor pin
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'buildserver'

@@ -80,7 +80,7 @@ jobs:
             VCS_REVISION=${{ github.sha }}
             IMAGE_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
           secrets: |
-            github_token=${{ secrets.GITHUB_TOKEN }}
+            github_token=${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: 🔍 Generate SBOM
         if: ${{ env.MATCHES_REF == 'true' }}

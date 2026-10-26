@@ -1,0 +1,57 @@
+--- a/src/decoder/pnglibconf.h
++++ b/src/decoder/pnglibconf.h
+@@ -160,7 +160,7 @@
+ #define PNG_USER_WIDTH_MAX 1000000
+ #define PNG_WEIGHT_SHIFT 8
+ #define PNG_ZBUF_SIZE 8192
+-#define PNG_ZLIB_VERNUM 0x12b0
++#define PNG_ZLIB_VERNUM 0
+ #define PNG_Z_DEFAULT_COMPRESSION (-1)
+ #define PNG_Z_DEFAULT_NOFILTER_STRATEGY 0
+ #define PNG_Z_DEFAULT_STRATEGY 1
+--- a/src/encoder/pnglibconf.h
++++ b/src/encoder/pnglibconf.h
+@@ -151,7 +151,7 @@
+ #define PNG_USER_WIDTH_MAX 1000000
+ #define PNG_WEIGHT_SHIFT 8
+ #define PNG_ZBUF_SIZE 8192
+-#define PNG_ZLIB_VERNUM 0x12b0
++#define PNG_ZLIB_VERNUM 0
+ #define PNG_Z_DEFAULT_COMPRESSION (-1)
+ #define PNG_Z_DEFAULT_NOFILTER_STRATEGY 0
+ #define PNG_Z_DEFAULT_STRATEGY 1
+--- a/src/image/image.cpp
++++ b/src/image/image.cpp
+@@ -3,7 +3,7 @@
+ Nan::Persistent<Function> LwipImage::constructor;
+ 
+ void LwipImage::Init(v8::Local<v8::Object> exports) {
+-    v8::Local<v8::Context> context = exports->CreationContext();
++    v8::Local<v8::Context> context = Nan::GetCurrentContext();
+     Nan::HandleScope scope;
+ 
+     // Prepare constructor template
+@@ -26,7 +26,7 @@
+     Nan::SetPrototypeMethod(tpl, "paste", paste);
+     Nan::SetPrototypeMethod(tpl, "setPixel", setPixel);
+     constructor.Reset(tpl->GetFunction(context).ToLocalChecked());
+-    exports->Set(
++    Nan::Set(exports,
+         Nan::New("LwipImage").ToLocalChecked(),
+         tpl->GetFunction(context).ToLocalChecked()
+     );
+@@ -96,10 +96,10 @@
+     size_t top = (size_t) info[1].As<Number>()->Value();
+     LwipImage * obj = ObjectWrap::Unwrap<LwipImage>(info.Holder());
+     Local<Array> rgba = Nan::New<Array>(4);
+-    rgba->Set(0, Nan::New((*(obj->_cimg))(left, top, 0, 0))); // red
+-    rgba->Set(1, Nan::New((*(obj->_cimg))(left, top, 0, 1))); // green
+-    rgba->Set(2, Nan::New((*(obj->_cimg))(left, top, 0, 2))); // blue
+-    rgba->Set(3, Nan::New((*(obj->_cimg))(left, top, 0, 3))); // alpha
++    Nan::Set(rgba, 0, Nan::New((*(obj->_cimg))(left, top, 0, 0))); // red
++    Nan::Set(rgba, 1, Nan::New((*(obj->_cimg))(left, top, 0, 1))); // green
++    Nan::Set(rgba, 2, Nan::New((*(obj->_cimg))(left, top, 0, 2))); // blue
++    Nan::Set(rgba, 3, Nan::New((*(obj->_cimg))(left, top, 0, 3))); // alpha
+     info.GetReturnValue().Set(rgba);
+ }
+ 

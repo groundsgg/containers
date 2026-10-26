@@ -36,6 +36,11 @@
         "release-type": "simple",
         "package-name": "buildserver",
         "initial-version": "0.1.0"
+      },
+      "crafatar": {
+        "release-type": "simple",
+        "package-name": "crafatar",
+        "initial-version": "0.1.0"
       }
   }
 }

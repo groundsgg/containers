@@ -66,6 +66,7 @@ jobs:
           - geyser
           - plugin-floodgate
           - buildserver
+          - crafatar
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v7
@@ -95,7 +96,7 @@ jobs:
           tags: ${{ matrix.container == 'buildserver' && 'grounds-buildserver:ci-test' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: ${{ matrix.container == 'buildserver' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
+          platforms: ${{ (matrix.container == 'buildserver' || matrix.container == 'crafatar') && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           build-args: |
             BUILD_DATE=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.updated_at }}
             VCS_REVISION=${{ github.sha }}

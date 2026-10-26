@@ -4,7 +4,7 @@
 # fixes, so this image carries them over (see README):
 #   - canvas 2.11.2 -> 3.2.3 (N-API), via patches/canvas-3.patch and the
 #     package-lock.json next to this file, which also moves nan 2.18 -> 2.30
-#   - lwip 1.3.1 patched for current V8 and zlib, via patches/lwip-node24.patch
+#   - lwip 1.3.1 patched for current V8, zlib and GCC, via patches/lwip-node24.patch
 ARG NODE_IMAGE=node:24.22.1-trixie-slim
 
 FROM ${NODE_IMAGE} AS build

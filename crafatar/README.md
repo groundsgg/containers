@@ -48,13 +48,14 @@ Read by upstream's `config.js`. The ones that matter here:
 
 ## Patches
 
-Upstream pins Node 12. Its native dependencies do not build, or build but break, on any Node that still gets security fixes, so this image changes three things and nothing in Crafatar's own code:
+Upstream pins Node 12. Its native dependencies do not build, or build but break, on any Node that still gets security fixes, so this image changes these and nothing in Crafatar's own code:
 
 | | Why |
 |---|---|
 | `patches/canvas-3.patch` + `package-lock.json`: canvas 2.11.2 → 3.2.3 | canvas 2 has no Node 24 build and does not compile against Node 26. Compiled for Node 24 against a newer nan, it loads but its `width`/`height` setters no longer reach the native object, so every 3D render fails with a 0×0 canvas. canvas 3 is N-API; Crafatar's render code runs on it unchanged. The lockfile is upstream's with only canvas' own dependencies and nan (2.18 → 2.30, which lwip needs for current V8) changed. canvas is compiled from source against Debian's cairo/pango instead of downloading its prebuilt binary. |
 | `patches/lwip-node24.patch`, six lines in `src/image/image.cpp` | `Object::CreationContext` and context-less `Object::Set` were removed from V8; replaced by their Nan equivalents. |
 | `patches/lwip-node24.patch`, `PNG_ZLIB_VERNUM` → 0 | lwip's bundled libpng was configured against zlib 1.2.11 and refuses to compile against another `zlib.h`; Node's headers ship zlib 1.3. 0 is libpng's own "prebuilt config" value, which skips that compile-time check. |
+| `patches/lwip-node24.patch`, `#include <unistd.h>` in the bundled zlib's `gzguts.h` | GCC 14 (Debian trixie) makes implicit function declarations an error; `lseek`/`read`/`write`/`close` were undeclared. Same fix as zlib 1.2.12. |
 
 Upstream's test suite (`npm test`, needs Redis and Mojang) on this build: 91 passing, 16 failing. All 16 compare a CRC32 of the PNG bytes; the pixels are identical (checked against the bundled Steve images), only the zlib output differs. Upstream's Dockerfile runs the tests during the build; this one does not, since they need the network and a live Mojang. The build does check that both native modules load and that canvas can size a canvas.
 

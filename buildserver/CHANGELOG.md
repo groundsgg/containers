@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.10.0](https://github.com/groundsgg/containers/compare/buildserver@v0.9.2...buildserver@v0.10.0) (2026-10-29)
+
+
+### Features
+
+* **buildserver:** /settings Chat & Voice tab (plugin-player 1.7.0) ([#318](https://github.com/groundsgg/containers/issues/318)) ([26ea8fc](https://github.com/groundsgg/containers/commit/26ea8fce4b7f25becbe62c0b66c8b00e781a8bca))
+* **buildserver:** /settings from plugin-player 1.6.0 ([#317](https://github.com/groundsgg/containers/issues/317)) ([d92ae3d](https://github.com/groundsgg/containers/commit/d92ae3df68cb7e816aa040a2ea024a2d50e9b4c7))
+* **buildserver:** build on the BuildSystem image with registry browsing ([#310](https://github.com/groundsgg/containers/issues/310)) ([e5bc2b4](https://github.com/groundsgg/containers/commit/e5bc2b417bf4a26386dff7fd495fa56205ec2f66))
+* **buildserver:** bundle clickable scene editor 0.8.0 ([#324](https://github.com/groundsgg/containers/issues/324)) ([36c900a](https://github.com/groundsgg/containers/commit/36c900a9a58ca080880e0903ac49314abaaa2b01))
+* **buildserver:** bundle plugin-chat-paper 2.12.0 ([#314](https://github.com/groundsgg/containers/issues/314)) ([6854792](https://github.com/groundsgg/containers/commit/6854792be4ce888c452e0e41f720a4ec4982197d))
+* **buildserver:** restore the working copy before Paper starts ([#307](https://github.com/groundsgg/containers/issues/307)) ([49c1854](https://github.com/groundsgg/containers/commit/49c1854b35805d3cf8d51ee3065ca65d65fccff3))
+* **catalog:** bake manifest-bearing plugins into proxy and buildserver images ([#302](https://github.com/groundsgg/containers/issues/302)) ([c78506f](https://github.com/groundsgg/containers/commit/c78506f67ccaaef75b3ab68b1d907a1828b482b0))
+
+
+### Bug Fixes
+
+* **chat:** activate context and level colors in runtimes ([#293](https://github.com/groundsgg/containers/issues/293)) ([34f772b](https://github.com/groundsgg/containers/commit/34f772b0c72efc91a4d875999e9fd21a567cef09))
+
 ## [0.9.2](https://github.com/groundsgg/containers/compare/buildserver@v0.9.1...buildserver@v0.9.2) (2026-10-17)
 
 

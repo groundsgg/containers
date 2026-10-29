@@ -6,9 +6,9 @@ Runnable Stage/prod buildserver image: `ghcr.io/groundsgg/buildsystem` plus pinn
 
 `FROM ghcr.io/groundsgg/buildsystem:sha-5c2cac7@sha256:d78d981f4b8e356fb73cd195175bd1cb2467227c64e262f18e608e95bbe0ba24`. That layer already has BuildSystem, GroundsMaps (including `/map pull` and `/map import` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions.
 
-Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar`.
+Scene Editor Maven URL: `https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.8.0/plugin-scene-editor-paper-0.8.0.jar`.
 
-Scene Editor SHA-256: `d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db`.
+Scene Editor SHA-256: `ec0afae32ba1edca58e91e803effdbfb97706d191e0e5ecbcd031ec18eccbba8`.
 This checksum identifies the published Maven artifact consumed by the image build.
 
 GroundsPluginRuntime 0.3.0 provides library-i18n 0.4.4 and the shared Mini-CD renderer.
@@ -32,7 +32,7 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 | goPaintAdvanced | 1.8.2 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | EasyArmorStands | 3.3.2 | |
-| Grounds Scene Editor | 0.7.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
+| Grounds Scene Editor | 0.8.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
 | GroundsChatPaper | 2.12.0 | `plugin-chat-paper` from the private plugin-chat Maven package (BuildKit secret). With `MODERATION_ENFORCEMENT_ENABLED=true` the proxy renders chat as on the lobby and games. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |

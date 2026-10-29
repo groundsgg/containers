@@ -8,8 +8,8 @@ ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 IMAGE=${1:-grounds-buildserver:scene-editor-test}
 
 base_image='ghcr.io/groundsgg/buildsystem:sha-5c2cac7@sha256:d78d981f4b8e356fb73cd195175bd1cb2467227c64e262f18e608e95bbe0ba24'
-scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar'
-scene_editor_sha256='d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db'
+scene_editor_url='https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.8.0/plugin-scene-editor-paper-0.8.0.jar'
+scene_editor_sha256='ec0afae32ba1edca58e91e803effdbfb97706d191e0e5ecbcd031ec18eccbba8'
 runtime_sha256='89f973e0388604d37c6bce48e72b3a267041b7c5ba733fd2391f4e456228542b'
 
 fail=0
@@ -45,7 +45,7 @@ require_arg "$ROOT_DIR/buildserver/Dockerfile" GROUNDS_RUNTIME_PAPER_SHA256 "$ru
 require_readme_line "$ROOT_DIR/buildserver/README.md" "\`FROM $base_image\`. That layer already has BuildSystem, GroundsMaps (including \`/map pull\` and \`/map import\` with generated derivation metadata excluded from authoring roundtrips), and plugin-permissions." 'README immutable BuildSystem pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor Maven URL: \`$scene_editor_url\`." 'README Scene Editor Maven URL pin'
 require_readme_line "$ROOT_DIR/buildserver/README.md" "Scene Editor SHA-256: \`$scene_editor_sha256\`." 'README Scene Editor SHA-256 pin'
-require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.7.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
+require_readme_line "$ROOT_DIR/buildserver/README.md" '| Grounds Scene Editor | 0.8.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |' 'README Scene Editor version'
 
 plugin_listing=$(docker run --rm --entrypoint sh "$IMAGE" -c 'find /app/plugins -maxdepth 1 -type f -name "*.jar" -exec basename {} \; | sort')
 plugin_count() {

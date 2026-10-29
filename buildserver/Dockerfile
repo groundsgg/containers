@@ -24,8 +24,8 @@ ARG CREATIVE_URL=https://cdn.modrinth.com/data/zAcZq5oV/versions/K9wWSuIr/creati
 ARG CREATIVE_SHA256=0cd7c566e63ddd2ac7c0741ca0bcb3abfbafba7fddf0838d77ed742cbd1831e9
 ARG EAS_URL=https://cdn.modrinth.com/data/8DDI76SG/versions/YIdwIece/EasyArmorStands-3.3.2.jar
 ARG EAS_SHA256=e830257512d3b95557fd3bf2a787015c18e52ff87314478b014ac1c45dff57c3
-ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.7.0/plugin-scene-editor-paper-0.7.0.jar
-ARG SCENE_EDITOR_SHA256=d59dc4beeb2a58ad451e6dbe4233596db0fb3baedc3e3fa68ff60273446be7db
+ARG SCENE_EDITOR_URL=https://maven.pkg.github.com/groundsgg/plugin-scene-editor/gg/grounds/plugin-scene-editor-paper/0.8.0/plugin-scene-editor-paper-0.8.0.jar
+ARG SCENE_EDITOR_SHA256=ec0afae32ba1edca58e91e803effdbfb97706d191e0e5ecbcd031ec18eccbba8
 ARG CHAT_URL=https://maven.pkg.github.com/groundsgg/plugin-chat/gg/grounds/plugin-chat-paper/2.12.0/plugin-chat-paper-2.12.0.jar
 ARG CHAT_SHA256=13f466c8658eadd430ab1528169220d5a885711eac646fc7a2ec2cf811e731c1
 # /settings, the same menu the lobby and games show (plugin-player's Paper plugin).

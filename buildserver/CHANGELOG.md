@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/groundsgg/containers/compare/buildserver@v0.10.0...buildserver@v0.10.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* **buildserver:** South America and Africa in /settings (plugin-player 1.7.1) ([#325](https://github.com/groundsgg/containers/issues/325)) ([95d62bc](https://github.com/groundsgg/containers/commit/95d62bc437fc1b8cd89ebcb614308fff281d8a1c))
+
 ## [0.10.0](https://github.com/groundsgg/containers/compare/buildserver@v0.9.2...buildserver@v0.10.0) (2026-10-29)
 
 

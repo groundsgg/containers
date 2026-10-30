@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3](https://github.com/groundsgg/containers/compare/buildserver@v0.10.2...buildserver@v0.10.3) (2026-10-30)
+
+
+### Bug Fixes
+
+* **deps:** bundle signed conversation chat 2.18.0 ([#329](https://github.com/groundsgg/containers/issues/329)) ([4cbb0b5](https://github.com/groundsgg/containers/commit/4cbb0b5d52974f23dbf1975ee4dcf35e66428c94))
+
 ## [0.10.2](https://github.com/groundsgg/containers/compare/buildserver@v0.10.1...buildserver@v0.10.2) (2026-10-30)
 
 

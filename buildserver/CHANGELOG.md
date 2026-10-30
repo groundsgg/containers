@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/groundsgg/containers/compare/buildserver@v0.10.1...buildserver@v0.10.2) (2026-10-30)
+
+
+### Bug Fixes
+
+* **buildserver:** bundle signed player chat 2.16.0 ([#327](https://github.com/groundsgg/containers/issues/327)) ([9eaf526](https://github.com/groundsgg/containers/commit/9eaf526f5f93b0dc596889b0d2ffc017ba921843))
+
 ## [0.10.1](https://github.com/groundsgg/containers/compare/buildserver@v0.10.0...buildserver@v0.10.1) (2026-10-30)
 
 

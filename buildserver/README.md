@@ -33,7 +33,7 @@ so updating the buildserver does not require rebuilding the shared Paper base.
 | CreativeUtilities | 1.5.0 | No 26.3 release listed (its update check warns); boots and enables on 26.3. |
 | EasyArmorStands | 3.3.2 | |
 | Grounds Scene Editor | 0.8.0 | Downloaded from the pinned GitHub Maven URL above using a BuildKit secret. |
-| GroundsChatPaper | 2.12.0 | `plugin-chat-paper` from the private plugin-chat Maven package (BuildKit secret). With `MODERATION_ENFORCEMENT_ENABLED=true` the proxy renders chat as on the lobby and games. |
+| GroundsChatPaper | 2.16.0 | `plugin-chat-paper` from the private plugin-chat Maven package (BuildKit secret). With `MODERATION_ENFORCEMENT_ENABLED=true` the proxy renders chat as on the lobby and games. |
 | goBrushAdvanced | — | Deferred (no Paper 26.2/26.3 build) |
 | HeadDatabase | — | Pending Spigot vendor jar |
 

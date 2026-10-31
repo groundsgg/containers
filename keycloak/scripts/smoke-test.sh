@@ -44,9 +44,23 @@ config="$(docker run --rm \
   "$image" show-config)"
 
 grep -Fq "kc.provider.file.keycloak-permissions-event-listener.jar.last-modified" <<<"$config"
-grep -Fq "kc.spi-events-listener-permissions-events-nats-url =  nats://nats:4222" <<<"$config"
-grep -Fq "kc.spi-events-listener-permissions-events-realm =  grounds-realm-id" <<<"$config"
-grep -Fq "kc.spi-events-listener-permissions-events-subject =  minecraft-identity.changed" <<<"$config"
+# Keycloak 26.8 masks SPI values in show-config. Require the exact property
+# and either our known fixture value or the redacted representation. Startup
+# below still exercises these settings against the real local NATS/Postgres.
+assert_spi_config() {
+  local property="$1" expected="$2" line masked=' =  \*+ '
+  line="$(grep -F "${property} =  " <<<"$config")" || {
+    echo "Keycloak provider verification failed (reason=spi_property_missing, property=${property})" >&2
+    return 1
+  }
+  if [[ "$line" != *"${property} =  ${expected} "* ]] && [[ ! "$line" =~ $masked ]]; then
+    echo "Keycloak provider verification failed (reason=spi_property_unexpected, property=${property})" >&2
+    return 1
+  fi
+}
+assert_spi_config "kc.spi-events-listener-permissions-events-nats-url" "nats://nats:4222"
+assert_spi_config "kc.spi-events-listener-permissions-events-realm" "grounds-realm-id"
+assert_spi_config "kc.spi-events-listener-permissions-events-subject" "minecraft-identity.changed"
 
 mkdir -p "${tmp_dir}/import"
 cat >"${tmp_dir}/import/grounds-realm.json" <<'EOF'

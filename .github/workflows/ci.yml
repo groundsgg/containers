@@ -22,11 +22,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '25'
       - run: python3 scripts/test-player-access-privacy.py
+      - run: python3 scripts/test-transfer-admission-build.py
 
   startup-contract-tests:
     name: Container startup contracts
@@ -42,7 +43,7 @@ jobs:
         run: scripts/test-velocity-floodgate-start.sh
 
       - name: Set up Java for the buildserver restore
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "25"
@@ -81,6 +82,7 @@ jobs:
             ${{ matrix.container }}/**
             ${{ matrix.container == 'buildserver' && 'scripts/test-buildserver-scene-editor-pin.sh' || '' }}
             ${{ (matrix.container == 'velocity' || matrix.container == 'geyser') && 'scripts/player-access-privacy/**' || '' }}
+            ${{ matrix.container == 'velocity' && 'scripts/transfer-admission/**' || '' }}
       - name: 🐳 Set up Docker Buildx
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v4

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.5](https://github.com/groundsgg/containers/compare/buildserver@v0.10.4...buildserver@v0.10.5) (2026-10-31)
+
+
+### Bug Fixes
+
+* **buildserver:** bundle functional alert settings 1.10.0 ([#333](https://github.com/groundsgg/containers/issues/333)) ([818e80f](https://github.com/groundsgg/containers/commit/818e80f72837865937328b85cd324da4ae6528cb))
+
 ## [0.10.4](https://github.com/groundsgg/containers/compare/buildserver@v0.10.3...buildserver@v0.10.4) (2026-10-31)
 
 

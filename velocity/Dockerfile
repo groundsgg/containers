@@ -64,7 +64,9 @@ ARG IMAGE_VERSION
 # ID" on every single boot. Which of the two won came down to the filename
 # sorting ahead of the other, which is not a thing to leave a permission
 # system resting on.
-ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.3.0"
+# Verified transfer admission needs the source-side retry/deduplication behavior:
+# a shared handoff budget refusal stays queued until the drain deadline.
+ARG PLUGINS="plugin-agones:plugin-agones-velocity:3.3.1"
 ARG GROUNDS_RUNTIME_PLUGIN_VERSION="0.3.0"
 # grounds-platform velocity build: proxy-side whitelist gate, MOTD, and
 # platform command execution. Gated on the arg so it can be disabled.

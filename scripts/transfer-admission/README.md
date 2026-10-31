@@ -18,8 +18,12 @@ there is no instrumentation agent, plugin-event exemption, or separate Velocity 
 - A destination-created random connection UUID and proxy ID bind the early reservation.
   That UUID is also the final exact session ID. The authenticated profile must match.
 - Cookie + HTTP verification: maximum 3 seconds, HTTP request 2 seconds. Maximum 32
-  pending/admitted connections per process. Online authentication is never skipped.
-- Service-player shares a 32-outstanding-ticket issuance budget across source proxies
+  pending/admitted connections per process. A global 64-attempt/second token bucket
+  (burst 64) bounds fast invalid transfers as well, including direct connections. Closed
+  connections cancel their timers. Online authentication is never skipped.
+- Enabled source proxies request `boundedAdmission=true` when issuing a ticket.
+  Legacy/off sources retain their existing issuance behavior during API-first rollout.
+  Service-player shares a 32-outstanding-ticket issuance budget across opted-in source proxies
   and service replicas; each destination also has a database admission budget of 32.
   plugin-agones retries a full budget before its drain deadline and keeps protecting
   running rounds. Minting happens at the actual send attempt, never on queue insertion.
@@ -68,3 +72,13 @@ continuous router coverage on every published node, including DNS-TTL overlap on
 Run `python3 scripts/test-transfer-admission-build.py` with JDK 25. It fetches the pinned
 upstream, checks reproducibility/reapplication/checksum/anchor drift, then runs real LOGIN
 wire tests with the flag on/off, two Velocity processes and a bounded loopback authority.
+
+## Activation requirements still open
+
+The code does not yet coordinate separate planned restart operations using total backlog
+plus authentication time, or discover admission/API capability through arbitrary shared
+entry hosts. Retrying until a local drain deadline supplies backpressure, not that broader
+rollout guarantee. Until those controls are implemented, use only an isolated, verified
+compatible receiver pool for canary testing and do not activate general mixed-version
+public routing. Public Stage activation remains blocked on that coordination/routing work
+and authenticated Stage evidence; this PR does not mark those plan tasks complete.

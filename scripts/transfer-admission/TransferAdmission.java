@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -32,12 +33,27 @@ public final class TransferAdmission {
     private static final boolean ENABLED = "true".equals(System.getenv("GROUNDS_TRANSFER_ADMISSION_ENABLED"));
     private static final Key COOKIE = Key.key("grounds:player-session-handoff");
     // Bounds all waiting sockets, HTTP checks, AND admitted authentications, not just active HTTP.
+    private static final AttemptBudget ATTEMPTS = new AttemptBudget();
     private static final Semaphore BUDGET = new Semaphore(32);
     private static final Semaphore ABORT_BUDGET = new Semaphore(32);
     private static final ConcurrentHashMap<MinecraftConnection, Pending> PENDING = new ConcurrentHashMap<>();
     private static final HttpClient HTTP = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1))
         .followRedirects(HttpClient.Redirect.NEVER).build();
     private static final Component FAILED = Component.text("This transfer could not be verified. Please reconnect.");
+
+    /** Global, never per-IP: a legitimate shared-NAT burst has the full initial 64 slots. */
+    private static final class AttemptBudget {
+        private double tokens = 64;
+        private long refilledAt = System.nanoTime();
+        synchronized boolean acquire() {
+            long now = System.nanoTime();
+            tokens = Math.min(64, tokens + Math.max(0, now - refilledAt) * (64.0 / 1_000_000_000));
+            refilledAt = now;
+            if (tokens < 1) return false;
+            tokens -= 1;
+            return true;
+        }
+    }
 
     private static final class Pending {
         final String connectionId = UUID.randomUUID().toString();
@@ -47,7 +63,9 @@ public final class TransferAdmission {
         UUID playerId;
         String token;
         boolean checking;
-        boolean admitted;
+        volatile boolean admitted;
+        volatile ScheduledFuture<?> cookieTimeout;
+        volatile ScheduledFuture<?> authTimeout;
     }
 
     private TransferAdmission() {}
@@ -55,15 +73,16 @@ public final class TransferAdmission {
     public static boolean attempt(Ratelimiter<Object> limiter, Object address,
                                   MinecraftConnection connection, HandshakePacket handshake) {
         if (!ENABLED || handshake.getIntent() != HandshakeIntent.TRANSFER) return limiter.attempt(address);
-        if (!BUDGET.tryAcquire()) return false;
+        if (!ATTEMPTS.acquire() || !BUDGET.tryAcquire()) return false;
         Pending pending = new Pending();
         if (PENDING.putIfAbsent(connection, pending) != null) { BUDGET.release(); return false; }
         connection.getChannel().closeFuture().addListener(f -> { if (remove(connection, pending)) abort(pending); });
-        connection.eventLoop().schedule(() -> {
+        if (PENDING.get(connection) != pending) return false;
+        pending.cookieTimeout = connection.eventLoop().schedule(() -> {
             if (PENDING.get(connection) == pending && !pending.admitted) reject(connection, pending);
         }, 3, TimeUnit.SECONDS);
         // Even admitted sockets cannot keep the finite admission budget forever during auth.
-        connection.eventLoop().schedule(() -> {
+        pending.authTimeout = connection.eventLoop().schedule(() -> {
             if (PENDING.get(connection) == pending) reject(connection, pending);
         }, 15, TimeUnit.SECONDS);
         return true;
@@ -177,6 +196,8 @@ public final class TransferAdmission {
     private static boolean remove(MinecraftConnection connection, Pending pending) {
         if (!PENDING.remove(connection, pending)) return false;
         BUDGET.release();
+        if (pending.cookieTimeout != null) pending.cookieTimeout.cancel(false);
+        if (pending.authTimeout != null) pending.authTimeout.cancel(false);
         return true;
     }
 }

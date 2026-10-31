@@ -258,6 +258,24 @@ enabled = false
                     except subprocess.TimeoutExpired:
                         process.kill(); process.wait()
 
+    @unittest.skipUnless(ENABLED, 'gate disabled')
+    def test_z_fast_failures_have_a_global_attempt_rate_bound(self):
+        admitted_to_cookie = 0
+        start = time.monotonic()
+        for _ in range(200):
+            s = self.connect()
+            response = packet(s)
+            if response[0] == 5:
+                admitted_to_cookie += 1
+                s.sendall(frame(b'\x04' + string(KEY) + b'\0'))
+                self.assertEqual(packet(s)[0], 0)
+            else:
+                self.assertEqual(response[0], 0)
+            s.close()
+        elapsed = time.monotonic() - start
+        self.assertLessEqual(admitted_to_cookie, 64 + int(elapsed * 64) + 2,
+            'fast invalid attempts must not replenish their own admission budget')
+
     @unittest.skipIf(ENABLED, 'gate enabled')
     def test_disabled_gate_preserves_transfer_ip_limit(self):
         self.connect(transfer=False, start=False)

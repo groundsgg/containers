@@ -27,6 +27,7 @@ jobs:
           distribution: temurin
           java-version: '25'
       - run: python3 scripts/test-player-access-privacy.py
+      - run: python3 scripts/test-transfer-admission-build.py
 
   startup-contract-tests:
     name: Container startup contracts
@@ -81,6 +82,7 @@ jobs:
             ${{ matrix.container }}/**
             ${{ matrix.container == 'buildserver' && 'scripts/test-buildserver-scene-editor-pin.sh' || '' }}
             ${{ (matrix.container == 'velocity' || matrix.container == 'geyser') && 'scripts/player-access-privacy/**' || '' }}
+            ${{ matrix.container == 'velocity' && 'scripts/transfer-admission/**' || '' }}
       - name: 🐳 Set up Docker Buildx
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v4

@@ -6,6 +6,7 @@ ARG VELOCITY_BUILD=30
 ARG VELOCITY_SHA256=35a5596a5468a035d8a32c8de5ebb0dc6b8d8f0cc3ff5169d514aca762af8aa8
 ARG VELOCITY_DOWNLOAD_USER_AGENT="grounds-containers/1.0 (https://github.com/groundsgg/containers)"
 COPY scripts/player-access-privacy /privacy
+COPY scripts/transfer-admission /transfer-admission
 RUN set -eu; \
     apk add --no-cache curl jq; \
     builds_api_url="https://fill.papermc.io/v3/projects/velocity/versions/${VELOCITY_VERSION}/builds"; \
@@ -13,7 +14,9 @@ RUN set -eu; \
     download_url="$(jq -r --argjson build "${VELOCITY_BUILD}" 'first(.[] | select(.id == $build or .number == $build) | .downloads["server:default"].url) // empty' /tmp/builds.json)"; \
     [ -n "$download_url" ] || { echo "Pinned Velocity build was not found" >&2; exit 1; }; \
     curl -fsSL -H "User-Agent: ${VELOCITY_DOWNLOAD_USER_AGENT}" "$download_url" -o /tmp/velocity-original.jar; \
-    sh /privacy/build.sh velocity /tmp/velocity-original.jar /out/velocity.jar "$VELOCITY_SHA256"
+    sh /privacy/build.sh velocity /tmp/velocity-original.jar /tmp/velocity-private.jar "$VELOCITY_SHA256"; \
+    privacy_sha256="$(sha256sum /tmp/velocity-private.jar | cut -d' ' -f1)"; \
+    sh /transfer-admission/build.sh /tmp/velocity-private.jar /out/velocity.jar "$privacy_sha256"
 
 FROM eclipse-temurin:25-jre-alpine
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.4](https://github.com/groundsgg/containers/compare/buildserver@v0.10.3...buildserver@v0.10.4) (2026-10-31)
+
+
+### Bug Fixes
+
+* **deps:** bundle recipient-scoped chat mentions 2.18.2 ([#331](https://github.com/groundsgg/containers/issues/331)) ([bdec2cb](https://github.com/groundsgg/containers/commit/bdec2cbe09a3396b4823ec656258d0aabe64ff37))
+
 ## [0.10.3](https://github.com/groundsgg/containers/compare/buildserver@v0.10.2...buildserver@v0.10.3) (2026-10-30)
 
 

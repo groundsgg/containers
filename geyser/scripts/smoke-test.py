@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -31,7 +32,9 @@ def main(image):
         identity = private + public
         (root / "identity.pem").write_bytes(identity)
         (root / "identity.pem").chmod(0o644)
-        (root / "floodgate-key.pem").write_text("synthetic-key-16b")
+        floodgate_key = "smoke-aes-key-16"
+        assert len(floodgate_key.encode()) == 16, "Floodgate fixture must be a valid AES key"
+        (root / "floodgate-key.pem").write_text(floodgate_key)
         (root / "config.yml").write_text("""bedrock:
   address: 0.0.0.0
   port: 19132
@@ -83,6 +86,14 @@ passthrough-player-counts: false
                         time.sleep(1)
                 assert data["version"] == "26.60" and data["protocol"] == 2225, data
                 assert data["onlineAuth"] is True and data["selfSignedAuth"] is False, data
+                migrated = docker("exec", name, "cat", "/opt/geyser/config.yml")
+                def section(key):
+                    body = migrated.split("\n" + key + ":\n", 1)[1]
+                    body = re.split(r"\n[^ #\n]", body, maxsplit=1)[0]
+                    return {k: v.strip().strip("\"'") for k, v in re.findall(r"(?m)^  ([a-z-]+): *(.*)$", body)}
+                java = section("java")
+                assert java["address"] == "127.0.0.1" and java["auth-type"] == "floodgate", java
+                assert section("advanced")["floodgate-key-file"] == "/config/floodgate-key.pem"
                 actual = docker("exec", name, "sha256sum", "/opt/geyser/nethernet/identity.pem").split()[0]
                 assert actual == expected, "operator identity changed"
                 # A fresh pod gets the same durable identity, not a newly generated one.
@@ -93,7 +104,7 @@ passthrough-player-counts: false
                     raise AssertionError("unauthenticated SDP was accepted")
                 except urllib.error.HTTPError as error:
                     assert error.code in (400, 401, 403), error.code
-                print("Fresh container", attempt + 1, "NetherNet ready; Bedrock", data["version"], "stable identity and auth rejection verified", flush=True)
+                print("Fresh container", attempt + 1, "NetherNet ready; Bedrock", data["version"], "stable identity, Java/Floodgate migration and malformed-request rejection verified", flush=True)
             except Exception:
                 print(docker("logs", "--tail", "60", name), flush=True)
                 raise

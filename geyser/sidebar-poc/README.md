@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.9 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.10 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -99,6 +99,10 @@ Version 0.1.9 replaces that compound guard with an equivalent compact string
 comparison, guarded below 512 characters. It also moves the domain up 2 GUI
 pixels so the glyphs remain inside the rounded panel. Native row sizes, section
 positions and the personal-head extension are unchanged.
+
+Version 0.1.10 hides the live text of the server's 26-space width-anchor row.
+That row is wider than the 82px text child and otherwise paints an ellipsis at
+the right edge. Its fixed 9px native height remains, preserving the layout.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

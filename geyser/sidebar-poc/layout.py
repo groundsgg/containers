@@ -76,7 +76,9 @@ def document():
     # One compact string comparison is equivalent to the long OR of every
     # dedicated field's predicate. Keep the last exclusion within the native
     # evaluator's practical expression budget (the old guard was 1078 chars).
-    markers = labels + tuple(s for name, _, _ in badge_variants for s in (name, name.title())) + ("grounds.gg", "§p", " / ")
+    # The server's 104px width anchor is 26 spaces. It still reserves a native
+    # row, but must not paint in the narrower 82px live-text child (ellipsis).
+    markers = labels + tuple(s for name, _, _ in badge_variants for s in (name, name.title())) + ("grounds.gg", "§p", " / ", " " * 26)
     filtered = "(#player_name_sidebar" + "".join(f" - '{marker}'" for marker in markers) + ")"
     regular = f"({filtered} = #player_name_sidebar)"
     row_controls = [{"live_text": {
@@ -196,6 +198,6 @@ if __name__ == "__main__":
     (textures / "player_head.png").write_bytes((textures / "crown.png").read_bytes())
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 9]
-    data["modules"][0]["version"] = [0, 1, 9]
+    data["header"]["version"] = [0, 1, 10]
+    data["modules"][0]["version"] = [0, 1, 10]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

@@ -54,7 +54,7 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "((#player_name_sidebar - 'RANG' - 'RANK' - 'COINS' - 'FREUNDE' - 'FRIENDS' - 'ADMIN' - 'Admin' - 'DEV' - 'Dev' - 'MOD' - 'Mod' - 'USER' - 'User' - 'grounds.gg' - '\u00a7p' - ' / ') = #player_name_sidebar)",
+              "source_property_name": "((#player_name_sidebar - 'RANG' - 'RANK' - 'COINS' - 'FREUNDE' - 'FRIENDS' - 'ADMIN' - 'Admin' - 'DEV' - 'Dev' - 'MOD' - 'Mod' - 'USER' - 'User' - 'grounds.gg' - '\u00a7p' - ' / ' - '                          ') = #player_name_sidebar)",
               "target_property_name": "#visible"
             }
           ]

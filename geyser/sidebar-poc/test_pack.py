@@ -165,10 +165,12 @@ class NativeSidebarTests(unittest.TestCase):
         native = self.ui["scoreboard_sidebar_player"]
         row = controls(native)
         for rank, friends in (("RANG", "FREUNDE"), ("RANK", "FRIENDS")):
-            texts = [" " * 26, "§h" + rank, "§hUser", "§hCOINS", "§p0", "§h" + friends, "§b0§r§h / 0", "§r", "§hgrounds.gg"]
+            texts = [" " * 26 + "§r§0§r", "§h" + rank, "§hUser", "§hCOINS", "§p0", "§h" + friends, "§b0§r§h / 0", "§r", "§hgrounds.gg"]
             y, tops, values = 25, {}, []
             for text in texts:
                 active = {k: v for k, v in row.items() if visible(v, text)}
+                if text.startswith(" " * 26):
+                    self.assertNotIn("live_text", active, "width padding must not render ellipsis")
                 for field in ("badge_user", "coins_value", "friends_value"):
                     if field in active: values.append(y + active[field]["offset"][1])
                 if text in ("§p0", "§b0§r§h / 0"):
@@ -191,7 +193,7 @@ class NativeSidebarTests(unittest.TestCase):
                 self.assertIsNone(pack.testzip())
                 self.assertEqual(len(pack.namelist()), 9)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 9])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 10])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

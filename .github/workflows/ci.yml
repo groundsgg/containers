@@ -16,6 +16,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  geyser-nethernet-tests:
+    name: Native Geyser NetherNet startup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t grounds-geyser:smoke -f geyser/Dockerfile .
+      - run: python3 geyser/scripts/smoke-test.py grounds-geyser:smoke
+
   player-access-privacy-tests:
     name: Player access privacy in pinned proxy runtimes
     runs-on: ubuntu-24.04

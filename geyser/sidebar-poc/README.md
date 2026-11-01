@@ -18,6 +18,13 @@ rank 14/13, Coins 10/9, friends 6/5, match 2, domain 2 (or 1 with a match).
 All connections read their own native scoreboard collections; no player UUID,
 proxy-local lookup or alternative data cache is introduced.
 
+The in-game 0.1.1 probe exposed two native JSON UI details: inherited controls
+are merged, and standalone labels with a collection index do not acquire the
+scoreboard's factory context. Version 0.1.2 explicitly hides the inherited
+`main` and objective-background instances and instantiates live text using
+Bedrock's `player_list_factory`. Its row panels share an overlay area and select
+their visible label by the original score, rather than stacking compacted rows.
+
 The original sidebar remains available for objectives outside that signature.
 Its definition follows Mojang's `resource_pack/ui/scoreboards.json` from
 `Mojang/bedrock-samples` (retrieved 2026-11-01), including the original player

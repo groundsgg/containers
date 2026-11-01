@@ -101,7 +101,10 @@ class NativeSidebarTests(unittest.TestCase):
         icons = controls(row["icons"])
         self.assertEqual(icons["coins_icon"]["offset"], [8, 13])
         self.assertEqual(icons["friends_icon"]["offset"], [8, 13])
-        self.assertEqual(icons["rank_icon"]["offset"], [8, 4])
+        self.assertEqual(icons["rank_icon"]["offset"], [9, 4])
+        self.assertEqual(icons["rank_icon"]["size"], [8, 8])
+        self.assertEqual(icons["rank_icon"]["color"], [1, 1, 1])
+        self.assertEqual(icons["rank_icon"]["texture"], "textures/grounds/sidebar/player_head")
         self.assertEqual(main["footer"]["size"], [110, 13])
         self.assertEqual(controls(main["footer"])["footer_separator"]["offset"], [10, -8])
         self.assertEqual(controls(main["footer"])["grounds_domain"]["offset"], [0, 6])
@@ -172,9 +175,9 @@ class NativeSidebarTests(unittest.TestCase):
             self.assertEqual(a.read_bytes(), b.read_bytes())
             with zipfile.ZipFile(a) as pack:
                 self.assertIsNone(pack.testzip())
-                self.assertEqual(len(pack.namelist()), 8)
+                self.assertEqual(len(pack.namelist()), 9)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 5])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 6])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

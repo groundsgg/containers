@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.5 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.6 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -18,8 +18,9 @@ sorting column and empty objective title are hidden inline. Rows display their
 live text with room for an icon; translated rank, Coins and friends labels get a
 first-party icon. A fixed domain footer avoids repeating the server's domain
 row. Known ranks use the shared mandatory nameplate pack's existing badge atlas;
-unknown ranks keep their live text. Rank uses a crown in this PoC; a personal
-head is not implemented. Long lines remain bounded by the native label's width.
+unknown ranks keep their live text. The rank icon is the connecting player's
+personal 8x8 face including its hat layer. Long lines remain bounded by the
+native label's width.
 
 The UI contract was compared with the exact installed Bedrock 1.26.60 Windows
 client. Its original sidebar definition matches Mojang's public
@@ -40,6 +41,24 @@ the duplicated domain row contributes zero height. A nine-sliced black mask
 rounds only the left corners by 4px and keeps the native opacity binding. Known
 labels and gold values use the Java palette. The existing logo and icon rasters
 are unchanged. This is layout/pack validation; in-game acceptance is required.
+
+Version 0.1.6 adds the small `GroundsSidebarHead` Geyser extension. During
+`SessionLoadResourcePacksEvent` it reads that connection's Bedrock login skin,
+crops the face and alpha-composites its hat, and registers a highest-priority
+pack containing only `textures/grounds/sidebar/player_head.png` and a manifest.
+No external skin service, Java-player lookup or proxy-local identity is used.
+Pack UUIDs derive from the face pixels so a changed face invalidates the client
+cache. Each connection owns a separate temporary pack file until disconnect;
+shutdown and failed registration also clean up the files. Unsupported, empty or
+malformed skin data keeps a crown fallback and does not block login. The skin
+dimensions are bounded before image allocation. Skin/identity data is not logged.
+
+The adapter accesses `GeyserSession.getClientData()` from the exact pinned
+Geyser 2.12.1-b1280 runtime; this internal call must be reviewed before a runtime
+upgrade. The Docker build compiles against that runtime and runs the head crop,
+hat/hires, malformed-input, deterministic-cache and session-isolation checks.
+The startup smoke test also verifies the extension initialization when run with
+`GROUNDS_SMOKE_EXPECT_EXTENSION='Personal sidebar portraits ready.'`.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

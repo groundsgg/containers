@@ -90,6 +90,13 @@ passthrough-player-counts: false
                         time.sleep(1)
                 assert data["version"] == "26.60" and data["protocol"] == 2225, data
                 assert data["onlineAuth"] is True and data["selfSignedAuth"] is False, data
+                expected_extension = os.environ.get("GROUNDS_SMOKE_EXPECT_EXTENSION")
+                if expected_extension:
+                    deadline = time.monotonic() + 10
+                    while expected_extension not in docker("logs", name):
+                        if time.monotonic() > deadline:
+                            raise AssertionError("expected extension did not initialize\n" + docker("logs", "--tail", "60", name))
+                        time.sleep(.2)
                 migrated = docker("exec", name, "cat", "/opt/geyser/config.yml")
                 def section(key):
                     body = migrated.split("\n" + key + ":\n", 1)[1]

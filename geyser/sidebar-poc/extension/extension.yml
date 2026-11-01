@@ -1,0 +1,6 @@
+id: groundssidebarhead
+name: GroundsSidebarHead
+main: gg.grounds.sidebar.SidebarHeadExtension
+api: 2.9.0
+version: 0.1.6
+authors: [Grounds]

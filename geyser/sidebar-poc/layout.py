@@ -113,11 +113,12 @@ def document():
     }})
     icons = []
     for name, texture, labels, color in (
-        ("rank_icon", "crown", ("RANG", "RANK"), [0.906, 0.722, 0.294]),
+        ("rank_icon", "player_head", ("RANG", "RANK"), [1, 1, 1]),
         ("coins_icon", "coin", ("COINS",), [0.906, 0.722, 0.294]),
         ("friends_icon", "friends", ("FREUNDE", "FRIENDS"), [0.475, 0.788, 0.745]),
     ):
-        icons.append({name: image(texture, (10, 10), (8, 4 if name == "rank_icon" else 13),
+        icons.append({name: image(texture, (8, 8) if name == "rank_icon" else (10, 10),
+            (9, 4) if name == "rank_icon" else (8, 13),
             color=color, bindings=visible_when(contains_label(labels)))})
     # Icons extend across both text rows; their 10px size must not change the
     # 9px native line pitch. The zero-height panel only supplies their anchor.
@@ -198,8 +199,12 @@ if __name__ == "__main__":
     target = ROOT / "pack/ui/scoreboards.json"
     target.write_text(json.dumps(document(), indent=2) + "\n")
     (ROOT / "pack/textures/grounds/sidebar/panel.png").write_bytes(panel_png())
+    # A missing/unsupported client skin keeps a visible icon. The per-session
+    # head pack overrides this one texture at the highest pack priority.
+    textures = ROOT / "pack/textures/grounds/sidebar"
+    (textures / "player_head.png").write_bytes((textures / "crown.png").read_bytes())
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 5]
-    data["modules"][0]["version"] = [0, 1, 5]
+    data["header"]["version"] = [0, 1, 6]
+    data["modules"][0]["version"] = [0, 1, 6]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

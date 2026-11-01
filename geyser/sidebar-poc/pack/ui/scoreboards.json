@@ -499,22 +499,22 @@
             {
               "rank_icon": {
                 "type": "image",
-                "texture": "textures/grounds/sidebar/crown",
+                "texture": "textures/grounds/sidebar/player_head",
                 "size": [
-                  10,
-                  10
+                  8,
+                  8
                 ],
                 "offset": [
-                  8,
+                  9,
                   4
                 ],
                 "anchor_from": "top_left",
                 "anchor_to": "top_left",
                 "layer": 2,
                 "color": [
-                  0.906,
-                  0.722,
-                  0.294
+                  1,
+                  1,
+                  1
                 ],
                 "bindings": [
                   {

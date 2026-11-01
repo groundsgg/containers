@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.7 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.8 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -69,6 +69,28 @@ conversion. The portrait now resolves the selected Bedrock geometry's UV canvas
 and head/hat front UVs, including box and per-face mappings. Image resolution
 alone is not a sufficient UV scale. Metadata logging includes dimensions and
 face coordinates only, so the next client join can verify the selected layout.
+
+Version 0.1.7 failed visual acceptance: the size binding compressed the native
+rows, and the client's Persona face was not in the default 256x256 atlas. A
+read-only snapshot of that connection showed an empty default head bone and a
+separate 32x64 `animated_face` geometry with normalized front-face meshes.
+
+Version 0.1.8 returns to fixed 9px native rows and places labels, values and icons
+at fixed drawing offsets. This avoids both child-dependent and bound row sizes.
+The frame adds 9px for the two section gaps, accounting for the hidden original
+domain row. The recorded fallback translates to nine distinct Bedrock entries;
+matching labels and native value formatting keep fields live without copying
+the data into a new controller. Other scoreboard shapes remain PoC limitations.
+
+Persona portraits now read the face animation from Geyser's already-verified
+client-data JWT during the resource-pack event, before Java login clears that
+field. Only the first face frame is retained. Its `animated_face` mesh selects
+the head and hat UV rectangles; the ordinary body atlas is not used for Persona
+faces. JWT input size, JSON depth, animation dimensions and frame count are
+bounded. Unrelated claims are skipped, and the JWT is neither persisted nor
+logged. The resource pack still contains only the 8x8 face PNG and its manifest.
+The Persona regression fixture keeps only anonymized geometry, with synthetic
+face pixels and synthetic JWT data. Classic skin handling remains available.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

@@ -25,10 +25,10 @@ final class HeadPack {
     }
 
     static Optional<byte[]> create(byte[] rgba, int width, int height, int canvasWidth, int canvasHeight, double[] uv) throws IOException {
-        if (rgba == null || width < 64 || width > 512 || width % 64 != 0
-                || height < 32 || height > 512 || rgba.length != width * height * 4) return Optional.empty();
-        if (canvasWidth < 64 || canvasWidth > 512 || (canvasWidth & (canvasWidth - 1)) != 0
-                || canvasHeight < 32 || canvasHeight > 512 || (canvasHeight & (canvasHeight - 1)) != 0) return Optional.empty();
+        if (rgba == null || width < 8 || width > 512 || (width & (width - 1)) != 0
+                || height < 8 || height > 512 || rgba.length != width * height * 4) return Optional.empty();
+        if (canvasWidth < 16 || canvasWidth > 512 || (canvasWidth & (canvasWidth - 1)) != 0
+                || canvasHeight < 16 || canvasHeight > 512 || (canvasHeight & (canvasHeight - 1)) != 0) return Optional.empty();
         double scaleX = (double) width / canvasWidth, scaleY = (double) height / canvasHeight;
         if (uv == null || uv.length != 8 || !valid(uv, 0, canvasWidth, canvasHeight)) return Optional.empty();
         boolean hasHat = valid(uv, 4, canvasWidth, canvasHeight);

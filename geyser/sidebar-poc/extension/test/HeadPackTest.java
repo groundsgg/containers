@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipInputStream;
@@ -94,6 +95,27 @@ public final class HeadPackTest {
         check(HeadPack.create(before, Integer.MAX_VALUE, 64).isEmpty(), "oversized dimensions bounded before multiplication");
         check(HeadPack.create(before, 63, 64).isEmpty(), "unsupported geometry fallback");
         check(HeadPack.create(new byte[64 * 64 * 4], 64, 64).isEmpty(), "empty portrait fallback");
+
+        // Persona's visible face is a separate animation atlas, not SkinData.
+        byte[] personaPatch = "{\"geometry\":{\"default\":\"geometry.poc_persona\",\"animated_face\":\"geometry.poc_face\"}}".getBytes(StandardCharsets.UTF_8);
+        byte[] personaGeometry;
+        try (var resource = HeadPackTest.class.getResourceAsStream("/persona-geometry.json")) { personaGeometry = resource.readAllBytes(); }
+        byte[] animation = new byte[32 * 128 * 4];
+        for (int y = 8; y < 16; y++) for (int x = 8; x < 16; x++) pixel(animation, 32, x, y, 20, 80, 150, 255);
+        pixel(animation, 32, 8, 24, 200, 0, 0, 128);
+        for (int y = 64; y < 128; y++) for (int x = 0; x < 32; x++) pixel(animation, 32, x, y, 0, 255, 0, 255);
+        String payload = "{\"UnrelatedClaim\":\"do-not-store\",\"AnimatedImageData\":[{\"Type\":1,\"ImageWidth\":32,\"ImageHeight\":128,\"Frames\":2,\"Image\":\"" + Base64.getEncoder().encodeToString(animation) + "\"}]}";
+        String jwt = "e30." + Base64.getUrlEncoder().withoutPadding().encodeToString(payload.getBytes(StandardCharsets.UTF_8)) + ".already-verified";
+        var animated = AnimatedFace.read(jwt, personaPatch, personaGeometry).orElseThrow();
+        check(animated.width() == 32 && animated.height() == 64, "use the first face frame only");
+        check(animated.canvas()[0] == 32 && animated.canvas()[1] == 64, "animated-face geometry instead of default body geometry");
+        check(Arrays.equals(animated.uv(), new double[]{8, 8, 8, 8, 8, 24, 8, 8}), "normalized front mesh UVs and hat");
+        var persona = entries(HeadPack.create(animated.pixels(), animated.width(), animated.height(), animated.canvas()[0], animated.canvas()[1], animated.uv()).orElseThrow());
+        var personaFace = ImageIO.read(new ByteArrayInputStream(persona.get("textures/grounds/sidebar/player_head.png")));
+        check(personaFace.getRGB(1, 0) == 0xff145096, "persona eyes/face come from animation, not body atlas");
+        check(personaFace.getRGB(0, 0) == 0xff6e284b, "persona hat is composited over face");
+        check(!new String(persona.get("manifest.json"), StandardCharsets.UTF_8).contains("do-not-store"), "login claims never enter the face pack");
+        check(AnimatedFace.read("invalid", personaPatch, personaGeometry).isEmpty(), "invalid optional face data fallback");
 
         // Two clients, including identical skins, must retain independent files.
         Path directory = Files.createTempDirectory("sidebar-head-test-");

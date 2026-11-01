@@ -74,16 +74,25 @@ def document():
     badge_condition = contains_label(tuple(s for name, _, _ in badge_variants for s in (name, name.title())))
     label_condition = contains_label(labels)
     domain_condition = contains_label(("grounds.gg",))
-    regular = f"(not ({label_condition} or {badge_condition} or {domain_condition}))"
+    coins_value = contains_label(("§p",))
+    friends_value = contains_label((" / ",))
+    regular = f"(not ({label_condition} or {badge_condition} or {domain_condition} or {coins_value} or {friends_value}))"
     row_controls = [{"live_text": {
         "type": "label", "size": [82, 9], "max_size": [82, 9], "offset": [26, 0],
         "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3,
         "text": "#player_name_sidebar", "localize": False, "shadow": False,
         "locked_alpha": 1.0, "color": "$player_name_color", "bindings": visible_when(regular),
     }}]
+    for name, y, condition in (("coins_value", 9, coins_value), ("friends_value", 18, friends_value)):
+        row_controls.append({name: {
+            "type": "label", "size": [82, 9], "max_size": [82, 9], "offset": [26, y],
+            "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3,
+            "text": "#player_name_sidebar", "localize": False, "shadow": False,
+            "locked_alpha": 1.0, "color": "$player_name_color", "bindings": visible_when(condition),
+        }})
     for label in labels:
         row_controls.append({"label_" + label.lower(): {
-            "type": "label", "text": label, "size": [82, 9], "offset": [26, 0 if label in ("RANG", "RANK") else 9],
+            "type": "label", "text": label, "size": [82, 9], "offset": [26, 0 if label in ("RANG", "RANK") else 9 if label == "COINS" else 18],
             "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3, "localize": False,
             "shadow": False, "locked_alpha": 1.0, "color": [193 / 255, 185 / 255, 170 / 255],
             "bindings": visible_when(contains_label((label,))),
@@ -102,7 +111,7 @@ def document():
         ("friends_icon", "friends", ("FREUNDE", "FRIENDS"), [0.475, 0.788, 0.745]),
     ):
         icons.append({name: image(texture, (8, 8) if name == "rank_icon" else (10, 10),
-            (9, 4) if name == "rank_icon" else (8, 13),
+            (9, 4) if name == "rank_icon" else (8, 13 if name == "coins_icon" else 22),
             color=color, bindings=visible_when(contains_label(labels)))})
     # Icons extend across both text rows; their 10px size must not change the
     # 9px native line pitch. The zero-height panel only supplies their anchor.
@@ -114,17 +123,8 @@ def document():
         "scoreboard_sidebar_player": {
             # Keep the original label control/factory registration. Its children
             # share the same live item context; the label itself paints no text.
-            "type": "label", "text": "", "size": [WIDTH, 9], "max_size": [WIDTH, 18],
-            "use_anchored_offset": True, "property_bag": {"#size_binding_y": 1.0},
-            "localize": False, "bindings": [player_binding(), {
-                "binding_type": "view",
-                "source_property_name": f"((1.0 + {contains_label(('COINS', 'FREUNDE', 'FRIENDS'))}) * (not {domain_condition}))",
-                "target_property_name": "#size_binding_y",
-            }, {
-                "binding_type": "view",
-                "source_property_name": "((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)",
-                "target_property_name": "#visible",
-            }], "controls": row_controls,
+            "type": "label", "text": "", "size": [WIDTH, 9], "max_size": [WIDTH, 9],
+            "localize": False, "bindings": [player_binding()], "controls": row_controls,
         },
         "scoreboard_sidebar": {
             "type": "panel", "size": [WIDTH, "100%c"],
@@ -136,7 +136,7 @@ def document():
                     "type": "image", "texture": "textures/grounds/sidebar/panel", "nineslice_size": [4, 4, 0, 4], "alpha": "#alpha",
                     "anchor_from": "top_middle", "anchor_to": "top_middle",
                     "bindings": [{"binding_name": "#objective_background_opacity", "binding_name_override": "#alpha"}],
-                    "size": [WIDTH, "100%c"],
+                    "size": [WIDTH, "100%c + 9px"],
                     "controls": [
                         {"displayed_objective": {
                             "type": "label", "text": "#objective_sidebar_name", "visible": False,
@@ -194,6 +194,6 @@ if __name__ == "__main__":
     (textures / "player_head.png").write_bytes((textures / "crown.png").read_bytes())
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 7]
-    data["modules"][0]["version"] = [0, 1, 7]
+    data["header"]["version"] = [0, 1, 8]
+    data["modules"][0]["version"] = [0, 1, 8]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

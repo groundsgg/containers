@@ -12,28 +12,14 @@
     ],
     "max_size": [
       110,
-      18
+      9
     ],
-    "use_anchored_offset": true,
-    "property_bag": {
-      "#size_binding_y": 1.0
-    },
     "localize": false,
     "bindings": [
       {
         "binding_name": "#player_name_sidebar",
         "binding_type": "collection",
         "binding_collection_name": "scoreboard_players"
-      },
-      {
-        "binding_type": "view",
-        "source_property_name": "((1.0 + ((not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar)))) * (not ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)))))",
-        "target_property_name": "#size_binding_y"
-      },
-      {
-        "binding_type": "view",
-        "source_property_name": "((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)",
-        "target_property_name": "#visible"
       }
     ],
     "controls": [
@@ -68,7 +54,81 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "(not (((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)))))",
+              "source_property_name": "(not (((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar))) or ((not ((#player_name_sidebar - '\u00a7p') = #player_name_sidebar))) or ((not ((#player_name_sidebar - ' / ') = #player_name_sidebar)))))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "coins_value": {
+          "type": "label",
+          "size": [
+            82,
+            9
+          ],
+          "max_size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            9
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "text": "#player_name_sidebar",
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": "$player_name_color",
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - '\u00a7p') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "friends_value": {
+          "type": "label",
+          "size": [
+            82,
+            9
+          ],
+          "max_size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            18
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "text": "#player_name_sidebar",
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": "$player_name_color",
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - ' / ') = #player_name_sidebar)))",
               "target_property_name": "#visible"
             }
           ]
@@ -195,7 +255,7 @@
           ],
           "offset": [
             26,
-            9
+            18
           ],
           "anchor_from": "top_left",
           "anchor_to": "top_left",
@@ -232,7 +292,7 @@
           ],
           "offset": [
             26,
-            9
+            18
           ],
           "anchor_from": "top_left",
           "anchor_to": "top_left",
@@ -495,7 +555,7 @@
                 ],
                 "offset": [
                   8,
-                  13
+                  22
                 ],
                 "anchor_from": "top_left",
                 "anchor_to": "top_left",
@@ -554,7 +614,7 @@
           ],
           "size": [
             110,
-            "100%c"
+            "100%c + 9px"
           ],
           "controls": [
             {

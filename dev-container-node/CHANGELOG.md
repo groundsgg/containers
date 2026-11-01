@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/groundsgg/containers/compare/dev-container-node@v0.2.1...dev-container-node@v0.2.2) (2026-11-01)
+
+
+### Bug Fixes
+
+* bump node in /dev-container-node ([#283](https://github.com/groundsgg/containers/issues/283)) ([7773e84](https://github.com/groundsgg/containers/commit/7773e8413afdf87478d5ae68243f662fc6cb8829))
+* bump node in /dev-container-node ([#322](https://github.com/groundsgg/containers/issues/322)) ([dbffccb](https://github.com/groundsgg/containers/commit/dbffccb84ae2299cdd8a8bbb5eeeb949236d5f96))
+
 ## [0.2.1](https://github.com/groundsgg/containers/compare/dev-container-node@v0.2.0...dev-container-node@v0.2.1) (2026-05-12)
 
 

@@ -80,7 +80,7 @@ class NativeSidebarTests(unittest.TestCase):
     def test_body_is_independent_of_title_type_and_row_count(self):
         self.assertIn("scoreboard_sidebar_player", self.ui)
         row = self.ui["scoreboard_sidebar_player"]
-        self.assertEqual(row["size"], [110, "100%cm"])
+        self.assertEqual(row["size"], [110, 9])
         self.assertEqual(controls(row)["live_text"]["offset"], [26, 0])
         self.assertNotIn("#objective_sidebar_name", json.dumps(row))
         self.assertNotIn("#scoreboard_sidebar_size", json.dumps(row))
@@ -95,9 +95,11 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertEqual(main["lists"]["offset"], [0, 25])
         row = controls(self.ui["scoreboard_sidebar_player"])
         self.assertEqual(row["live_text"]["size"], [82, 9])
-        # Geyser omits Java's empty spacer rows. A visible spacer makes the
-        # second/third label rows 18px tall; other rows remain 9px tall.
-        self.assertEqual(row["section_spacing"]["size"], [110, 18])
+        native = self.ui["scoreboard_sidebar_player"]
+        self.assertTrue(native["use_anchored_offset"])
+        self.assertEqual(native["property_bag"]["#size_binding_y"], 1.0)
+        self.assertNotIn("section_spacing", row)
+        self.assertNotIn("gold_value", row)
         icons = controls(row["icons"])
         self.assertEqual(icons["coins_icon"]["offset"], [8, 13])
         self.assertEqual(icons["friends_icon"]["offset"], [8, 13])
@@ -137,7 +139,7 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertEqual(pixels[4 * 21 + 4], 255)  # middle of left edge
         self.assertTrue(all(pixels[y * 21 + 20] == 255 for y in range(9)))
 
-    def test_visible_child_heights_match_the_java_reference_for_live_rows(self):
+    def test_explicit_row_heights_match_the_java_reference_for_live_rows(self):
         class Text(str):
             def __sub__(self, other):
                 return Text(self.replace(other, ""))
@@ -149,9 +151,11 @@ class NativeSidebarTests(unittest.TestCase):
                     return bool(eval(expr, {"__builtins__": {}}, {"name": Text(text)}))
             return node.get("visible", True)
 
-        # Replay the translated rows with Bedrock's documented max-visible-
-        # child sizing. This is geometry validation, not a rendering emulator.
-        row = controls(self.ui["scoreboard_sidebar_player"])
+        # Validate the explicit native size binding; do not infer label heights
+        # from child visibility, which did not match Bedrock's live layout.
+        native = self.ui["scoreboard_sidebar_player"]
+        row = controls(native)
+        height = next(b["source_property_name"] for b in native["bindings"] if b.get("target_property_name") == "#size_binding_y")
         for rank, friends in (("RANG", "FREUNDE"), ("RANK", "FRIENDS")):
             texts = [" " * 26, "§7" + rank, "§7User", "§7COINS", "§e0", "§7" + friends, "§b0 §f/ 0", "§r", "§7grounds.gg"]
             y, tops, values = 25, {}, []
@@ -159,10 +163,13 @@ class NativeSidebarTests(unittest.TestCase):
                 active = {k: v for k, v in row.items() if visible(v, text)}
                 if text in ("§7User", "§e0", "§b0 §f/ 0"):
                     values.append(y)
+                if text in ("§e0", "§b0 §f/ 0"):
+                    self.assertIn("live_text", active)
                 for name in ("label_" + rank.lower(), "label_coins", "label_" + friends.lower()):
                     if name in active:
                         tops[name] = y + active[name]["offset"][1]
-                y += max((v["size"][1] for v in active.values()), default=0)
+                expr = height.replace("#player_name_sidebar", "name").replace(" = ", " == ")
+                y += native["size"][1] * eval(expr, {"__builtins__": {}}, {"name": Text(text)})
             self.assertEqual(list(tops.values()), [34, 61, 88])
             self.assertEqual(values, [43, 70, 97])
             self.assertEqual(y + 13, 128)
@@ -177,7 +184,7 @@ class NativeSidebarTests(unittest.TestCase):
                 self.assertIsNone(pack.testzip())
                 self.assertEqual(len(pack.namelist()), 9)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 6])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 7])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

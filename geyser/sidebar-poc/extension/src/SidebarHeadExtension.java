@@ -32,9 +32,13 @@ public final class SidebarHeadExtension implements Extension {
         var skin = session.getClientData();
         if (skin == null) return;
         try {
+            int[] canvas = SkinCanvas.resolve(skin.getGeometryName(), skin.getGeometryData(), skin.getSkinImageWidth(), skin.getSkinImageHeight());
+            double[] uv = SkinCanvas.rectangles(skin.getGeometryName(), skin.getGeometryData());
             boolean registered = packs.offer(event.connection(), skin.getSkinData(), skin.getSkinImageWidth(), skin.getSkinImageHeight(),
+                canvas[0], canvas[1], uv,
                 path -> event.register(ResourcePack.create(PackCodec.path(path)), PriorityOption.HIGHEST));
-            if (registered) logger().info("Personal sidebar portrait registered for this connection.");
+            if (registered) logger().info("Personal sidebar portrait registered (texture " + skin.getSkinImageWidth() + "x" + skin.getSkinImageHeight()
+                + ", UV canvas " + canvas[0] + "x" + canvas[1] + ", face " + uv[0] + "," + uv[1] + ").");
             else logger().debug("Unsupported sidebar portrait dimensions; using the crown fallback.");
         } catch (IOException | RuntimeException e) {
             // An optional portrait must never prevent the authenticated login.

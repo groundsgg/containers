@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.6 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.7 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -39,7 +39,7 @@ rows, 27px section pitch, a 26px text inset and icons centered between the label
 and value. Visible child sizing restores the section gaps Geyser omits, while
 the duplicated domain row contributes zero height. A nine-sliced black mask
 rounds only the left corners by 4px and keeps the native opacity binding. Known
-labels and gold values use the Java palette. The existing logo and icon rasters
+labels use the Java palette. The existing logo and icon rasters
 are unchanged. This is layout/pack validation; in-game acceptance is required.
 
 Version 0.1.6 adds the small `GroundsSidebarHead` Geyser extension. During
@@ -59,6 +59,16 @@ upgrade. The Docker build compiles against that runtime and runs the head crop,
 hat/hires, malformed-input, deterministic-cache and session-isolation checks.
 The startup smoke test also verifies the extension initialization when run with
 `GROUNDS_SMOKE_EXPECT_EXTENSION='Personal sidebar portraits ready.'`.
+
+Version 0.1.7 corrects two failed assumptions from the first visual test of
+0.1.6. Row labels no longer infer their height from visible child controls;
+instead, `use_anchored_offset` and the native `#size_binding_y` property set
+explicit 9px/18px row heights (zero for the duplicated footer). Numeric values
+keep their original collection text and formatting, without a custom gold-text
+conversion. The portrait now resolves the selected Bedrock geometry's UV canvas
+and head/hat front UVs, including box and per-face mappings. Image resolution
+alone is not a sufficient UV scale. Metadata logging includes dimensions and
+face coordinates only, so the next client join can verify the selected layout.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

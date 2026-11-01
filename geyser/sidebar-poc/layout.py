@@ -74,20 +74,13 @@ def document():
     badge_condition = contains_label(tuple(s for name, _, _ in badge_variants for s in (name, name.title())))
     label_condition = contains_label(labels)
     domain_condition = contains_label(("grounds.gg",))
-    gold_condition = contains_label(("§e", "§6"))
-    regular = f"(not ({label_condition} or {badge_condition} or {domain_condition} or {gold_condition}))"
+    regular = f"(not ({label_condition} or {badge_condition} or {domain_condition}))"
     row_controls = [{"live_text": {
         "type": "label", "size": [82, 9], "max_size": [82, 9], "offset": [26, 0],
         "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3,
         "text": "#player_name_sidebar", "localize": False, "shadow": False,
         "locked_alpha": 1.0, "color": "$player_name_color", "bindings": visible_when(regular),
     }}]
-    # Geyser drops the empty rows between Java's sections. Restore their 9px
-    # spacing in the same native item context, without a second factory.
-    row_controls.append({"section_spacing": {"type": "panel", "size": [WIDTH, 18],
-        "bindings": visible_when(contains_label(("COINS", "FREUNDE", "FRIENDS")))}})
-    row_controls.append({"row_spacing": {"type": "panel", "size": [WIDTH, 9],
-        "bindings": visible_when(f"(not {domain_condition})")}})
     for label in labels:
         row_controls.append({"label_" + label.lower(): {
             "type": "label", "text": label, "size": [82, 9], "offset": [26, 0 if label in ("RANG", "RANK") else 9],
@@ -102,15 +95,6 @@ def document():
             "size": [width, 8], "offset": [26, 0], "anchor_from": "top_left", "anchor_to": "top_left",
             "layer": 3, "bindings": visible_when(contains_label((name, name.title()))),
         }})
-    plain_gold = "(#player_name_sidebar" + "".join(" - '§" + code + "'" for code in "0123456789abcdefklmnor") + ")"
-    row_controls.append({"gold_value": {
-        "type": "label", "size": [82, 9], "max_size": [82, 9], "offset": [26, 0],
-        "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3, "text": "#plain_gold",
-        "localize": False, "shadow": False, "locked_alpha": 1.0, "color": [231 / 255, 184 / 255, 75 / 255],
-        "bindings": visible_when(f"({gold_condition} and not ({label_condition} or {badge_condition} or {domain_condition}))") + [{
-            "binding_type": "view", "source_property_name": plain_gold, "target_property_name": "#plain_gold",
-        }],
-    }})
     icons = []
     for name, texture, labels, color in (
         ("rank_icon", "player_head", ("RANG", "RANK"), [1, 1, 1]),
@@ -130,8 +114,13 @@ def document():
         "scoreboard_sidebar_player": {
             # Keep the original label control/factory registration. Its children
             # share the same live item context; the label itself paints no text.
-            "type": "label", "text": "", "size": [WIDTH, "100%cm"], "max_size": [WIDTH, "100%cm"],
+            "type": "label", "text": "", "size": [WIDTH, 9], "max_size": [WIDTH, 18],
+            "use_anchored_offset": True, "property_bag": {"#size_binding_y": 1.0},
             "localize": False, "bindings": [player_binding(), {
+                "binding_type": "view",
+                "source_property_name": f"((1.0 + {contains_label(('COINS', 'FREUNDE', 'FRIENDS'))}) * (not {domain_condition}))",
+                "target_property_name": "#size_binding_y",
+            }, {
                 "binding_type": "view",
                 "source_property_name": "((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)",
                 "target_property_name": "#visible",
@@ -205,6 +194,6 @@ if __name__ == "__main__":
     (textures / "player_head.png").write_bytes((textures / "crown.png").read_bytes())
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 6]
-    data["modules"][0]["version"] = [0, 1, 6]
+    data["header"]["version"] = [0, 1, 7]
+    data["modules"][0]["version"] = [0, 1, 7]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

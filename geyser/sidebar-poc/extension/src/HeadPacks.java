@@ -18,7 +18,17 @@ final class HeadPacks implements AutoCloseable {
 
     synchronized boolean offer(Object connection, byte[] rgba, int width, int height,
                                Consumer<Path> register) throws IOException {
-        var pack = HeadPack.create(rgba, width, height);
+        return offer(connection, rgba, width, height, 64, height * 2 == width ? 32 : 64, register);
+    }
+
+    synchronized boolean offer(Object connection, byte[] rgba, int width, int height,
+                               int canvasWidth, int canvasHeight, Consumer<Path> register) throws IOException {
+        return offer(connection, rgba, width, height, canvasWidth, canvasHeight, new double[]{8, 8, 8, 8, 40, 8, 8, 8}, register);
+    }
+
+    synchronized boolean offer(Object connection, byte[] rgba, int width, int height,
+                               int canvasWidth, int canvasHeight, double[] uv, Consumer<Path> register) throws IOException {
+        var pack = HeadPack.create(rgba, width, height, canvasWidth, canvasHeight, uv);
         if (pack.isEmpty()) return false;
         Path file = Files.createTempFile(directory, "portrait-", ".mcpack");
         boolean retained = false;

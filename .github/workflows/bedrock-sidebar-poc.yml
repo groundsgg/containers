@@ -1,0 +1,41 @@
+name: Bedrock Sidebar PoC
+
+on:
+  push:
+    branches: [poc/bedrock-sidebar-20261101]
+    paths:
+      - geyser/sidebar-poc/**
+      - .github/workflows/bedrock-sidebar-poc.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: bedrock-sidebar-poc-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify native data bindings and package the prototype
+        run: |
+          python3 -m unittest discover -s geyser/sidebar-poc -v
+          python3 geyser/sidebar-poc/build.py
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Stage-only image
+        uses: docker/build-push-action@v7
+        with:
+          context: geyser/sidebar-poc
+          push: true
+          tags: ghcr.io/groundsgg/geyser:sidebar-poc-${{ github.sha }}
+          platforms: linux/amd64

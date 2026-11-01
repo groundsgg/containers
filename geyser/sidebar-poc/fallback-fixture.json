@@ -1,0 +1,92 @@
+{
+  "contentWidth": 104,
+  "exact": false,
+  "title": {
+    "font": "minecraft:default",
+    "text": ""
+  },
+  "rows": [
+    "                          ",
+    {
+      "color": "#C1B9AA",
+      "font": "minecraft:default",
+      "extra": [
+        {
+          "font": "minecraft:default",
+          "text": "RANG"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "color": "#F3F0EA",
+      "text": "WWWWWWWWWWWWWWWW…"
+    },
+    "",
+    "",
+    {
+      "color": "#C1B9AA",
+      "font": "minecraft:default",
+      "extra": [
+        {
+          "font": "minecraft:default",
+          "text": "COINS"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "color": "#F3F0EA",
+      "font": "minecraft:default",
+      "extra": [
+        {
+          "color": "#E7B84B",
+          "font": "minecraft:default",
+          "text": "1.240"
+        }
+      ],
+      "text": ""
+    },
+    "",
+    "",
+    {
+      "color": "#C1B9AA",
+      "font": "minecraft:default",
+      "extra": [
+        {
+          "font": "minecraft:default",
+          "text": "FREUNDE"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "color": "#F3F0EA",
+      "font": "minecraft:default",
+      "extra": [
+        {
+          "font": "minecraft:default",
+          "extra": [
+            {
+              "color": "#65D9DF",
+              "font": "minecraft:default",
+              "text": "3"
+            },
+            {
+              "font": "minecraft:default",
+              "text": " / 12"
+            }
+          ],
+          "text": ""
+        }
+      ],
+      "text": ""
+    },
+    "",
+    "",
+    {
+      "color": "#C1B9AA",
+      "text": "grounds.gg"
+    }
+  ]
+}

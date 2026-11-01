@@ -4,9 +4,9 @@ FROM eclipse-temurin:25-jdk-alpine AS downloader
 # every six weeks, and a floating build would turn any unrelated rebuild into an
 # unannounced protocol upgrade. Worse, it would do so silently — a Geyser one
 # version behind rejects every client that already auto-updated.
-ARG GEYSER_VERSION=2.12.0
-ARG GEYSER_BUILD=1264
-ARG GEYSER_SHA256=b4ecc3bec2206781013b58350955aedf63ca29e70637d476c92835a3214ff2fd
+ARG GEYSER_VERSION=2.12.1
+ARG GEYSER_BUILD=1280
+ARG GEYSER_SHA256=fa447f0c1343adeae248d95506b372ffe6b6633a51e88cfb83cc6978c48d3f10
 
 RUN set -eux; \
     apk add --no-cache curl; \
@@ -32,8 +32,8 @@ FROM eclipse-temurin:25-jre-alpine
 ARG VCS_REVISION
 ARG BUILD_DATE
 ARG IMAGE_VERSION
-ARG GEYSER_VERSION=2.12.0
-ARG GEYSER_BUILD=1264
+ARG GEYSER_VERSION=2.12.1
+ARG GEYSER_BUILD=1280
 
 LABEL org.opencontainers.image.title="geyser" \
       org.opencontainers.image.description="Geyser Standalone — Bedrock UDP entry point that translates to the Java-protocol Velocity proxy." \
@@ -65,7 +65,7 @@ RUN set -eux; \
 
 USER geyser
 
-EXPOSE 19132/udp
+EXPOSE 19132/udp 19132/tcp
 
 # No HEALTHCHECK. Geyser speaks RakNet over UDP and exposes no HTTP endpoint, and
 # a UDP port probe cannot distinguish "listening" from "nothing there" — it would

@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.3 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.4 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -25,6 +25,12 @@ client. Its original sidebar definition matches Mojang's public
 `resource_pack/ui/scoreboards.json` in `Mojang/bedrock-samples`. Earlier variants
 that tried routing to copied templates did not pass in-game acceptance; native
 collection bindings are now preserved in their original instances.
+
+Version 0.1.3 incorrectly assumed inline children in a replaced `controls` array
+would inherit vanilla definitions by matching their names. This removed types
+from six child controls and removed the score factory. Version 0.1.4 supplies
+complete child definitions, including both factories. A regression check now
+validates replacement children and the paired native collection contracts.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

@@ -18,7 +18,10 @@ class NativeSidebarTests(unittest.TestCase):
     def test_existing_native_renderer_is_the_only_entry_point(self):
         # Resolve existing names without copied scoreboards, slash paths or title heuristics.
         self.assertEqual(set(self.ui), {"namespace", "scoreboard_sidebar", "scoreboard_sidebar_player", "scoreboard_sidebar_score"})
-        self.assertNotIn("#objective_sidebar_name", json.dumps(self.ui))
+        self.assertFalse(any(
+            "#objective_sidebar_name" in binding.get("source_property_name", "")
+            for binding in self.ui["scoreboard_sidebar"].get("bindings", [])
+        ))
 
     def test_live_text_keeps_the_original_native_factory_and_collection(self):
         self.assertIn("main", controls(self.ui["scoreboard_sidebar"]))
@@ -33,6 +36,31 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertFalse(live["localize"])
         self.assertNotIn("collection_index", json.dumps(self.ui))
         self.assertNotIn("#player_score_sidebar", json.dumps(self.ui))
+
+    def test_replaced_controls_arrays_are_self_contained(self):
+        # Arrays replace the original list: named children do not inherit the
+        # original child's type or descendants by matching its name.
+        def check(node, path):
+            for name, child in controls(node).items():
+                with self.subTest(control=path + "/" + name):
+                    self.assertTrue("type" in child or "@" in name,
+                                    "replacement child has no type or template")
+                check(child, path + "/" + name)
+
+        check(self.ui["scoreboard_sidebar"], "scoreboard_sidebar")
+        main = controls(self.ui["scoreboard_sidebar"])["main"]
+        scores = controls(controls(main)["lists"])["scores"]
+        self.assertEqual(scores.get("factory"), {
+            "name": "player_score_factory",
+            "control_name": "scoreboard.scoreboard_sidebar_score",
+        })
+        self.assertEqual(scores.get("collection_name"), "scoreboard_scores")
+        self.assertEqual(scores.get("bindings"), [{
+            "binding_name": "#scoreboard_sidebar_size", "binding_type": "global",
+            "binding_name_override": "#collection_length",
+        }])
+        self.assertEqual(main.get("type"), "image")
+        self.assertEqual(main.get("texture"), "textures/ui/Black")
 
     def test_title_and_sorting_columns_are_removed_inline(self):
         root = controls(self.ui["scoreboard_sidebar"])
@@ -68,7 +96,7 @@ class NativeSidebarTests(unittest.TestCase):
                 self.assertIsNone(pack.testzip())
                 self.assertEqual(len(pack.namelist()), 7)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 3])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 4])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

@@ -59,12 +59,22 @@ def document():
             }], "controls": row_controls,
         },
         "scoreboard_sidebar": {
-            "size": [WIDTH, "100%c"],
+            "type": "panel", "size": [WIDTH, "100%c"],
+            "anchor_from": "right_middle", "anchor_to": "right_middle",
             "controls": [
                 {"main": {
+                    # `controls` replaces an array, so these children need
+                    # complete definitions rather than partial named patches.
+                    "type": "image", "texture": "textures/ui/Black", "alpha": "#alpha",
+                    "anchor_from": "top_middle", "anchor_to": "top_middle",
+                    "bindings": [{"binding_name": "#objective_background_opacity", "binding_name_override": "#alpha"}],
                     "size": [WIDTH, "100%c"],
                     "controls": [
-                        {"displayed_objective": {"visible": False, "size": [0, 0]}},
+                        {"displayed_objective": {
+                            "type": "label", "text": "#objective_sidebar_name", "visible": False,
+                            "size": [0, 0], "anchor_from": "top_middle", "anchor_to": "top_middle",
+                            "localize": False, "bindings": [{"binding_name": "#objective_sidebar_name", "binding_type": "global"}],
+                        }},
                         {"header": {"type": "panel", "size": [WIDTH, 27],
                             "anchor_from": "top_middle", "anchor_to": "top_middle",
                             "controls": [
@@ -72,9 +82,17 @@ def document():
                                 {"top_separator": image("separator", (90, 9), (10, 18), uv=[0, 0], uv_size=[180, 18], color=[0.757, 0.725, 0.667])},
                             ]}},
                         {"lists": {
+                            "type": "panel", "anchor_from": "top_middle", "anchor_to": "top_middle",
                             "size": [WIDTH, "100%cm"], "offset": [0, 27], "inherit_max_sibling_width": False,
-                            "controls": [{"players": players}, {"horizontal_padding": {"ignored": True}},
-                                {"scores": {"visible": False, "size": [0, "100%c"]}}],
+                            "controls": [{"players": players}, {"horizontal_padding": {"type": "panel", "ignored": True}},
+                                {"scores": {
+                                    "type": "stack_panel", "visible": False, "size": [0, "100%c"],
+                                    "anchor_from": "top_right", "anchor_to": "top_right",
+                                    "orientation": "vertical", "use_child_anchors": True,
+                                    "collection_name": "scoreboard_scores",
+                                    "factory": {"name": "player_score_factory", "control_name": "scoreboard.scoreboard_sidebar_score"},
+                                    "bindings": [{"binding_name": "#scoreboard_sidebar_size", "binding_type": "global", "binding_name_override": "#collection_length"}],
+                                }}],
                         }},
                         {"footer_separator": image("separator", (90, 9), (0, -10),
                             anchor_from="bottom_middle", anchor_to="bottom_middle",
@@ -85,7 +103,12 @@ def document():
                             "locked_alpha": 1.0, "layer": 3, "color": [0.757, 0.725, 0.667]}},
                     ],
                 }},
-                {"displayed_objective_background": {"visible": False, "size": [0, 0]}},
+                {"displayed_objective_background": {
+                    "type": "image", "texture": "textures/ui/Black", "alpha": "#alpha",
+                    "visible": False, "size": [0, 0],
+                    "anchor_from": "top_middle", "anchor_to": "top_middle", "layer": 1,
+                    "bindings": [{"binding_name": "#scoreboard_objective_background_opacity", "binding_name_override": "#alpha"}],
+                }},
             ],
         },
     }
@@ -96,6 +119,6 @@ if __name__ == "__main__":
     target.write_text(json.dumps(document(), indent=2) + "\n")
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 3]
-    data["modules"][0]["version"] = [0, 1, 3]
+    data["header"]["version"] = [0, 1, 4]
+    data["modules"][0]["version"] = [0, 1, 4]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

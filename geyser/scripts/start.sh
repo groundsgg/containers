@@ -18,6 +18,12 @@ if [ -f /config/config.yml ]; then
     cp /config/config.yml /opt/geyser/config.yml
 fi
 
+# Kubernetes service links use this same name for a URL, while Geyser's new
+# environment mapper expects an integer. Preserve deliberate numeric overrides.
+case "${GEYSER_BEDROCK_PORT:-}" in
+    udp://*|tcp://*) unset GEYSER_BEDROCK_PORT ;;
+esac
+
 if [ -n "${GROUNDS_GEYSER_IDENTITY_FILE:-}" ]; then
     # Geyser tightens PEM permissions and rejects symlinks. Copy the projected
     # read-only Secret into the writable data directory rather than mounting

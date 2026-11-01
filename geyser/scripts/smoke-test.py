@@ -60,6 +60,7 @@ passthrough-player-counts: false
                 docker("create", "--name", name, "--memory=768m", "--cpus=1", "-p", "127.0.0.1::19132/tcp",
                        "-e", "JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=2 -Xmx256m",
                        "-e", "GROUNDS_GEYSER_ADVERTISE_ADDRESS=93.184.215.14",
+                       "-e", "GEYSER_BEDROCK_PORT=" + ("udp" if attempt == 0 else "tcp") + "://10.0.0.1:19132",
                        "-e", "GROUNDS_GEYSER_IDENTITY_FILE=/config/identity.pem", image)
                 docker("cp", str(root) + "/.", name + ":/config")
                 docker("start", name)
@@ -81,6 +82,9 @@ passthrough-player-counts: false
                             data = json.load(response)
                         break
                     except (OSError, ValueError):
+                        state = json.loads(docker("inspect", name))[0]["State"]
+                        if state["Status"] in ("exited", "dead"):
+                            raise AssertionError("runtime exited before signaling was ready\n" + docker("logs", "--tail", "40", name))
                         if time.monotonic() > deadline:
                             raise AssertionError("native NetherNet signaling did not become ready\n" + docker("logs", "--tail", "60", name))
                         time.sleep(1)

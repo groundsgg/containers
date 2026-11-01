@@ -1,47 +1,48 @@
-# Bedrock lobby sidebar prototype
+# Bedrock sidebar prototype
 
-Throwaway Stage PoC, requested before implementing the same animated NPC models
-for Bedrock. This adds a native JSON UI lobby frame to the exact existing Geyser
-image. It does not enable Java fonts for Bedrock or replace the mandatory
-nameplate pack. Only Stage's image pin is intended to use this prototype.
+Stage-only PoC before implementing the same animated NPC models for Bedrock.
+The image inherits the exact existing Geyser runtime and adds one independent
+resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
+using their existing runtime and data paths. No NPC assets are included.
 
-The logo, separators and three icons are unchanged first-party PNGs from
-`groundsgg/resourcepacks`' platform pack `8b88835212ae`. There are no NPC assets.
-Rank uses a crown in this PoC; a per-player head and Java-style badge are not yet
-implemented. Labels, rank, Coins, friends and optional match ID remain live
-server scoreboard text, including server-selected translations.
+Version 0.1.3 styles Bedrock's existing scoreboard directly. It keeps the native
+`scoreboard_sidebar`, its player factory, its collection-length binding and its
+per-item text binding. The paired score factory stays registered but invisible.
+There is no second sidebar, copied fallback, slash-path override or selection by
+objective-title type or row count. Live labels, rank, Coins, friends and optional
+match IDs continue to come from the server, including locale changes and updates
+from any proxy. All Stage Bedrock scoreboards use the native branded frame.
 
-The lobby fallback has an empty objective title and 14 rows, or 15 with a match.
-Bedrock can drop six empty rows, leaving 8 or 9. Therefore each displayed value
-is selected by its stable score, never by its position in the compacted list:
-rank 14/13, Coins 10/9, friends 6/5, match 2, domain 2 (or 1 with a match).
-All connections read their own native scoreboard collections; no player UUID,
-proxy-local lookup or alternative data cache is introduced.
+The header uses the unchanged first-party Grounds logo. The original numeric
+sorting column and empty objective title are hidden inline. Rows display their
+live text with room for an icon; translated rank, Coins and friends labels get a
+first-party icon. A fixed domain footer avoids repeating the server's domain
+row. Rank uses a crown in this PoC; a personal head and Java-style badge are not
+implemented. Long lines remain bounded by the native label's width.
 
-The in-game 0.1.1 probe exposed two native JSON UI details: inherited controls
-are merged, and standalone labels with a collection index do not acquire the
-scoreboard's factory context. Version 0.1.2 explicitly hides the inherited
-`main` and objective-background instances and instantiates live text using
-Bedrock's `player_list_factory`. Its row panels share an overlay area and select
-their visible label by the original score, rather than stacking compacted rows.
+The UI contract was compared with the exact installed Bedrock 1.26.60 Windows
+client. Its original sidebar definition matches Mojang's public
+`resource_pack/ui/scoreboards.json` in `Mojang/bedrock-samples`. Earlier variants
+that tried routing to copied templates did not pass in-game acceptance; native
+collection bindings are now preserved in their original instances.
 
-The original sidebar remains available for objectives outside that signature.
-Its definition follows Mojang's `resource_pack/ui/scoreboards.json` from
-`Mojang/bedrock-samples` (retrieved 2026-11-01), including the original player
-and score factories. The PoC overrides only the `scoreboard` namespace, leaving
-Geyser's HUD/cooldown controls and pause-screen scoreboard definitions alone.
+The logo, separators and icons are unchanged first-party PNGs from
+`groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,
+nameplate atlas, HUD/cooldown controls and pause screen are not replaced.
 
-Run `python3 -m unittest discover -s geyser/sidebar-poc -v`, then
-`python3 geyser/sidebar-poc/build.py`. Build using `geyser/sidebar-poc` as the
-Docker context. The branch-only workflow publishes an immutable image for a
-Stage pin; the normal Geyser Dockerfile does not include this PoC.
+Regenerate, test and build:
 
-Validation covers JSON/ZIP integrity, unchanged image base and badge pack,
-native text bindings and full/compacted lobby rows. Geyser startup can validate
-pack loading but does not render JSON UI. Final rendering, both UI profiles,
-GUI scales, language changes and reconnect/server transfer require Bedrock
-client acceptance. The Windows automation bridge was unavailable in the WSL
-workspace during this PoC.
+```sh
+python3 geyser/sidebar-poc/layout.py
+python3 -m unittest discover -s geyser/sidebar-poc -v
+python3 geyser/sidebar-poc/build.py
+```
 
-Rollback: restore the Stage image pin to
+Use `geyser/sidebar-poc` as the Docker context. The branch-only workflow builds a
+pinned Stage image; the normal Geyser Dockerfile does not include the PoC.
+JSON and ZIP checks validate packaging and native binding contracts. They do not
+prove rendering; visual acceptance in Bedrock remains required. The Windows UI
+automation bridge is unavailable for this Linux workspace.
+
+Rollback: restore the Stage Geyser image to
 `sha-c8b6f55@sha256:1f7370fb6409756449596c0917b32005dfe99903a9507ed6353d241b45281f70`.

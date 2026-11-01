@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-import re
 import tempfile
 import unittest
 import zipfile
@@ -8,96 +7,58 @@ import zipfile
 from build import ROOT, build
 
 
-def text(component):
-    if isinstance(component, str):
-        return component
-    return component.get("text", "") + "".join(map(text, component.get("extra", [])))
+def controls(node):
+    return {name: child for entry in node.get("controls", []) for name, child in entry.items()}
 
 
-def fields(panel):
-    return {name: control for item in panel["controls"] for name, control in item.items()}
-
-
-def row_fields(ui, key):
-    panel = fields(ui[key])
-    factory = next(control["factory"] for control in panel.values() if "factory" in control)
-    return fields(ui[factory["control_name"].split(".", 1)[1]])
-
-
-def visible_values(ui, key, prefix, collection):
-    result = []
-    control = row_fields(ui, key)[prefix]
-    condition = control["bindings"][-1]["source_property_name"]
-    wanted = int(re.search(r"= (\d+)", condition).group(1))
-    # The native factory provides a context for each received scoreboard item.
-    for score, value in collection:
-        if score == wanted:
-            result.append(value)
-    return result
-
-
-class SidebarPrototypeTests(unittest.TestCase):
+class NativeSidebarTests(unittest.TestCase):
     def setUp(self):
         self.ui = json.loads((ROOT / "pack/ui/scoreboards.json").read_text())
-        self.rows = json.loads((ROOT / "fallback-fixture.json").read_text())["rows"]
 
-    def test_inherited_vanilla_controls_are_explicitly_hidden(self):
-        # Native JSON UI merges controls by name. Adding a new controls array
-        # does not remove the old main panel or its objective background.
-        for name in ("main", "displayed_objective_background"):
-            self.assertFalse(self.ui.get("scoreboard_sidebar/" + name, {}).get("visible", True))
+    def test_existing_native_renderer_is_the_only_entry_point(self):
+        # Resolve existing names without copied scoreboards, slash paths or title heuristics.
+        self.assertEqual(set(self.ui), {"namespace", "scoreboard_sidebar", "scoreboard_sidebar_player", "scoreboard_sidebar_score"})
+        self.assertNotIn("#objective_sidebar_name", json.dumps(self.ui))
 
-    def test_live_text_is_instantiated_by_the_native_collection_factory(self):
-        # A collection_index on a standalone label does not create the native
-        # scoreboard collection context; the first in-game PoC proved this.
-        for key in ("grounds_lobby_sidebar", "grounds_lobby_match_sidebar"):
-            panel = fields(self.ui[key])
-            factory_panels = [control for control in panel.values() if "factory" in control]
-            self.assertEqual(len(factory_panels), 1)
-            rows = factory_panels[0]
-            self.assertEqual(rows["collection_name"], "scoreboard_players")
-            self.assertEqual(rows["factory"]["name"], "player_list_factory")
-            self.assertTrue(any(binding.get("binding_name_override") == "#collection_length" for binding in rows["bindings"]))
-            template = self.ui[rows["factory"]["control_name"].split(".", 1)[1]]
-            for control in fields(template).values():
-                self.assertNotIn("collection_index", control)
-                self.assertEqual(control["text"], "#player_name_sidebar")
+    def test_live_text_keeps_the_original_native_factory_and_collection(self):
+        self.assertIn("main", controls(self.ui["scoreboard_sidebar"]))
+        main = controls(self.ui["scoreboard_sidebar"])["main"]
+        players = controls(controls(main)["lists"])["players"]
+        self.assertEqual(players["collection_name"], "scoreboard_players")
+        self.assertEqual(players["factory"], {"name": "player_list_factory", "control_name": "scoreboard.scoreboard_sidebar_player"})
+        self.assertEqual(players["bindings"], [{"binding_name": "#scoreboard_sidebar_size", "binding_type": "global", "binding_name_override": "#collection_length"}])
+        live = controls(self.ui["scoreboard_sidebar_player"])["live_text"]
+        self.assertEqual(live["text"], "#player_name_sidebar")
+        self.assertEqual(live["bindings"], [{"binding_name": "#player_name_sidebar", "binding_type": "collection", "binding_collection_name": "scoreboard_players"}])
+        self.assertFalse(live["localize"])
+        self.assertNotIn("collection_index", json.dumps(self.ui))
+        self.assertNotIn("#player_score_sidebar", json.dumps(self.ui))
 
-    def test_real_server_values_survive_empty_row_compaction(self):
-        complete = [(15 - index, text(component)) for index, component in enumerate(self.rows)]
-        compact = [(score, value) for score, value in complete if value]
-        self.assertEqual((len(complete), len(compact)), (14, 8))
-        for collection in (complete, compact):
-            for prefix, expected in (
-                ("rank_label", "RANG"), ("coins_label", "COINS"),
-                ("coins_value", "1.240"), ("friends_label", "FREUNDE"),
-                ("friends_value", "3 / 12"), ("domain", "grounds.gg"),
-            ):
-                self.assertEqual(visible_values(self.ui, "grounds_lobby_sidebar", prefix, collection), [expected])
-        # A fresh server update changes the live label, not pack-generated text.
-        changed = [(score, "9 / 23" if score == 5 else value) for score, value in compact]
-        self.assertEqual(visible_values(self.ui, "grounds_lobby_sidebar", "friends_value", changed), ["9 / 23"])
+    def test_title_and_sorting_columns_are_removed_inline(self):
+        root = controls(self.ui["scoreboard_sidebar"])
+        self.assertIn("main", root)
+        main = controls(root["main"])
+        columns = controls(main["lists"])
+        self.assertFalse(main["displayed_objective"].get("visible", True))
+        self.assertFalse(root["displayed_objective_background"].get("visible", True))
+        self.assertFalse(columns["scores"].get("visible", True))
+        self.assertFalse(columns["scores"].get("ignored", False))
+        self.assertTrue(columns["horizontal_padding"]["ignored"])
+        self.assertFalse(self.ui["scoreboard_sidebar_score"]["visible"])
+        self.assertFalse(self.ui["scoreboard_sidebar_score"].get("ignored", False))
 
-    def test_match_and_domain_survive_compaction_and_do_not_overlap(self):
-        rows = [(15 - index, text(component)) for index, component in enumerate(self.rows[:-1])]
-        rows.extend(((2, "#a1b2c3d4"), (1, "grounds.gg")))
-        for collection in (rows, [(score, value) for score, value in rows if value]):
-            self.assertEqual(visible_values(self.ui, "grounds_lobby_match_sidebar", "match_id", collection), ["#a1b2c3d4"])
-            self.assertEqual(visible_values(self.ui, "grounds_lobby_match_sidebar", "domain", collection), ["grounds.gg"])
-        controls = row_fields(self.ui, "grounds_lobby_match_sidebar")
-        self.assertLess(controls["match_id"]["offset"][1], controls["domain"]["offset"][1])
+    def test_body_is_independent_of_title_type_and_row_count(self):
+        self.assertIn("scoreboard_sidebar_player", self.ui)
+        row = self.ui["scoreboard_sidebar_player"]
+        self.assertEqual(row["size"], [110, 10])
+        self.assertEqual(controls(row)["live_text"]["offset"], [24, 0])
+        self.assertNotIn("#objective_sidebar_name", json.dumps(row))
+        self.assertNotIn("#scoreboard_sidebar_size", json.dumps(row))
+        # Native text includes match IDs and translations; only the repeated domain is hidden.
+        self.assertIn("#player_name_sidebar", row["bindings"][-1]["source_property_name"])
+        self.assertIn("grounds.gg", row["bindings"][-1]["source_property_name"])
 
-    def test_only_the_lobby_uses_the_branded_layout(self):
-        fallback = json.dumps(self.ui["grounds_vanilla_sidebar"])
-        self.assertIn("scoreboard.scoreboard_sidebar_score", fallback)
-        self.assertIn("not", fallback)
-        for key in ("grounds_lobby_sidebar", "grounds_lobby_match_sidebar"):
-            for control in row_fields(self.ui, key).values():
-                self.assertNotEqual(control.get("text"), "#player_score_sidebar")
-                self.assertEqual(control["text"], "#player_name_sidebar")
-                self.assertEqual({binding.get("binding_collection_name") for binding in control["bindings"] if "binding_collection_name" in binding}, {"scoreboard_players", "scoreboard_scores"})
-
-    def test_archive_is_reproducible_and_cannot_replace_the_badge_pack(self):
+    def test_archive_is_reproducible_and_keeps_badges_and_npcs_separate(self):
         with tempfile.TemporaryDirectory() as directory:
             a, b = Path(directory) / "a.mcpack", Path(directory) / "b.mcpack"
             build(a)
@@ -107,13 +68,11 @@ class SidebarPrototypeTests(unittest.TestCase):
                 self.assertIsNone(pack.testzip())
                 self.assertEqual(len(pack.namelist()), 7)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertNotEqual(manifest["header"]["uuid"], manifest["modules"][0]["uuid"])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 3])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
-                for control in fields(self.ui["grounds_lobby_sidebar"]).values():
-                    texture = control.get("texture", "")
-                    if texture.startswith("textures/grounds/"):
-                        self.assertIn(texture + ".png", pack.namelist())
+                for name in ("logo", "separator", "crown", "coin", "friends"):
+                    self.assertIn(f"textures/grounds/sidebar/{name}.png", pack.namelist())
 
 
 if __name__ == "__main__":

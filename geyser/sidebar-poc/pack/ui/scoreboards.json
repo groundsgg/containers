@@ -8,11 +8,11 @@
     "text": "",
     "size": [
       110,
-      10
+      "100%cm"
     ],
     "max_size": [
       110,
-      10
+      "100%cm"
     ],
     "localize": false,
     "bindings": [
@@ -33,14 +33,14 @@
           "type": "label",
           "size": [
             82,
-            10
+            9
           ],
           "max_size": [
             82,
-            10
+            9
           ],
           "offset": [
-            24,
+            26,
             0
           ],
           "anchor_from": "top_left",
@@ -56,29 +56,21 @@
               "binding_name": "#player_name_sidebar",
               "binding_type": "collection",
               "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar))) or ((not ((#player_name_sidebar - '\u00a7e') = #player_name_sidebar)) or (not ((#player_name_sidebar - '\u00a76') = #player_name_sidebar)))))",
+              "target_property_name": "#visible"
             }
           ]
         }
       },
       {
-        "rank_icon": {
-          "type": "image",
-          "texture": "textures/grounds/sidebar/crown",
+        "section_spacing": {
+          "type": "panel",
           "size": [
-            10,
-            10
-          ],
-          "offset": [
-            7,
-            0
-          ],
-          "anchor_from": "top_left",
-          "anchor_to": "top_left",
-          "layer": 2,
-          "color": [
-            0.906,
-            0.722,
-            0.294
+            110,
+            18
           ],
           "bindings": [
             {
@@ -88,31 +80,129 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)))",
+              "source_property_name": "((not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar)))",
               "target_property_name": "#visible"
             }
           ]
         }
       },
       {
-        "coins_icon": {
-          "type": "image",
-          "texture": "textures/grounds/sidebar/coin",
+        "row_spacing": {
+          "type": "panel",
           "size": [
-            10,
-            10
+            110,
+            9
+          ],
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar))))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "label_rang": {
+          "type": "label",
+          "text": "RANG",
+          "size": [
+            82,
+            9
           ],
           "offset": [
-            7,
+            26,
             0
           ],
           "anchor_from": "top_left",
           "anchor_to": "top_left",
-          "layer": 2,
+          "layer": 3,
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
           "color": [
-            0.906,
-            0.722,
-            0.294
+            0.7568627450980392,
+            0.7254901960784313,
+            0.6666666666666666
+          ],
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "label_rank": {
+          "type": "label",
+          "text": "RANK",
+          "size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": [
+            0.7568627450980392,
+            0.7254901960784313,
+            0.6666666666666666
+          ],
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "label_coins": {
+          "type": "label",
+          "text": "COINS",
+          "size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            9
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": [
+            0.7568627450980392,
+            0.7254901960784313,
+            0.6666666666666666
           ],
           "bindings": [
             {
@@ -129,24 +219,27 @@
         }
       },
       {
-        "friends_icon": {
-          "type": "image",
-          "texture": "textures/grounds/sidebar/friends",
+        "label_freunde": {
+          "type": "label",
+          "text": "FREUNDE",
           "size": [
-            10,
-            10
+            82,
+            9
           ],
           "offset": [
-            7,
-            0
+            26,
+            9
           ],
           "anchor_from": "top_left",
           "anchor_to": "top_left",
-          "layer": 2,
+          "layer": 3,
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
           "color": [
-            0.475,
-            0.788,
-            0.745
+            0.7568627450980392,
+            0.7254901960784313,
+            0.6666666666666666
           ],
           "bindings": [
             {
@@ -156,8 +249,354 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "((not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar)))",
+              "source_property_name": "((not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)))",
               "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "label_friends": {
+          "type": "label",
+          "text": "FRIENDS",
+          "size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            9
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": [
+            0.7568627450980392,
+            0.7254901960784313,
+            0.6666666666666666
+          ],
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "badge_admin": {
+          "type": "image",
+          "texture": "font/glyph_E6",
+          "uv": [
+            0,
+            0
+          ],
+          "uv_size": [
+            32,
+            8
+          ],
+          "size": [
+            32,
+            8
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "badge_dev": {
+          "type": "image",
+          "texture": "font/glyph_E6",
+          "uv": [
+            64,
+            0
+          ],
+          "uv_size": [
+            22,
+            8
+          ],
+          "size": [
+            22,
+            8
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "badge_mod": {
+          "type": "image",
+          "texture": "font/glyph_E6",
+          "uv": [
+            192,
+            0
+          ],
+          "uv_size": [
+            22,
+            8
+          ],
+          "size": [
+            22,
+            8
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "badge_user": {
+          "type": "image",
+          "texture": "font/glyph_E6",
+          "uv": [
+            128,
+            0
+          ],
+          "uv_size": [
+            28,
+            8
+          ],
+          "size": [
+            28,
+            8
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "((not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar)))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "gold_value": {
+          "type": "label",
+          "size": [
+            82,
+            9
+          ],
+          "max_size": [
+            82,
+            9
+          ],
+          "offset": [
+            26,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "layer": 3,
+          "text": "#plain_gold",
+          "localize": false,
+          "shadow": false,
+          "locked_alpha": 1.0,
+          "color": [
+            0.9058823529411765,
+            0.7215686274509804,
+            0.29411764705882354
+          ],
+          "bindings": [
+            {
+              "binding_name": "#player_name_sidebar",
+              "binding_type": "collection",
+              "binding_collection_name": "scoreboard_players"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(((not ((#player_name_sidebar - '\u00a7e') = #player_name_sidebar)) or (not ((#player_name_sidebar - '\u00a76') = #player_name_sidebar))) and not (((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar)))))",
+              "target_property_name": "#visible"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(#player_name_sidebar - '\u00a70' - '\u00a71' - '\u00a72' - '\u00a73' - '\u00a74' - '\u00a75' - '\u00a76' - '\u00a77' - '\u00a78' - '\u00a79' - '\u00a7a' - '\u00a7b' - '\u00a7c' - '\u00a7d' - '\u00a7e' - '\u00a7f' - '\u00a7k' - '\u00a7l' - '\u00a7m' - '\u00a7n' - '\u00a7o' - '\u00a7r')",
+              "target_property_name": "#plain_gold"
+            }
+          ]
+        }
+      },
+      {
+        "icons": {
+          "type": "panel",
+          "size": [
+            110,
+            0
+          ],
+          "anchor_from": "top_left",
+          "anchor_to": "top_left",
+          "controls": [
+            {
+              "rank_icon": {
+                "type": "image",
+                "texture": "textures/grounds/sidebar/crown",
+                "size": [
+                  10,
+                  10
+                ],
+                "offset": [
+                  8,
+                  4
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2,
+                "color": [
+                  0.906,
+                  0.722,
+                  0.294
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#player_name_sidebar",
+                    "binding_type": "collection",
+                    "binding_collection_name": "scoreboard_players"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "coins_icon": {
+                "type": "image",
+                "texture": "textures/grounds/sidebar/coin",
+                "size": [
+                  10,
+                  10
+                ],
+                "offset": [
+                  8,
+                  13
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2,
+                "color": [
+                  0.906,
+                  0.722,
+                  0.294
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#player_name_sidebar",
+                    "binding_type": "collection",
+                    "binding_collection_name": "scoreboard_players"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
+            },
+            {
+              "friends_icon": {
+                "type": "image",
+                "texture": "textures/grounds/sidebar/friends",
+                "size": [
+                  10,
+                  10
+                ],
+                "offset": [
+                  8,
+                  13
+                ],
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "layer": 2,
+                "color": [
+                  0.475,
+                  0.788,
+                  0.745
+                ],
+                "bindings": [
+                  {
+                    "binding_name": "#player_name_sidebar",
+                    "binding_type": "collection",
+                    "binding_collection_name": "scoreboard_players"
+                  },
+                  {
+                    "binding_type": "view",
+                    "source_property_name": "((not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar)))",
+                    "target_property_name": "#visible"
+                  }
+                ]
+              }
             }
           ]
         }
@@ -176,7 +615,13 @@
       {
         "main": {
           "type": "image",
-          "texture": "textures/ui/Black",
+          "texture": "textures/grounds/sidebar/panel",
+          "nineslice_size": [
+            4,
+            4,
+            0,
+            4
+          ],
           "alpha": "#alpha",
           "anchor_from": "top_middle",
           "anchor_to": "top_middle",
@@ -216,7 +661,7 @@
                 "type": "panel",
                 "size": [
                   110,
-                  27
+                  25
                 ],
                 "anchor_from": "top_middle",
                 "anchor_to": "top_middle",
@@ -256,7 +701,7 @@
                       ],
                       "offset": [
                         10,
-                        18
+                        22
                       ],
                       "anchor_from": "top_left",
                       "anchor_to": "top_left",
@@ -270,9 +715,9 @@
                         18
                       ],
                       "color": [
-                        0.757,
-                        0.725,
-                        0.667
+                        0.7568627450980392,
+                        0.7254901960784313,
+                        0.6666666666666666
                       ]
                     }
                   }
@@ -290,7 +735,7 @@
                 ],
                 "offset": [
                   0,
-                  27
+                  25
                 ],
                 "inherit_max_sibling_width": false,
                 "controls": [
@@ -354,53 +799,70 @@
               }
             },
             {
-              "footer_separator": {
-                "type": "image",
-                "texture": "textures/grounds/sidebar/separator",
-                "size": [
-                  90,
-                  9
-                ],
-                "offset": [
-                  0,
-                  -10
-                ],
-                "anchor_from": "bottom_middle",
-                "anchor_to": "bottom_middle",
-                "layer": 2,
-                "uv": [
-                  0,
-                  0
-                ],
-                "uv_size": [
-                  180,
-                  18
-                ],
-                "color": [
-                  0.757,
-                  0.725,
-                  0.667
-                ]
-              }
-            },
-            {
-              "grounds_domain": {
-                "type": "label",
+              "footer": {
+                "type": "panel",
                 "size": [
                   110,
-                  10
+                  13
                 ],
                 "anchor_from": "bottom_middle",
                 "anchor_to": "bottom_middle",
-                "text": "grounds.gg",
-                "text_alignment": "center",
-                "localize": false,
-                "locked_alpha": 1.0,
-                "layer": 3,
-                "color": [
-                  0.757,
-                  0.725,
-                  0.667
+                "controls": [
+                  {
+                    "footer_separator": {
+                      "type": "image",
+                      "texture": "textures/grounds/sidebar/separator",
+                      "size": [
+                        90,
+                        9
+                      ],
+                      "offset": [
+                        10,
+                        -8
+                      ],
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "layer": 2,
+                      "uv": [
+                        0,
+                        0
+                      ],
+                      "uv_size": [
+                        180,
+                        18
+                      ],
+                      "color": [
+                        0.7568627450980392,
+                        0.7254901960784313,
+                        0.6666666666666666
+                      ]
+                    }
+                  },
+                  {
+                    "grounds_domain": {
+                      "type": "label",
+                      "size": [
+                        110,
+                        9
+                      ],
+                      "offset": [
+                        0,
+                        6
+                      ],
+                      "anchor_from": "top_left",
+                      "anchor_to": "top_left",
+                      "text": "grounds.gg",
+                      "text_alignment": "center",
+                      "localize": false,
+                      "locked_alpha": 1.0,
+                      "layer": 3,
+                      "color": [
+                        0.7568627450980392,
+                        0.7254901960784313,
+                        0.6666666666666666
+                      ]
+                    }
+                  }
                 ]
               }
             }

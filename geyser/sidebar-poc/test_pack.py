@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
+import struct
 import tempfile
 import unittest
 import zipfile
+import zlib
 
 from build import ROOT, build
 
@@ -32,7 +34,7 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertEqual(players["bindings"], [{"binding_name": "#scoreboard_sidebar_size", "binding_type": "global", "binding_name_override": "#collection_length"}])
         live = controls(self.ui["scoreboard_sidebar_player"])["live_text"]
         self.assertEqual(live["text"], "#player_name_sidebar")
-        self.assertEqual(live["bindings"], [{"binding_name": "#player_name_sidebar", "binding_type": "collection", "binding_collection_name": "scoreboard_players"}])
+        self.assertEqual(live["bindings"][0], {"binding_name": "#player_name_sidebar", "binding_type": "collection", "binding_collection_name": "scoreboard_players"})
         self.assertFalse(live["localize"])
         self.assertNotIn("collection_index", json.dumps(self.ui))
         self.assertNotIn("#player_score_sidebar", json.dumps(self.ui))
@@ -60,7 +62,7 @@ class NativeSidebarTests(unittest.TestCase):
             "binding_name_override": "#collection_length",
         }])
         self.assertEqual(main.get("type"), "image")
-        self.assertEqual(main.get("texture"), "textures/ui/Black")
+        self.assertEqual(main.get("texture"), "textures/grounds/sidebar/panel")
 
     def test_title_and_sorting_columns_are_removed_inline(self):
         root = controls(self.ui["scoreboard_sidebar"])
@@ -78,13 +80,89 @@ class NativeSidebarTests(unittest.TestCase):
     def test_body_is_independent_of_title_type_and_row_count(self):
         self.assertIn("scoreboard_sidebar_player", self.ui)
         row = self.ui["scoreboard_sidebar_player"]
-        self.assertEqual(row["size"], [110, 10])
-        self.assertEqual(controls(row)["live_text"]["offset"], [24, 0])
+        self.assertEqual(row["size"], [110, "100%cm"])
+        self.assertEqual(controls(row)["live_text"]["offset"], [26, 0])
         self.assertNotIn("#objective_sidebar_name", json.dumps(row))
         self.assertNotIn("#scoreboard_sidebar_size", json.dumps(row))
         # Native text includes match IDs and translations; only the repeated domain is hidden.
         self.assertIn("#player_name_sidebar", row["bindings"][-1]["source_property_name"])
         self.assertIn("grounds.gg", row["bindings"][-1]["source_property_name"])
+
+    def test_java_spacing_and_icon_alignment_are_preserved(self):
+        main = controls(controls(self.ui["scoreboard_sidebar"])["main"])
+        self.assertEqual(main["header"]["size"], [110, 25])
+        self.assertEqual(controls(main["header"])["top_separator"]["offset"], [10, 22])
+        self.assertEqual(main["lists"]["offset"], [0, 25])
+        row = controls(self.ui["scoreboard_sidebar_player"])
+        self.assertEqual(row["live_text"]["size"], [82, 9])
+        # Geyser omits Java's empty spacer rows. A visible spacer makes the
+        # second/third label rows 18px tall; other rows remain 9px tall.
+        self.assertEqual(row["section_spacing"]["size"], [110, 18])
+        icons = controls(row["icons"])
+        self.assertEqual(icons["coins_icon"]["offset"], [8, 13])
+        self.assertEqual(icons["friends_icon"]["offset"], [8, 13])
+        self.assertEqual(icons["rank_icon"]["offset"], [8, 4])
+        self.assertEqual(main["footer"]["size"], [110, 13])
+        self.assertEqual(controls(main["footer"])["footer_separator"]["offset"], [10, -8])
+        self.assertEqual(controls(main["footer"])["grounds_domain"]["offset"], [0, 6])
+
+    def test_badges_reuse_the_existing_mandatory_rank_atlas(self):
+        row = controls(self.ui["scoreboard_sidebar_player"])
+        for name, x, width in (("admin", 0, 32), ("dev", 64, 22), ("user", 128, 28), ("mod", 192, 22)):
+            badge = row["badge_" + name]
+            self.assertEqual(badge["texture"], "font/glyph_E6")
+            self.assertEqual(badge["uv"], [x, 0])
+            self.assertEqual(badge["uv_size"], [width, 8])
+            self.assertEqual(badge["size"], [width, 8])
+            self.assertEqual(badge["offset"], [26, 0])
+
+    def test_background_rounds_only_the_left_edge_and_keeps_native_opacity(self):
+        main = controls(self.ui["scoreboard_sidebar"])["main"]
+        self.assertEqual(main["nineslice_size"], [4, 4, 0, 4])
+        self.assertEqual(main["bindings"], [{"binding_name": "#objective_background_opacity", "binding_name_override": "#alpha"}])
+        data = (ROOT / "pack/textures/grounds/sidebar/panel.png").read_bytes()
+        self.assertEqual(struct.unpack_from(">II", data, 16), (5, 9))
+        offset, compressed = 8, b""
+        while offset < len(data):
+            size = struct.unpack_from(">I", data, offset)[0]
+            if data[offset + 4:offset + 8] == b"IDAT":
+                compressed += data[offset + 8:offset + 8 + size]
+            offset += size + 12
+        pixels = zlib.decompress(compressed)
+        self.assertEqual(pixels[4], 0)  # upper-left corner is transparent
+        self.assertEqual(pixels[8 * 21 + 4], 0)  # lower-left corner
+        self.assertEqual(pixels[4 * 21 + 4], 255)  # middle of left edge
+        self.assertTrue(all(pixels[y * 21 + 20] == 255 for y in range(9)))
+
+    def test_visible_child_heights_match_the_java_reference_for_live_rows(self):
+        class Text(str):
+            def __sub__(self, other):
+                return Text(self.replace(other, ""))
+
+        def visible(node, text):
+            for binding in node.get("bindings", []):
+                if binding.get("target_property_name") == "#visible":
+                    expr = binding["source_property_name"].replace("#player_name_sidebar", "name").replace(" = ", " == ")
+                    return bool(eval(expr, {"__builtins__": {}}, {"name": Text(text)}))
+            return node.get("visible", True)
+
+        # Replay the translated rows with Bedrock's documented max-visible-
+        # child sizing. This is geometry validation, not a rendering emulator.
+        row = controls(self.ui["scoreboard_sidebar_player"])
+        for rank, friends in (("RANG", "FREUNDE"), ("RANK", "FRIENDS")):
+            texts = [" " * 26, "§7" + rank, "§7User", "§7COINS", "§e0", "§7" + friends, "§b0 §f/ 0", "§r", "§7grounds.gg"]
+            y, tops, values = 25, {}, []
+            for text in texts:
+                active = {k: v for k, v in row.items() if visible(v, text)}
+                if text in ("§7User", "§e0", "§b0 §f/ 0"):
+                    values.append(y)
+                for name in ("label_" + rank.lower(), "label_coins", "label_" + friends.lower()):
+                    if name in active:
+                        tops[name] = y + active[name]["offset"][1]
+                y += max((v["size"][1] for v in active.values()), default=0)
+            self.assertEqual(list(tops.values()), [34, 61, 88])
+            self.assertEqual(values, [43, 70, 97])
+            self.assertEqual(y + 13, 128)
 
     def test_archive_is_reproducible_and_keeps_badges_and_npcs_separate(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -94,9 +172,9 @@ class NativeSidebarTests(unittest.TestCase):
             self.assertEqual(a.read_bytes(), b.read_bytes())
             with zipfile.ZipFile(a) as pack:
                 self.assertIsNone(pack.testzip())
-                self.assertEqual(len(pack.namelist()), 7)
+                self.assertEqual(len(pack.namelist()), 8)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 4])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 5])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

@@ -39,6 +39,13 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertNotIn("collection_index", json.dumps(self.ui))
         self.assertNotIn("#player_score_sidebar", json.dumps(self.ui))
 
+    def test_generic_text_visibility_filter_stays_compact(self):
+        # In 0.1.8 the only duplicated value was guarded by the final clause
+        # beyond character 1024. Keep this native expression well below that.
+        live = controls(self.ui["scoreboard_sidebar_player"])["live_text"]
+        expression = live["bindings"][-1]["source_property_name"]
+        self.assertLessEqual(len(expression), 512)
+
     def test_replaced_controls_arrays_are_self_contained(self):
         # Arrays replace the original list: named children do not inherit the
         # original child's type or descendants by matching its name.
@@ -111,7 +118,7 @@ class NativeSidebarTests(unittest.TestCase):
         self.assertEqual(icons["rank_icon"]["texture"], "textures/grounds/sidebar/player_head")
         self.assertEqual(main["footer"]["size"], [110, 13])
         self.assertEqual(controls(main["footer"])["footer_separator"]["offset"], [10, -8])
-        self.assertEqual(controls(main["footer"])["grounds_domain"]["offset"], [0, 6])
+        self.assertEqual(controls(main["footer"])["grounds_domain"]["offset"], [0, 4])
 
     def test_badges_reuse_the_existing_mandatory_rank_atlas(self):
         row = controls(self.ui["scoreboard_sidebar_player"])
@@ -164,6 +171,8 @@ class NativeSidebarTests(unittest.TestCase):
                 active = {k: v for k, v in row.items() if visible(v, text)}
                 for field in ("badge_user", "coins_value", "friends_value"):
                     if field in active: values.append(y + active[field]["offset"][1])
+                if text in ("§p0", "§b0§r§h / 0"):
+                    self.assertNotIn("live_text", active)
                 for name in ("label_" + rank.lower(), "label_coins", "label_" + friends.lower()):
                     if name in active:
                         tops[name] = y + active[name]["offset"][1]
@@ -182,7 +191,7 @@ class NativeSidebarTests(unittest.TestCase):
                 self.assertIsNone(pack.testzip())
                 self.assertEqual(len(pack.namelist()), 9)
                 manifest = json.loads(pack.read("manifest.json"))
-                self.assertEqual(manifest["header"]["version"], [0, 1, 8])
+                self.assertEqual(manifest["header"]["version"], [0, 1, 9])
                 self.assertNotEqual(manifest["header"]["uuid"], "32f559d7-e76a-470e-ac36-8b458b99c84c")
                 self.assertFalse(any(path.startswith(("font/", "entity/", "models/")) for path in pack.namelist()))
                 for name in ("logo", "separator", "crown", "coin", "friends"):

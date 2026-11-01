@@ -54,7 +54,7 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "(not (((not ((#player_name_sidebar - 'RANG') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'RANK') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'COINS') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FREUNDE') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'FRIENDS') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'ADMIN') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Admin') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'DEV') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Dev') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'MOD') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'Mod') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'USER') = #player_name_sidebar)) or (not ((#player_name_sidebar - 'User') = #player_name_sidebar))) or ((not ((#player_name_sidebar - 'grounds.gg') = #player_name_sidebar))) or ((not ((#player_name_sidebar - '\u00a7p') = #player_name_sidebar))) or ((not ((#player_name_sidebar - ' / ') = #player_name_sidebar)))))",
+              "source_property_name": "((#player_name_sidebar - 'RANG' - 'RANK' - 'COINS' - 'FREUNDE' - 'FRIENDS' - 'ADMIN' - 'Admin' - 'DEV' - 'Dev' - 'MOD' - 'Mod' - 'USER' - 'User' - 'grounds.gg' - '\u00a7p' - ' / ') = #player_name_sidebar)",
               "target_property_name": "#visible"
             }
           ]
@@ -828,7 +828,7 @@
                       ],
                       "offset": [
                         0,
-                        6
+                        4
                       ],
                       "anchor_from": "top_left",
                       "anchor_to": "top_left",

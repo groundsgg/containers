@@ -5,7 +5,7 @@ The image inherits the exact existing Geyser runtime and adds one independent
 resource pack. NetherNet, Floodgate, mandatory nameplates and Java clients keep
 using their existing runtime and data paths. No NPC assets are included.
 
-Version 0.1.8 styles Bedrock's existing scoreboard directly. It keeps the native
+Version 0.1.9 styles Bedrock's existing scoreboard directly. It keeps the native
 `scoreboard_sidebar`, its player factory, its collection-length binding and its
 per-item text binding. The paired score factory stays registered but invisible.
 There is no second sidebar, copied fallback, slash-path override or selection by
@@ -91,6 +91,14 @@ bounded. Unrelated claims are skipped, and the JWT is neither persisted nor
 logged. The resource pack still contains only the 8x8 face PNG and its manifest.
 The Persona regression fixture keeps only anonymized geometry, with synthetic
 face pixels and synthetic JWT data. Classic skin handling remains available.
+
+Version 0.1.8 rendered the head, badges and all values, but also drew a second
+friends value in the generic text row. Its last exclusion was beyond character
+1024 in a 1078-character condition, consistent with native expression truncation.
+Version 0.1.9 replaces that compound guard with an equivalent compact string
+comparison, guarded below 512 characters. It also moves the domain up 2 GUI
+pixels so the glyphs remain inside the rounded panel. Native row sizes, section
+positions and the personal-head extension are unchanged.
 
 The logo, separators and icons are unchanged first-party PNGs from
 `groundsgg/resourcepacks` platform pack `8b88835212ae`. Geyser's integrated pack,

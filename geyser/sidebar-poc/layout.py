@@ -71,12 +71,14 @@ def document():
     }
     labels = ("RANG", "RANK", "COINS", "FREUNDE", "FRIENDS")
     badge_variants = list(rank_badges())
-    badge_condition = contains_label(tuple(s for name, _, _ in badge_variants for s in (name, name.title())))
-    label_condition = contains_label(labels)
-    domain_condition = contains_label(("grounds.gg",))
     coins_value = contains_label(("§p",))
     friends_value = contains_label((" / ",))
-    regular = f"(not ({label_condition} or {badge_condition} or {domain_condition} or {coins_value} or {friends_value}))"
+    # One compact string comparison is equivalent to the long OR of every
+    # dedicated field's predicate. Keep the last exclusion within the native
+    # evaluator's practical expression budget (the old guard was 1078 chars).
+    markers = labels + tuple(s for name, _, _ in badge_variants for s in (name, name.title())) + ("grounds.gg", "§p", " / ")
+    filtered = "(#player_name_sidebar" + "".join(f" - '{marker}'" for marker in markers) + ")"
+    regular = f"({filtered} = #player_name_sidebar)"
     row_controls = [{"live_text": {
         "type": "label", "size": [82, 9], "max_size": [82, 9], "offset": [26, 0],
         "anchor_from": "top_left", "anchor_to": "top_left", "layer": 3,
@@ -166,7 +168,7 @@ def document():
                             "anchor_from": "bottom_middle", "anchor_to": "bottom_middle", "controls": [
                                 {"footer_separator": image("separator", (90, 9), (10, -8),
                                     uv=[0, 0], uv_size=[180, 18], color=[193 / 255, 185 / 255, 170 / 255])},
-                                {"grounds_domain": {"type": "label", "size": [WIDTH, 9], "offset": [0, 6],
+                                {"grounds_domain": {"type": "label", "size": [WIDTH, 9], "offset": [0, 4],
                                     "anchor_from": "top_left", "anchor_to": "top_left",
                                     "text": "grounds.gg", "text_alignment": "center", "localize": False,
                                     "locked_alpha": 1.0, "layer": 3, "color": [193 / 255, 185 / 255, 170 / 255]}},
@@ -194,6 +196,6 @@ if __name__ == "__main__":
     (textures / "player_head.png").write_bytes((textures / "crown.png").read_bytes())
     manifest = ROOT / "pack/manifest.json"
     data = json.loads(manifest.read_text())
-    data["header"]["version"] = [0, 1, 8]
-    data["modules"][0]["version"] = [0, 1, 8]
+    data["header"]["version"] = [0, 1, 9]
+    data["modules"][0]["version"] = [0, 1, 9]
     manifest.write_text(json.dumps(data, separators=(",", ":")))

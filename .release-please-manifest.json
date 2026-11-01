@@ -7,5 +7,6 @@
   "keycloak": "0.7.2",
   "plugin-floodgate": "0.2.0",
   "geyser": "0.1.1",
-  "buildserver": "0.10.5"
+  "buildserver": "0.10.5",
+  "crafatar": "0.1.0"
 }

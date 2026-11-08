@@ -1,0 +1,377 @@
+/* Portal sources: src/app/layout.tsx and @cloudflare/kumo/styles/theme-kumo.
+ * Keep this small token bridge aligned when the Portal design system changes.
+ * Inherit Keycloak's templates, validation, translations and browser scripts.
+ */
+@font-face {
+  font-family: Geist;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/geist-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: Geist;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/geist-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light;
+  --grounds-canvas: oklch(98.75% 0 0);
+  --grounds-base: #fff;
+  --grounds-tint: oklch(97% 0 0);
+  --grounds-text: oklch(21% 0.006 285.885);
+  --grounds-subtle: oklch(44% 0 0);
+  --grounds-line: oklch(14.5% 0 0 / 0.14);
+  --grounds-brand: oklch(0.5772 0.2324 260);
+  --grounds-brand-hover: oklch(48.8% 0.243 264.376);
+  --grounds-link: oklch(42.4% 0.199 265.638);
+  --grounds-focus: oklch(42.4% 0.199 265.638);
+  --grounds-danger: oklch(50.5% 0.213 27.518);
+  --grounds-danger-tint: oklch(93.6% 0.032 17.7 / 0.42);
+  --grounds-success: oklch(43.2% 0.095 166.913);
+  --grounds-warning: oklch(50% 0.12 57.5);
+  --grounds-radius: 0.5rem;
+
+  --pf-v5-global--FontFamily--text: Geist, sans-serif;
+  --pf-v5-global--FontFamily--heading: Geist, sans-serif;
+  --pf-v5-global--Color--100: var(--grounds-text);
+  --pf-v5-global--Color--200: var(--grounds-subtle);
+  --pf-v5-global--BackgroundColor--100: var(--grounds-base);
+  --pf-v5-global--BackgroundColor--200: var(--grounds-canvas);
+  --pf-v5-global--BorderColor--100: var(--grounds-line);
+  --pf-v5-global--BorderColor--200: var(--grounds-subtle);
+  --pf-v5-global--primary-color--100: var(--grounds-brand);
+  --pf-v5-global--primary-color--200: var(--grounds-brand-hover);
+  --pf-v5-global--link--Color: var(--grounds-link);
+  --pf-v5-global--link--Color--hover: var(--grounds-link);
+  --pf-v5-global--danger-color--100: var(--grounds-danger);
+  --pf-v5-global--success-color--100: var(--grounds-success);
+  --pf-v5-global--warning-color--100: var(--grounds-warning);
+}
+
+:root.pf-v5-theme-dark {
+  color-scheme: dark;
+  --grounds-canvas: oklch(10% 0 0);
+  --grounds-base: oklch(17% 0 0);
+  --grounds-tint: oklch(26.9% 0 0);
+  --grounds-text: oklch(97% 0 0);
+  --grounds-subtle: oklch(70.8% 0 0);
+  --grounds-line: oklch(32% 0 0);
+  --grounds-link: oklch(70.7% 0.165 254.624);
+  --grounds-focus: oklch(80.9% 0.105 251.813);
+  --grounds-danger: oklch(70.4% 0.191 22.216);
+  --grounds-danger-tint: oklch(42.9% 0.176 28.7 / 0.17);
+  --grounds-success: oklch(90.5% 0.093 164.15);
+  --grounds-warning: oklch(80% 0.13 65);
+}
+
+html,
+.login-pf body {
+  min-height: 100%;
+  background: var(--grounds-canvas);
+  color: var(--grounds-text);
+  font-family: Geist, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--grounds-subtle) var(--grounds-canvas);
+}
+
+::selection {
+  background: var(--grounds-brand);
+  color: #fff;
+}
+
+.pf-v5-c-login {
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  color: var(--grounds-text);
+}
+
+.pf-v5-c-login__container {
+  width: 100%;
+  max-width: 28rem;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 2rem;
+  padding: 0;
+}
+
+.pf-v5-c-login__header {
+  margin: 0;
+}
+
+#kc-header-wrapper {
+  margin: 0;
+  color: var(--grounds-subtle) !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+#kc-header-wrapper::before {
+  display: block;
+  width: min(18rem, 100%);
+  aspect-ratio: 4.8;
+  margin: 0 auto 1rem;
+  background: url("../img/grounds-logo-full.webp") center / contain no-repeat;
+  content: "";
+}
+
+.pf-v5-c-login__main {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--grounds-line);
+  border-radius: 1rem;
+  background: var(--grounds-base);
+  box-shadow: none;
+}
+
+.pf-v5-c-login__main-header {
+  gap: 1rem;
+  padding: 2rem 2rem 1.5rem;
+  border: 0;
+}
+
+#kc-page-title {
+  color: var(--grounds-text);
+  font-family: Geist, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.pf-v5-c-login__main-body {
+  padding: 0 2rem 2rem;
+}
+
+.pf-v5-c-login__main-footer {
+  padding: 0;
+}
+
+.pf-v5-c-login__main-footer-band {
+  background: transparent;
+  color: var(--grounds-subtle);
+}
+
+.pf-v5-c-form {
+  row-gap: 1.25rem;
+}
+
+.pf-v5-c-form:has(#kc-attempted-username) {
+  margin-block-end: 1.25rem;
+}
+
+.pf-v5-c-form__label {
+  color: var(--grounds-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pf-v5-c-form-control {
+  --pf-v5-c-form-control--BackgroundColor: var(--grounds-base);
+  --pf-v5-c-form-control--Color: var(--grounds-text);
+  --pf-v5-c-form-control--before--BorderColor: var(--grounds-line);
+  --pf-v5-c-form-control--after--BorderBottomWidth: 0;
+  min-height: 2.75rem;
+  border: 1px solid var(--grounds-line);
+  border-radius: var(--grounds-radius);
+  caret-color: var(--grounds-link);
+}
+
+.pf-v5-c-form-control::before,
+.pf-v5-c-form-control::after {
+  display: none;
+}
+
+.pf-v5-c-form-control input,
+.pf-v5-c-form-control select {
+  min-height: calc(2.75rem - 2px);
+}
+
+.pf-v5-c-form-control.pf-m-readonly {
+  background: var(--grounds-tint);
+}
+
+.pf-v5-c-form-control input::placeholder {
+  color: var(--grounds-subtle);
+  opacity: 1;
+}
+
+.pf-v5-c-form-control:focus-within {
+  outline: 2px solid var(--grounds-focus);
+  outline-offset: 2px;
+}
+
+.pf-v5-c-form-control.pf-m-error {
+  --pf-v5-c-form-control--before--BorderColor: var(--grounds-danger);
+  border-color: var(--grounds-danger);
+}
+
+#otp {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.15em;
+}
+
+.pf-v5-c-button {
+  min-height: 2.75rem;
+  border-radius: var(--grounds-radius);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  --pf-v5-c-button--m-primary--BackgroundColor: var(--grounds-brand);
+  --pf-v5-c-button--m-primary--hover--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-primary--focus--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-primary--active--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-secondary--Color: var(--grounds-text);
+  --pf-v5-c-button--m-secondary--BackgroundColor: var(--grounds-base);
+  --pf-v5-c-button--m-secondary--after--BorderColor: var(--grounds-line);
+  --pf-v5-c-button--m-secondary--hover--Color: var(--grounds-text);
+  --pf-v5-c-button--m-secondary--hover--BackgroundColor: var(--grounds-tint);
+}
+
+.pf-v5-c-button::after {
+  border-radius: inherit;
+}
+
+.pf-v5-c-button.pf-m-control {
+  border: 1px solid var(--grounds-line);
+  background: var(--grounds-base);
+  color: var(--grounds-text);
+}
+
+.pf-v5-c-button.pf-m-control:hover {
+  background: var(--grounds-tint);
+}
+
+.pf-v5-c-button:disabled,
+.pf-v5-c-button.pf-m-aria-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+a {
+  color: var(--grounds-link);
+  text-underline-offset: 0.2em;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--grounds-focus);
+  outline-offset: 3px;
+}
+
+.pf-v5-c-form-control input:focus-visible,
+.pf-v5-c-form-control select:focus-visible {
+  outline: none;
+}
+
+.pf-v5-c-helper-text__item.pf-m-error,
+.pf-v5-c-helper-text__item.pf-m-error .kc-feedback-text {
+  color: var(--grounds-danger);
+}
+
+.kc-login-tooltip .kc-tooltip-text {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  left: auto;
+  max-width: min(12rem, 70vw);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--grounds-line);
+  border-radius: var(--grounds-radius);
+  background: var(--grounds-base);
+  color: var(--grounds-text);
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+}
+
+.kc-login-tooltip .kc-tooltip-text::after {
+  display: none;
+}
+
+.kc-login-tooltip:focus-visible .kc-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.pf-v5-c-alert {
+  border: 1px solid var(--grounds-line);
+  border-radius: var(--grounds-radius);
+  background: var(--grounds-tint);
+  box-shadow: none;
+}
+
+.pf-v5-c-alert.pf-m-danger {
+  border-color: var(--grounds-danger);
+  background: var(--grounds-danger-tint);
+}
+
+.pf-v5-c-alert__title,
+.pf-v5-c-alert__description {
+  color: var(--grounds-text);
+  font-size: 0.875rem;
+}
+
+.pf-v5-c-tile,
+.pf-v5-c-panel,
+.pf-v5-c-data-list__item {
+  background: var(--grounds-base);
+  color: var(--grounds-text);
+}
+
+.kc-qr-code img {
+  box-sizing: content-box;
+  max-width: calc(100% - 1rem);
+  height: auto;
+  border: 0.5rem solid #fff;
+  background: #fff;
+  box-shadow: none;
+}
+
+.grounds-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.25rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--grounds-line);
+  font-size: 0.75rem;
+}
+
+.grounds-footer a {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  color: var(--grounds-subtle);
+}
+
+.grounds-footer a:hover {
+  color: var(--grounds-text);
+}
+
+@media (max-width: 479px) {
+  .pf-v5-c-login__main-header {
+    padding: 1.5rem 1.25rem 1.25rem;
+  }
+
+  .pf-v5-c-login__main-body {
+    padding: 0 1.25rem 1.5rem;
+  }
+
+  .pf-v5-c-login__main-header:has(.pf-v5-c-login__main-header-utilities) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -33,6 +33,7 @@ WORKDIR /opt/keycloak
 
 COPY --from=downloader --chmod=644 /tmp/keycloak-minecraft-idp.jar /opt/keycloak/providers/keycloak-minecraft-idp.jar
 COPY --from=downloader --chmod=644 /tmp/keycloak-permissions-event-listener.jar /opt/keycloak/providers/keycloak-permissions-event-listener.jar
+COPY --chown=1000:0 keycloak/themes/ /opt/keycloak/themes/
 
 RUN /opt/keycloak/bin/kc.sh build \
       --db=postgres \

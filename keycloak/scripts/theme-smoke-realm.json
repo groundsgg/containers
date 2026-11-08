@@ -1,0 +1,51 @@
+{
+  "id": "grounds-realm-id",
+  "realm": "grounds",
+  "enabled": true,
+  "displayName": "Grounds Account",
+  "displayNameHtml": "<strong>Grounds Account</strong>",
+  "loginTheme": "grounds",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en", "de"],
+  "defaultLocale": "en",
+  "eventsListeners": ["jboss-logging", "permissions-events"],
+  "clients": [
+    {
+      "clientId": "theme-smoke",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["http://localhost/callback"],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost/logout-complete"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "theme-user",
+      "enabled": true,
+      "firstName": "Theme",
+      "lastName": "Test",
+      "email": "theme@example.invalid",
+      "emailVerified": true,
+      "credentials": [{"type": "password", "value": "theme-password", "temporary": false}]
+    },
+    {
+      "username": "otp-user",
+      "enabled": true,
+      "firstName": "OTP",
+      "lastName": "Test",
+      "email": "otp@example.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {"type": "password", "value": "theme-password", "temporary": false},
+        {
+          "type": "otp",
+          "userLabel": "Theme smoke test",
+          "secretData": "{\"value\":\"theme-smoke-otp-secret\"}",
+          "credentialData": "{\"subType\":\"totp\",\"digits\":6,\"counter\":0,\"period\":30,\"algorithm\":\"HmacSHA1\"}"
+        }
+      ]
+    }
+  ]
+}

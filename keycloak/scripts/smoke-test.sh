@@ -3,6 +3,7 @@
 set -euo pipefail
 
 image="${1:?usage: $0 <image>}"
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 providers_dir="/opt/keycloak/providers"
 minecraft_provider="${providers_dir}/keycloak-minecraft-idp.jar"
 permissions_provider="${providers_dir}/keycloak-permissions-event-listener.jar"
@@ -63,14 +64,7 @@ assert_spi_config "kc.spi-events-listener-permissions-events-realm" "grounds-rea
 assert_spi_config "kc.spi-events-listener-permissions-events-subject" "minecraft-identity.changed"
 
 mkdir -p "${tmp_dir}/import"
-cat >"${tmp_dir}/import/grounds-realm.json" <<'EOF'
-{
-  "id": "grounds-realm-id",
-  "realm": "grounds",
-  "enabled": true,
-  "eventsListeners": ["jboss-logging", "permissions-events"]
-}
-EOF
+cp "${script_dir}/theme-smoke-realm.json" "${tmp_dir}/import/grounds-realm.json"
 
 docker network create "$network" >/dev/null
 postgres_container="$(docker run -d \
@@ -116,6 +110,7 @@ fi
 keycloak_container="$(docker create \
   --memory 768m \
   --network "$network" \
+  --publish 127.0.0.1::8080 \
   -e KC_DB=postgres \
   -e KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak \
   -e KC_DB_USERNAME=keycloak \
@@ -139,6 +134,8 @@ for _ in {1..90}; do
   if docker exec "$keycloak_container" bash -c \
     'exec 3<>/dev/tcp/localhost/8080 && printf "GET /realms/grounds/.well-known/openid-configuration HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && grep -q "HTTP/1.1 200" <&3' \
     >/dev/null 2>&1; then
+    local_port="$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$keycloak_container")"
+    python3 "${script_dir}/test-login-theme.py" "http://127.0.0.1:${local_port}"
     exit 0
   fi
   sleep 2

@@ -39,3 +39,9 @@ The plugin format follows Maven coordinates:
 - **Repository**: GitHub repository name (e.g., `plugin-server-discovery`)
 - **Artifact ID**: Maven artifact ID (e.g., `plugin-server-discovery-paper`)
 - **Version**: Plugin version (e.g., `0.1.0`)
+
+## Bedrock chat behind Velocity
+
+When `PAPER_VELOCITY_SECRET` (or the legacy `VELOCITY_FORWARDING_SECRET`) enables authenticated proxy forwarding, startup sets `enforce-secure-profile=false` so Bedrock players can chat. Standalone startup retains the configured secure-profile setting. Java message signatures are preserved. See the [Geyser secure-chat guidance](https://geysermc.org/wiki/geyser/secure-chat/).
+
+`paper/variants/stage-buildserver-bedrock.Dockerfile` applies this startup correction to the exact accepted Stage buildserver image. It replaces only the inherited Paper start script, preserving the editor and chat plugins, the working-copy wrapper, runtime user and image entrypoint. Build from this repository root with `docker build -f paper/variants/stage-buildserver-bedrock.Dockerfile .`.

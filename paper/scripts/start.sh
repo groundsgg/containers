@@ -14,6 +14,9 @@ sed -i "s/^level-type=.*/level-type=${LEVEL_TYPE:-flat}/" /app/server.properties
 velocity_secret=${PAPER_VELOCITY_SECRET:-${VELOCITY_FORWARDING_SECRET:-}}
 if [ -n "$velocity_secret" ]; then
     sed -i 's/^online-mode=.*/online-mode=false/' /app/server.properties
+    # Bedrock has no Java profile key; identity is authenticated by the proxy.
+    # This permits unsigned chat without removing signatures from Java messages.
+    sed -i 's/^enforce-secure-profile=.*/enforce-secure-profile=false/' /app/server.properties
     PAPER_FORWARDING_SECRET="$velocity_secret" awk '
         BEGIN {
             q = "\047"

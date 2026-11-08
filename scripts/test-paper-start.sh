@@ -25,6 +25,13 @@ grep -Fx 'level-type=flat' /app/server.properties >/dev/null
 expected_online_mode=$(cat /app/.expected-online-mode)
 grep -Fx "online-mode=$expected_online_mode" /app/server.properties >/dev/null
 
+# Bedrock has no Java profile key. A proxy-authenticated backend must allow
+# its chat, while a standalone server keeps secure-profile enforcement.
+grep -Fx "enforce-secure-profile=$expected_online_mode" /app/server.properties >/dev/null || {
+    echo "Unexpected secure-profile enforcement; expected $expected_online_mode" >&2
+    exit 1
+}
+
 if [ "$expected_online_mode" = false ]; then
     grep -Fx '    enabled: true' /app/config/paper-global.yml >/dev/null
     grep -Fxf /app/.expected-yaml-secret /app/config/paper-global.yml >/dev/null

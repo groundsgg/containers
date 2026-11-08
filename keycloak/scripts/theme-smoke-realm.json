@@ -6,7 +6,7 @@
   "displayNameHtml": "<strong>Grounds Account</strong>",
   "loginTheme": "grounds",
   "internationalizationEnabled": true,
-  "supportedLocales": ["en", "de"],
+  "supportedLocales": ["en", "de", "es", "fr", "tr"],
   "defaultLocale": "en",
   "eventsListeners": ["jboss-logging", "permissions-events"],
   "clients": [

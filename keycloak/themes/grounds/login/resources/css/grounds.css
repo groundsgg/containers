@@ -162,6 +162,28 @@ button,
   max-width: 100%;
 }
 
+.pf-v5-c-login__main-header-utilities select {
+  padding-inline-end: 44px;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__utilities {
+  align-self: stretch;
+  align-items: center;
+  padding: 0 12px 0 0;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__toggle-icon svg {
+  display: block;
+}
+
 .pf-v5-c-login__main-body,
 .pf-v5-c-login__main-footer {
   padding: 0;
@@ -179,6 +201,68 @@ button,
 
 .pf-v5-c-form:has(#kc-attempted-username) {
   margin-block-end: 20px;
+}
+
+.pf-v5-c-input-group:has(#reset-login) {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.pf-v5-c-input-group:has(#reset-login) > .pf-v5-c-input-group__item {
+  width: 100%;
+  flex: none;
+}
+
+.pf-v5-c-input-group > .pf-v5-c-input-group__item:has(#reset-login) {
+  width: auto;
+  align-self: flex-end;
+  margin: 0;
+  border: 0;
+}
+
+#reset-login {
+  display: inline-flex;
+  width: auto;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: end;
+  white-space: normal;
+  text-underline-offset: 4px;
+}
+
+#reset-login:hover {
+  background: transparent;
+  color: var(--text-body);
+  text-decoration: underline;
+  text-decoration-color: var(--color-energy);
+}
+
+#reset-login > i {
+  display: none;
+}
+
+/* Use Keycloak's localized accessible name as a real, visible action label. */
+#reset-login .kc-tooltip-text {
+  display: block;
+  position: static;
+  min-width: 0;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  box-shadow: none;
+  visibility: visible;
+  opacity: 1;
+  transition: none;
 }
 
 .pf-v5-c-form__label {
@@ -381,7 +465,8 @@ select:focus-visible {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0 20px;
+  align-items: center;
+  gap: 0 10px;
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid var(--color-stone-line);

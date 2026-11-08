@@ -52,9 +52,13 @@ including its repo-internal component library and focused sign-in page:
   Mini-CD v0.19 values and semantic roles, with Tailwind `@theme` emitted as
   ordinary `:root` CSS for native Keycloak.
 - `src/components/design-system/button.tsx`, `select.tsx` and their shared
-  `src/app/globals.css` rules → `resources/css/hub-components.css`:
+  `src/app/globals.css` rules, plus the text-button variant from
+  `src/styles/design-system.css` → `resources/css/hub-components.css`:
   `.btn`, `.btn-gold`, `.btn-ghost` and `.field` presentation. Theme properties
-  attach these classes to Keycloak's existing controls.
+  attach these classes to Keycloak's existing controls. The restart text action
+  sits below the primary form and before the legal footer, using Keycloak's
+  server-generated restart URL and the same visibility condition as its native
+  identity control. Keyboard order follows this visual order.
 - `src/app/[locale]/login/login.css` → the layout adapter `grounds.css`:
   Stone Deep/Surface, gold primary actions, Energy focus, 6px control/10px panel
   radii, a dark sign-in panel and the same Clockwork background. The Hub is

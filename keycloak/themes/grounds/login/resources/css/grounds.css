@@ -204,66 +204,9 @@ button,
   margin-block-end: 20px;
 }
 
-.pf-v5-c-input-group:has(#reset-login) {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-}
-
-.pf-v5-c-input-group:has(#reset-login) > .pf-v5-c-input-group__item {
-  width: 100%;
-  flex: none;
-}
-
 .pf-v5-c-input-group > .pf-v5-c-input-group__item:has(#reset-login) {
-  width: auto;
-  align-self: flex-end;
-  margin: 0;
-  border: 0;
-}
-
-#reset-login {
-  display: inline-flex;
-  width: auto;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 14px;
-  text-align: end;
-  white-space: normal;
-  text-underline-offset: 4px;
-}
-
-#reset-login:hover {
-  background: transparent;
-  color: var(--text-body);
-  text-decoration: underline;
-  text-decoration-color: var(--color-energy);
-}
-
-#reset-login > i {
+  /* The same native restart action is presented below the submit button. */
   display: none;
-}
-
-/* Use Keycloak's localized accessible name as a real, visible action label. */
-#reset-login .kc-tooltip-text {
-  display: block;
-  position: static;
-  min-width: 0;
-  max-width: none;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: inherit;
-  box-shadow: none;
-  visibility: visible;
-  opacity: 1;
-  transition: none;
 }
 
 .pf-v5-c-form__label {
@@ -460,6 +403,22 @@ select:focus-visible {
   border: 8px solid #fff;
   background: #fff;
   box-shadow: none;
+}
+
+.grounds-restart {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.grounds-restart .btn {
+  color: var(--text-muted);
+  text-align: center;
+  white-space: normal;
+}
+
+.grounds-restart .btn:hover {
+  color: var(--text-body);
 }
 
 .grounds-footer {

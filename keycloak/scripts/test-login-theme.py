@@ -87,6 +87,7 @@ def check(base):
     })
     page = fetch(browser, auth)
     assert "kc-form-login" in page.ids, "Keycloak login form was not rendered"
+    assert "grounds-restart-login" not in page.ids, "Initial login must not offer a redundant restart"
     css_url = next((url for url in page.styles if url.endswith("/css/grounds.css")), None)
     assert css_url, "Grounds login theme was not selected or packaged"
     assert page.favicons and page.favicons[0].endswith("/img/grounds-icon.png"), "Grounds Hub favicon is missing"
@@ -107,17 +108,27 @@ def check(base):
 
     otp = post_form(browser, invalid, "kc-form-login", {"username": "otp-user", "password": "theme-password"})
     assert "otp" in otp.ids, "Existing OTP credential did not trigger MFA"
+    assert "grounds-restart-login" in otp.ids, "MFA must offer its secondary restart action"
     themed(otp)
     invalid_otp = post_form(browser, otp, "kc-otp-login-form", {"otp": "invalid"})
     assert "input-error-otp" in invalid_otp.ids, "Invalid OTP did not render accessible feedback"
     themed(invalid_otp)
+
+    restart_url = urljoin(invalid_otp.url, invalid_otp.ids["grounds-restart-login"]["href"])
+    assert urlparse(restart_url).netloc == urlparse(base).netloc, "Restart must stay on the Keycloak origin"
+    restarted = fetch(browser, restart_url)
+    assert "kc-form-login" in restarted.ids, "Secondary action did not restart the native login flow"
+    assert "grounds-restart-login" not in restarted.ids, "Restart must disappear at the login entry point"
+    themed(restarted)
+    otp = post_form(browser, restarted, "kc-form-login", {"username": "otp-user", "password": "theme-password"})
+    assert "otp" in otp.ids, "MFA did not resume after restarting the sign-in flow"
 
     # Keycloak's imported OTP secret is the raw UTF-8 secret, not Base32.
     counter = struct.pack(">Q", int(time.time()) // 30)
     digest = hmac.new(b"theme-smoke-otp-secret", counter, hashlib.sha1).digest()
     offset = digest[-1] & 15
     code = str((struct.unpack(">I", digest[offset:offset + 4])[0] & 0x7fffffff) % 1000000).zfill(6)
-    signed_in = post_form(browser, invalid_otp, "kc-otp-login-form", {"otp": code})
+    signed_in = post_form(browser, otp, "kc-otp-login-form", {"otp": code})
     query = parse_qs(urlparse(signed_in.location).query)
     assert signed_in.status == 302 and query.get("code"), "Valid OTP did not complete authentication"
 
@@ -125,6 +136,7 @@ def check(base):
         "client_id": "theme-smoke", "post_logout_redirect_uri": "http://localhost/logout-complete",
     }))
     assert "kc-logout-confirm" in logout.ids, "Logout confirmation did not render"
+    assert "grounds-restart-login" not in logout.ids, "Logout must not offer an unrelated sign-in restart"
     themed(logout)
     logged_out = post_form(browser, logout, None, {"confirmLogout": ""})
     assert logged_out.status == 302 and logged_out.location == "http://localhost/logout-complete", "Logout did not complete"
@@ -136,6 +148,7 @@ def check(base):
     themed(expired)
     error = fetch(new_browser(), auth.replace("client_id=theme-smoke", "client_id=missing-client"))
     assert error.status == 400 and "kc-error-message" in error.ids, "Invalid client did not render the error page"
+    assert "grounds-restart-login" not in error.ids, "Detached errors must not contain an unavailable restart action"
     themed(error)
     german = fetch(new_browser(), auth + "&ui_locales=de")
     assert "Datenschutz" in german.source and "Impressum" in german.source, "German Hub footer translations did not render"

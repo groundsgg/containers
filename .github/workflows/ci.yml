@@ -34,7 +34,7 @@ jobs:
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: "25"
       - run: python3 scripts/test-player-access-privacy.py
       - run: python3 scripts/test-transfer-admission-build.py
 
@@ -89,6 +89,7 @@ jobs:
         with:
           files: |
             ${{ matrix.container }}/**
+            .github/workflows/ci.yml
             ${{ matrix.container == 'buildserver' && 'scripts/test-buildserver-scene-editor-pin.sh' || '' }}
             ${{ (matrix.container == 'velocity' || matrix.container == 'geyser') && 'scripts/player-access-privacy/**' || '' }}
             ${{ matrix.container == 'velocity' && 'scripts/transfer-admission/**' || '' }}
@@ -128,6 +129,16 @@ jobs:
             --platform linux/amd64 \
             --tag grounds-keycloak:ci-test \
             .
+
+      - uses: actions/setup-node@v6
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: keycloak/tests/package-lock.json
+      - name: Prepare Keycloak browser tests
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
+        run: npm ci --prefix keycloak/tests && npm run install:browsers --prefix keycloak/tests
 
       - name: 🔍 Smoke test Keycloak providers
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'

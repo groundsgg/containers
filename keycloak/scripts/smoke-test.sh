@@ -29,6 +29,18 @@ trap cleanup EXIT
 docker cp "${container_id}:${minecraft_provider}" "${tmp_dir}/keycloak-minecraft-idp.jar"
 docker cp "${container_id}:${permissions_provider}" "${tmp_dir}/keycloak-permissions-event-listener.jar"
 
+candidate=false
+if docker cp "${container_id}:${providers_dir}/grounds-keycloak-theme.jar" "${tmp_dir}/grounds-keycloak-theme.jar" >/dev/null 2>&1; then
+  candidate=true
+  if [[ "${GROUNDS_KEYCLOAK_BROWSER:-0}" != 1 ]]; then
+    node "${script_dir}/../tests/run.mjs" "$image"
+    exit $?
+  fi
+elif [[ "${GROUNDS_KEYCLOAK_BROWSER:-0}" == 1 ]]; then
+  echo "Keycloak theme verification failed (reason=candidate_jar_missing)" >&2
+  exit 1
+fi
+
 test -s "${tmp_dir}/keycloak-minecraft-idp.jar"
 test -s "${tmp_dir}/keycloak-permissions-event-listener.jar"
 if cmp -s \
@@ -65,6 +77,17 @@ assert_spi_config "kc.spi-events-listener-permissions-events-subject" "minecraft
 
 mkdir -p "${tmp_dir}/import"
 cp "${script_dir}/theme-smoke-realm.json" "${tmp_dir}/import/grounds-realm.json"
+
+if [[ "$candidate" == true ]]; then
+  : "${KEYCLOAK_TEST_CALLBACK_BASE:?browser runner must start an isolated callback server}"
+  python3 - "${script_dir}/../tests/fixtures" "${tmp_dir}/import" "$KEYCLOAK_TEST_CALLBACK_BASE" <<'PYFIXTURE'
+import json, pathlib, sys
+source, target, callback = sys.argv[1:]
+for fixture in pathlib.Path(source).glob('*.json'):
+    data = json.loads(fixture.read_text().replace('__CALLBACK_BASE__', callback))
+    (pathlib.Path(target) / fixture.name).write_text(json.dumps(data))
+PYFIXTURE
+fi
 
 docker network create "$network" >/dev/null
 postgres_container="$(docker run -d \
@@ -136,6 +159,9 @@ for _ in {1..90}; do
     >/dev/null 2>&1; then
     local_port="$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$keycloak_container")"
     python3 "${script_dir}/test-login-theme.py" "http://127.0.0.1:${local_port}"
+    if [[ "$candidate" == true ]]; then
+      KEYCLOAK_TEST_BASE_URL="http://127.0.0.1:${local_port}" npm test --prefix "${script_dir}/../tests"
+    fi
     exit 0
   fi
   sleep 2

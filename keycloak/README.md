@@ -16,10 +16,10 @@ docker build -f keycloak/Dockerfile -t keycloak-custom .
 
 Provider versions are independent build arguments:
 
-| Provider | Build argument | Default version |
-| --- | --- | --- |
-| Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION` | `1.3.1` |
-| Permissions event listener | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.2` |
+| Provider                    | Build argument                                | Default version |
+| --------------------------- | --------------------------------------------- | --------------- |
+| Minecraft identity provider | `KEYCLOAK_MINECRAFT_VERSION`                  | `1.3.1`         |
+| Permissions event listener  | `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION` | `0.2.2`         |
 
 The provider assets are pinned by `KEYCLOAK_MINECRAFT_SHA256` and `KEYCLOAK_PERMISSIONS_EVENT_LISTENER_SHA256`. Override each provider's version and checksum together when updating it.
 
@@ -118,24 +118,86 @@ exercises the MFA prompt. The callback deliberately points to an absent local
 application. This upstream-only preview has no custom providers or external
 identity provider; the full image smoke test above covers provider coexistence.
 
-### Production activation
+## Keycloakify candidate (`grounds-login`)
 
-Image packaging alone does not switch the live realm's theme. Roll out in order:
+The Hub workspace now owns `@groundsgg/ui` and `@groundsgg/keycloak-theme`.
+The new React theme consumes shared primitives, tokens, CSS and self-hosted
+fonts. The native `grounds` theme above remains available for rollback.
+The default image stays native until a released, reviewed artifact digest is
+pinned; no placeholder digest or unreviewed `latest` is used.
 
-1. Build and publish the image, then pin and deploy its immutable digest through
-   `grounds-pulumi/core/src/platform/keycloak.ts` (`KEYCLOAK_IMAGE`). Verify every
-   Keycloak replica contains the theme before selecting it.
-2. Add `loginTheme: "grounds"` to the existing `realmSettings` owner in
-   `grounds-pulumi/core/src/platform/portal-keycloak.ts`, preview the realm update
-   and apply only the intended change. An existing realm is not updated by
-   editing its bootstrap `KeycloakRealmImport` alone.
-3. Check the real Minecraft/Microsoft redirect, Portal/Hub SSO reuse and Control
-   Center MFA. Native username/password accounts exist only in the smoke fixture;
-   this theme does not add that login method to Grounds.
+Build a candidate with an immutable artifact reference and the JAR checksum
+from its manifest:
 
-For rollback, restore the previous login-theme selection before rolling back
-to an image without the `grounds` theme. Preserve the existing realm policies,
-client settings, providers and credentials throughout.
+```bash
+docker build -f keycloak/Dockerfile \
+  --build-arg "GROUNDS_LOGIN_THEME_IMAGE=$THEME_IMAGE" \
+  --build-arg "GROUNDS_LOGIN_THEME_SHA256=$JAR_SHA256" \
+  -t grounds-keycloak:theme-candidate .
+npm ci --prefix keycloak/tests
+npm run install:browsers --prefix keycloak/tests
+node keycloak/tests/run.mjs grounds-keycloak:theme-candidate
+```
+
+`THEME_IMAGE` must be the released
+`ghcr.io/groundsgg/grounds-login-theme@sha256:…` reference. The Dockerfile checks
+the JAR checksum and rejects any other theme descriptor before adding it to
+`providers` and running `kc.sh build`. The existing two providers and the
+native theme are unchanged.
+
+`keycloak-theme-candidate.yml` manually validates a released artifact on main,
+builds AMD64 and ARM64, and runs the browser suite. It publishes no image and
+changes no realm. Grant its repository read access to the Hub artifact package.
+
+The smoke script automatically requires browser verification when the image
+contains the candidate JAR. The explicit Node runner rejects an image without
+that JAR. It creates one ephemeral callback server, imports isolated test realms,
+and cleans up the callback server, Postgres, NATS and Keycloak. Tests cover
+invalid/valid login and OTP, restart and tab order, SSO in both directions,
+LoA 2 step-up, logout, an actual timed-out login and recovery, detached errors,
+JavaScript/bundle failure, language switching during MFA and 320/360/1440px
+layouts. Fixture LoA flows preserve the production Cookie/alternative-level
+structure; local password authentication replaces the external Minecraft
+redirect solely in fixtures. These tests do not prove live Microsoft/Xbox login.
+The legacy Python missing-tab test remains separate from the real timeout test.
+
+JavaScript is required by the candidate. A static loading/reload surface and
+readable noscript hint remain if the bundle cannot execute. Confirm this policy
+before live activation; no CSP relaxation is part of this change.
+
+### Release and live activation order
+
+1. Merge the reviewed Hub UI version/changelog PR. Publish private `@groundsgg/ui`
+   through its manual main-only workflow. Verify private visibility and registry
+   read access for downstream CI and Cloudflare builds.
+2. Build the theme through the separate artifact workflow. It verifies that
+   published UI bytes match the workspace, registers only `grounds-login`, and
+   records source SHA, UI integrity, Keycloak target and JAR checksum. Capture
+   the actual OCI digest; never substitute a tag or fabricated checksum.
+3. Run the candidate workflow above. After acceptance, pin that exact artifact
+   and checksum in a separate reviewed containers change and publish the new
+   Keycloak image. Read and record the live Keycloak image and realm/client
+   theme selections before changing them; checkout state is not live evidence.
+4. Pin the new Keycloak image through the existing
+   `grounds-pulumi/core/src/platform/keycloak.ts` owner and image-only preview/
+   saved-plan workflow. Confirm every replica contains both theme names before
+   selecting `grounds-login` anywhere.
+5. Prepare a dedicated, strictly checked theme-selection preview/saved-plan
+   workflow. Use the existing `hub-demo-client` owner for a temporary Hub beta
+   canary; leave redirects, PKCE, LoA and flow bindings unchanged. Realm selection
+   belongs to `grounds-realm-settings` in `portal-keycloak.ts`, never the
+   create-only `KeycloakRealmImport`. A realm settings hash change also replaces
+   `keycloak-realm-events-reconcile`; allow only the proven hash annotation change
+   and unchanged job specification, never an arbitrary dependent mutation.
+6. Verify live Hub/Portal SSO, Minecraft/Microsoft redirects, fresh and existing
+   sessions, provider cancellation/failure, Control Center OTP and logout.
+   Realm-wide selection requires the separate activation decision; restore the
+   prior client override when the realm becomes the owner of the selection.
+
+Rollback restores the captured realm/client selections first, then the prior
+image if necessary. Never remove an image while its theme is selected. Native
+snapshot cleanup is a later PR after acceptance and a secured rollback path.
+The existing image-only guard must continue rejecting realm/client mutations.
 
 ## Configuration
 
@@ -144,7 +206,7 @@ This image runs Keycloak in optimized mode (`start --optimized`). All Keycloak c
 Required configuration:
 
 | Variable         | Description                       |
-|------------------|-----------------------------------|
+| ---------------- | --------------------------------- |
 | `KC_DB`          | Database vendor (e.g. `postgres`) |
 | `KC_DB_URL`      | JDBC database URL                 |
 | `KC_DB_USERNAME` | Database username                 |
@@ -153,11 +215,11 @@ Required configuration:
 
 The permissions event listener also requires:
 
-| Variable                                                    | Required | Default                      | Description                            |
-|-------------------------------------------------------------|----------|------------------------------|----------------------------------------|
-| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL`        | Yes      | -                            | NATS server URL with JetStream enabled |
-| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`           | Yes      | -                            | Comma-separated accepted realm IDs     |
-| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT`         | No       | `minecraft-identity.changed` | NATS subject for invalidation events   |
+| Variable                                             | Required | Default                      | Description                            |
+| ---------------------------------------------------- | -------- | ---------------------------- | -------------------------------------- |
+| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_NATS_URL` | Yes      | -                            | NATS server URL with JetStream enabled |
+| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_REALM`    | Yes      | -                            | Comma-separated accepted realm IDs     |
+| `KC_SPI_EVENTS_LISTENER_PERMISSIONS_EVENTS_SUBJECT`  | No       | `minecraft-identity.changed` | NATS subject for invalidation events   |
 
 Enable the `permissions-events` event listener in the target realm. The configured subject must be retained by a JetStream stream before Keycloak publishes identity invalidations.
 

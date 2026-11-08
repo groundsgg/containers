@@ -1,0 +1,240 @@
+{
+  "id": "grounds-login-test-id",
+  "realm": "grounds-login-test",
+  "enabled": true,
+  "displayName": "Grounds Account",
+  "displayNameHtml": "<strong>Grounds Account</strong>",
+  "loginTheme": "grounds-login",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en", "de", "es", "fr", "tr"],
+  "defaultLocale": "en",
+  "eventsListeners": ["jboss-logging"],
+  "clients": [
+    {
+      "clientId": "theme-smoke",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["__CALLBACK_BASE__/callback"],
+      "attributes": {
+        "post.logout.redirect.uris": "__CALLBACK_BASE__/logout-complete"
+      }
+    },
+    {
+      "clientId": "hub-test",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["__CALLBACK_BASE__/callback"],
+      "attributes": {
+        "post.logout.redirect.uris": "__CALLBACK_BASE__/logout-complete",
+        "acr.loa.map": "{\"1\": \"1\", \"control-center-mfa\": \"2\"}",
+        "default.acr.values": "1"
+      },
+      "authenticationFlowBindingOverrides": {
+        "browser": "fixture-step-up-id"
+      }
+    },
+    {
+      "clientId": "portal-test",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["__CALLBACK_BASE__/callback"],
+      "attributes": {
+        "post.logout.redirect.uris": "__CALLBACK_BASE__/logout-complete",
+        "acr.loa.map": "{\"1\": \"1\", \"control-center-mfa\": \"2\"}",
+        "default.acr.values": "1"
+      },
+      "authenticationFlowBindingOverrides": {
+        "browser": "fixture-step-up-id"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "theme-user",
+      "enabled": true,
+      "firstName": "Theme",
+      "lastName": "Test",
+      "email": "theme@example.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "theme-password",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "otp-user",
+      "enabled": true,
+      "firstName": "OTP",
+      "lastName": "Test",
+      "email": "otp@example.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "theme-password",
+          "temporary": false
+        },
+        {
+          "type": "otp",
+          "userLabel": "Theme smoke test",
+          "secretData": "{\"value\":\"theme-smoke-otp-secret\"}",
+          "credentialData": "{\"subType\":\"totp\",\"digits\":6,\"counter\":0,\"period\":30,\"algorithm\":\"HmacSHA1\"}"
+        }
+      ]
+    },
+    {
+      "username": "sso-hub-user",
+      "enabled": true,
+      "firstName": "OTP",
+      "lastName": "Test",
+      "email": "sso-hub-user@example.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "theme-password",
+          "temporary": false
+        },
+        {
+          "type": "otp",
+          "userLabel": "Theme smoke test",
+          "secretData": "{\"value\":\"theme-smoke-otp-secret\"}",
+          "credentialData": "{\"subType\":\"totp\",\"digits\":6,\"counter\":0,\"period\":30,\"algorithm\":\"HmacSHA1\"}"
+        }
+      ]
+    },
+    {
+      "username": "sso-portal-user",
+      "enabled": true,
+      "firstName": "OTP",
+      "lastName": "Test",
+      "email": "sso-portal-user@example.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "theme-password",
+          "temporary": false
+        },
+        {
+          "type": "otp",
+          "userLabel": "Theme smoke test",
+          "secretData": "{\"value\":\"theme-smoke-otp-secret\"}",
+          "credentialData": "{\"subType\":\"totp\",\"digits\":6,\"counter\":0,\"period\":30,\"algorithm\":\"HmacSHA1\"}"
+        }
+      ]
+    }
+  ],
+  "authenticationFlows": [
+    {
+      "alias": "fixture-step-up",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "authenticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "flowAlias": "fixture-levels",
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "authenticatorFlow": true,
+          "userSetupAllowed": false
+        }
+      ],
+      "id": "fixture-step-up-id"
+    },
+    {
+      "alias": "fixture-levels",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "flowAlias": "fixture-level-1",
+          "requirement": "CONDITIONAL",
+          "priority": 0,
+          "authenticatorFlow": true,
+          "userSetupAllowed": false
+        },
+        {
+          "flowAlias": "fixture-level-2",
+          "requirement": "CONDITIONAL",
+          "priority": 1,
+          "authenticatorFlow": true,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "fixture-level-1",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-level-of-authentication",
+          "requirement": "REQUIRED",
+          "priority": 0,
+          "authenticatorFlow": false,
+          "userSetupAllowed": false,
+          "authenticatorConfig": "fixture-loa-1"
+        },
+        {
+          "authenticator": "auth-username-password-form",
+          "requirement": "REQUIRED",
+          "priority": 1,
+          "authenticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "fixture-level-2",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-level-of-authentication",
+          "requirement": "REQUIRED",
+          "priority": 0,
+          "authenticatorFlow": false,
+          "userSetupAllowed": false,
+          "authenticatorConfig": "fixture-loa-2"
+        },
+        {
+          "authenticator": "auth-otp-form",
+          "requirement": "REQUIRED",
+          "priority": 1,
+          "authenticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    }
+  ],
+  "authenticatorConfig": [
+    {
+      "alias": "fixture-loa-1",
+      "config": {
+        "loa-condition-level": "1",
+        "loa-max-age": "36000"
+      }
+    },
+    {
+      "alias": "fixture-loa-2",
+      "config": {
+        "loa-condition-level": "2",
+        "loa-max-age": "0"
+      }
+    }
+  ]
+}

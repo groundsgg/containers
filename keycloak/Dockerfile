@@ -1,3 +1,7 @@
+# Keep native theming as the default until a reviewed, published theme digest is pinned.
+ARG GROUNDS_LOGIN_THEME_IMAGE=scratch
+FROM ${GROUNDS_LOGIN_THEME_IMAGE} AS login-theme
+
 FROM alpine:3.24 AS downloader
 
 ARG KEYCLOAK_MINECRAFT_VERSION=1.3.1
@@ -27,12 +31,29 @@ RUN set -eux; \
       | grep -Fxq 'gg.grounds.keycloak.permissions.events.PermissionsEventListenerProviderFactory' \
       || { echo "Keycloak permissions event listener validation failed (version=${KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION}, reason=provider_factory_not_registered)" >&2; exit 1; }
 
+ARG GROUNDS_LOGIN_THEME_IMAGE
+ARG GROUNDS_LOGIN_THEME_SHA256
+RUN --mount=from=login-theme,source=/,target=/theme,ro \
+    set -eux; \
+    mkdir -p /theme-provider; \
+    if [ "$GROUNDS_LOGIN_THEME_IMAGE" = scratch ]; then \
+      [ -z "$GROUNDS_LOGIN_THEME_SHA256" ]; \
+    else \
+      [ -n "$GROUNDS_LOGIN_THEME_SHA256" ]; \
+      echo "$GROUNDS_LOGIN_THEME_SHA256  /theme/grounds-keycloak-theme.jar" | sha256sum -c -; \
+      unzip -p /theme/grounds-keycloak-theme.jar META-INF/keycloak-themes.json \
+        | tr -d '[:space:]' \
+        | grep -Fx '{"themes":[{"name":"grounds-login","types":["login"]}]}'; \
+      cp /theme/grounds-keycloak-theme.jar /theme-provider/grounds-keycloak-theme.jar; \
+    fi
+
 FROM quay.io/keycloak/keycloak:26.8.1-1 AS builder
 
 WORKDIR /opt/keycloak
 
 COPY --from=downloader --chmod=644 /tmp/keycloak-minecraft-idp.jar /opt/keycloak/providers/keycloak-minecraft-idp.jar
 COPY --from=downloader --chmod=644 /tmp/keycloak-permissions-event-listener.jar /opt/keycloak/providers/keycloak-permissions-event-listener.jar
+COPY --from=downloader --chmod=644 /theme-provider/ /opt/keycloak/providers/
 COPY --chown=1000:0 keycloak/themes/ /opt/keycloak/themes/
 
 RUN /opt/keycloak/bin/kc.sh build \

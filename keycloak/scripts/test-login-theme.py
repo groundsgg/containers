@@ -89,13 +89,15 @@ def check(base):
     assert "kc-form-login" in page.ids, "Keycloak login form was not rendered"
     css_url = next((url for url in page.styles if url.endswith("/css/grounds.css")), None)
     assert css_url, "Grounds login theme was not selected or packaged"
-    assert page.favicons and page.favicons[0].endswith("/img/grounds-icon-32.png"), "Grounds favicon is missing"
+    assert page.favicons and page.favicons[0].endswith("/img/grounds-icon.png"), "Grounds Hub favicon is missing"
+    assert "btn-gold" in page.ids["kc-login"]["class"].split(), "Native submit button is missing the shared Hub variant"
+    assert all(any(url.endswith(path) for url in page.styles) for path in ["/css/hub-tokens.css", "/css/hub-components.css"]), "Shared Hub foundations were not loaded"
     themed(page)
     with browser.open(urljoin(page.url, css_url), timeout=15) as response:
         assert response.status == 200
         assert "--grounds-canvas" in response.read().decode(), "Grounds stylesheet is missing"
     resources = urljoin(page.url, css_url).removesuffix("css/grounds.css")
-    for name in ["img/grounds-logo-full.webp", "img/grounds-icon-32.png", "fonts/geist-latin.woff2", "fonts/geist-latin-ext.woff2"]:
+    for name in ["css/hub-tokens.css", "css/hub-components.css", "img/grounds-logo.webp", "img/grounds-icon.png", "img/hero-clockwork-1920.avif", "img/hero-clockwork-960.avif", "fonts/bricolage-grotesque-latin.woff2", "fonts/bricolage-grotesque-latin-ext.woff2"]:
         with browser.open(resources + name, timeout=15) as response:
             assert response.status == 200 and len(response.read()) > 100, f"Missing resource: {name}"
     assert urlparse(resources).netloc == urlparse(base).netloc, "Theme assets must be served by Keycloak"
@@ -136,7 +138,7 @@ def check(base):
     assert error.status == 400 and "kc-error-message" in error.ids, "Invalid client did not render the error page"
     themed(error)
     german = fetch(new_browser(), auth + "&ui_locales=de")
-    assert "Datenschutz" in german.source and "Nutzungsbedingungen" in german.source, "German footer translations did not render"
+    assert "Datenschutz" in german.source and "Impressum" in german.source, "German Hub footer translations did not render"
     themed(german)
     print("Grounds login theme: local assets, login/error, OTP/error/success, expired authentication, logout and German locale passed")
 

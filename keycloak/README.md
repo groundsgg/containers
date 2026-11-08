@@ -45,14 +45,31 @@ Only sign-in pages are themed, including OTP, errors, expired authentication
 and logout confirmation. Account management, administration and emails retain
 their existing themes.
 
-The visual tokens follow the Grounds Portal's Kumo neutral surfaces and blue
-actions, with system light/dark preference and self-hosted Geist. The logo and
-favicon are copied unchanged from `grounds-portal/public/brand/`. The Latin and
-Latin Extended Geist variable fonts are the same assets bundled by Next.js
-16.2.12 for the Portal; their SIL Open Font License is included next to them.
-There are no external font, script or image dependencies. The token bridge is
-`themes/grounds/login/resources/css/grounds.css`; update it alongside future
-Portal design-system changes.
+The design reference is **Grounds Hub**, `groundsgg/grounds-hub@889f6d8`,
+including its repo-internal component library and focused sign-in page:
+
+- `src/styles/design-tokens.css` → `resources/css/hub-tokens.css`: unchanged
+  Mini-CD v0.19 values and semantic roles, with Tailwind `@theme` emitted as
+  ordinary `:root` CSS for native Keycloak.
+- `src/components/design-system/button.tsx`, `select.tsx` and their shared
+  `src/app/globals.css` rules → `resources/css/hub-components.css`:
+  `.btn`, `.btn-gold`, `.btn-ghost` and `.field` presentation. Theme properties
+  attach these classes to Keycloak's existing controls.
+- `src/app/[locale]/login/login.css` → the layout adapter `grounds.css`:
+  Stone Deep/Surface, gold primary actions, Energy focus, 6px control/10px panel
+  radii, a dark sign-in panel and the same Clockwork background. The Hub is
+  intentionally dark regardless of the operating-system preference.
+- Bricolage Grotesque variable font, logo, favicon and Clockwork images are
+  copied unchanged from that Hub checkout. Latin and Latin Extended subsets
+  are self-hosted; the SIL Open Font License is included next to the fonts.
+  Footer copy follows the Hub in de/en/es/fr/tr.
+
+Keycloak uses FreeMarker, so the Hub's React components cannot be imported
+at runtime. The versioned token/component CSS snapshots form the native
+adapter; no React runtime or second authentication implementation is added.
+When the Hub library changes, refresh these snapshots and their recorded
+revision together, then verify the Keycloak integration. There are no remote
+font, script or image dependencies.
 
 ### Verification
 

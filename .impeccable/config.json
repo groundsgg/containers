@@ -2,16 +2,6 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [],
-    "ignoreValues": [
-      {
-        "rule": "overused-font",
-        "value": "geist",
-        "files": [
-          "keycloak/themes/grounds/login/resources/css/grounds.css"
-        ],
-        "createdAt": "2026-11-08T11:37:06.792Z",
-        "reason": "Agent: The approved scope matches the existing Grounds Portal design system; grounds-portal/src/app/layout.tsx loads Geist. Preserve that shared typography for the Keycloak login theme."
-      }
-    ]
+    "ignoreValues": []
   }
 }

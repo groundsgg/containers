@@ -1,3 +1,4 @@
+import { verifyThemeResources } from "./resource-contract.mjs";
 import { test, expect, type Page } from "@playwright/test";
 import { createHmac } from "node:crypto";
 import { mkdir } from "node:fs/promises";
@@ -58,6 +59,31 @@ async function completeOtp(page: Page) {
   );
   expect(new URL(page.url()).searchParams.get("code")).toBeTruthy();
 }
+async function exchangeCode(
+  page: Page,
+  base: string,
+  realm: string,
+  client: string,
+) {
+  const query = new URL(page.url()).searchParams;
+  expect(query.get("iss")).toBe(base + `/realms/${realm}`);
+  const response = await fetch(
+    base + `/realms/${realm}/protocol/openid-connect/token`,
+    {
+      method: "POST",
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code: query.get("code")!,
+        client_id: client,
+        redirect_uri: callback + "/callback",
+      }),
+    },
+  );
+  expect(response.status).toBe(200);
+  const tokens = await response.json();
+  expect(tokens.access_token).toBeTruthy();
+  expect(tokens.id_token).toBeTruthy();
+}
 test.beforeEach(async ({ page, baseURL }) => {
   expect(new URL(baseURL!).hostname).toMatch(/^(127\.0\.0\.1|localhost)$/);
   page.on("pageerror", (error) => {
@@ -68,7 +94,12 @@ test("Grounds login shares controls and places language and restart by task hier
   page,
   baseURL,
 }) => {
-  await page.goto(auth(baseURL!, { locale: "de" }));
+  await page.goto(
+    auth(baseURL!, {
+      locale: "de",
+      extra: { state: "restart-continuity-state" },
+    }),
+  );
   await expect(page.locator(".grounds-page")).toBeVisible();
   await expect(page.locator("#grounds-restart-login")).toHaveCount(0);
   await expect(page.locator("#username")).toHaveClass(/field/);
@@ -88,6 +119,12 @@ test("Grounds login shares controls and places language and restart by task hier
   await restart.click();
   await expect(page.locator("#username")).toBeVisible();
   await expect(restart).toHaveCount(0);
+  await credentials(page, "restart-user");
+  await completeOtp(page);
+  expect(new URL(page.url()).searchParams.get("state")).toBe(
+    "restart-continuity-state",
+  );
+  await exchangeCode(page, baseURL!, "grounds-login-test", "theme-smoke");
 });
 test("invalid password and OTP keep accessible errors; valid OTP completes the code flow", async ({
   page,
@@ -173,7 +210,12 @@ test("a real expired authentication session offers recovery into a fresh login",
   page,
   baseURL,
 }) => {
-  await page.goto(auth(baseURL!, { realm: "grounds-expiry" }));
+  await page.goto(
+    auth(baseURL!, {
+      realm: "grounds-expiry",
+      extra: { state: "expiry-continuity-state" },
+    }),
+  );
   await credentials(page);
   await expect(page.locator("#otp")).toBeVisible();
   const oldAction = await page.locator("form").getAttribute("action");
@@ -190,6 +232,12 @@ test("a real expired authentication session offers recovery into a fresh login",
   expect(await page.locator("#kc-form-login").getAttribute("action")).not.toBe(
     oldAction,
   );
+  await credentials(page);
+  await completeOtp(page);
+  expect(new URL(page.url()).searchParams.get("state")).toBe(
+    "expiry-continuity-state",
+  );
+  await exchangeCode(page, baseURL!, "grounds-expiry", "theme-smoke");
 });
 test("detached errors keep the shell and omit restart", async ({
   page,
@@ -218,7 +266,9 @@ test("disabled JavaScript and a failed module provide readable recovery", async 
   const p = await failed.newPage();
   await p.route("**/*.js", (route) => route.abort());
   await p.goto(auth(baseURL!));
-  await expect(p.locator("#root")).toContainText("Reload page");
+  await expect(p.locator("#root")).toContainText(
+    "Refresh this page in your browser",
+  );
   await expect(p.locator("form")).toHaveCount(0);
   await failed.close();
 });
@@ -240,6 +290,41 @@ for (const locale of Object.keys(labels) as (keyof typeof labels)[])
         colorScheme: width === 360 ? "light" : "dark",
       });
       const page = await context.newPage();
+      const resources: {
+        url: string;
+        type: string;
+        status?: number;
+        failure?: string;
+      }[] = [];
+      await page.addInitScript(() => {
+        (
+          window as typeof window & { __groundsCspViolations: string[] }
+        ).__groundsCspViolations = [];
+        document.addEventListener("securitypolicyviolation", (event) =>
+          (
+            window as typeof window & { __groundsCspViolations: string[] }
+          ).__groundsCspViolations.push(
+            event.violatedDirective + ":" + event.blockedURI,
+          ),
+        );
+      });
+      page.on("request", (request) =>
+        resources.push({ url: request.url(), type: request.resourceType() }),
+      );
+      page.on("response", (response) =>
+        resources.push({
+          url: response.url(),
+          type: response.request().resourceType(),
+          status: response.status(),
+        }),
+      );
+      page.on("requestfailed", (request) =>
+        resources.push({
+          url: request.url(),
+          type: request.resourceType(),
+          failure: request.failure()?.errorText ?? "unknown failure",
+        }),
+      );
       const remote: string[] = [];
       const errors: string[] = [];
       page.on("request", (request) => {
@@ -283,8 +368,89 @@ for (const locale of Object.keys(labels) as (keyof typeof labels)[])
         "otp-user",
       );
       await expect(page.locator("html")).toHaveAttribute("lang", next);
+      await page.evaluate(() => document.fonts.ready);
+      expect(
+        await page
+          .locator(".grounds-logo")
+          .evaluate(
+            (image: HTMLImageElement) =>
+              image.complete && image.naturalWidth > 0,
+          ),
+      ).toBe(true);
+      expect(
+        await page.evaluate(() =>
+          Array.from(document.fonts).some(
+            (font) =>
+              font.family.includes("Bricolage") && font.status === "loaded",
+          ),
+        ),
+      ).toBe(true);
+      expect(
+        await page.evaluate(
+          () =>
+            (window as typeof window & { __groundsCspViolations: string[] })
+              .__groundsCspViolations,
+        ),
+      ).toEqual([]);
+      const roots = await page.evaluate(() => {
+        const context = (
+          window as typeof window & {
+            kcContext: {
+              url: { resourcesPath: string; resourcesCommonPath: string };
+            };
+          }
+        ).kcContext;
+        return [
+          new URL(context.url.resourcesPath, location.href).href,
+          new URL(context.url.resourcesCommonPath, location.href).href,
+        ];
+      });
+      verifyThemeResources(resources, roots);
       expect(remote).toEqual([]);
       expect(errors).toEqual([]);
       await context.close();
     }
+  });
+
+for (const chunk of ["entry", "late"])
+  test(`${chunk} module failure preserves an actionable recovery at the same login URL`, async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const state = `recovery-${chunk}-state`;
+    const url = auth(baseURL!, { locale: "de", extra: { state } });
+    let blocked = 0;
+    const pattern =
+      chunk === "entry"
+        ? /\/assets\/index-[^/]+\.js$/
+        : /\/assets\/KcPage-[^/]+\.js$/;
+    await page.route(pattern, (route) => {
+      blocked++;
+      return route.abort();
+    });
+    await page.goto(url);
+    await expect.poll(() => blocked).toBeGreaterThan(0);
+    if (chunk === "entry")
+      await expect(page.locator("#root")).toContainText(
+        "Refresh this page in your browser",
+      );
+    else {
+      await expect(page.locator("#grounds-load-error")).toBeVisible();
+      await expect(page.locator("html")).toHaveAttribute("lang", "de");
+      const retry = page.locator("#grounds-retry-login");
+      await expect(retry).toHaveAttribute("href", url);
+      await page.unroute(pattern);
+      await retry.click();
+    }
+    if (chunk === "entry") {
+      await page.unroute(pattern);
+      await page.reload();
+    }
+    await expect(page.locator("#username")).toBeVisible();
+    await credentials(page, `recovery-${chunk}-user`);
+    await completeOtp(page);
+    expect(new URL(page.url()).searchParams.get("state")).toBe(state);
+    await context.close();
   });

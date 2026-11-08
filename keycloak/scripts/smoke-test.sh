@@ -160,6 +160,7 @@ for _ in {1..90}; do
     local_port="$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$keycloak_container")"
     python3 "${script_dir}/test-login-theme.py" "http://127.0.0.1:${local_port}"
     if [[ "$candidate" == true ]]; then
+      npm run test:contracts --prefix "${script_dir}/../tests"
       KEYCLOAK_TEST_BASE_URL="http://127.0.0.1:${local_port}" npm test --prefix "${script_dir}/../tests"
     fi
     exit 0

@@ -89,10 +89,15 @@ jobs:
         with:
           files: |
             ${{ matrix.container }}/**
-            .github/workflows/ci.yml
+            ${{ matrix.container == 'keycloak' && '.github/workflows/ci.yml' || '' }}
+            ${{ matrix.container == 'keycloak' && '.github/workflows/keycloak-theme-candidate.yml' || '' }}
             ${{ matrix.container == 'buildserver' && 'scripts/test-buildserver-scene-editor-pin.sh' || '' }}
             ${{ (matrix.container == 'velocity' || matrix.container == 'geyser') && 'scripts/player-access-privacy/**' || '' }}
             ${{ matrix.container == 'velocity' && 'scripts/transfer-admission/**' || '' }}
+      - name: Set up QEMU for the Keycloak multiarch build
+        if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
+        uses: docker/setup-qemu-action@v3
+
       - name: 🐳 Set up Docker Buildx
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v4
@@ -138,7 +143,7 @@ jobs:
           cache-dependency-path: keycloak/tests/package-lock.json
       - name: Prepare Keycloak browser tests
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
-        run: npm ci --prefix keycloak/tests && npm run install:browsers --prefix keycloak/tests
+        run: npm ci --prefix keycloak/tests && npm run test:contracts --prefix keycloak/tests && npm run install:browsers --prefix keycloak/tests
 
       - name: 🔍 Smoke test Keycloak providers
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'

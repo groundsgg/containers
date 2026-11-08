@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "install:browsers": "playwright install --with-deps chromium"
+    "install:browsers": "playwright install --with-deps chromium",
+    "test:contracts": "node --test *.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1"

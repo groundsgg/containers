@@ -32,7 +32,7 @@ RUN set -eux; \
       || { echo "Keycloak permissions event listener validation failed (version=${KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION}, reason=provider_factory_not_registered)" >&2; exit 1; }
 
 ARG GROUNDS_LOGIN_THEME_IMAGE
-ARG GROUNDS_LOGIN_THEME_SHA256
+ARG GROUNDS_LOGIN_THEME_SHA256=""
 RUN --mount=from=login-theme,source=/,target=/theme,ro \
     set -eux; \
     mkdir -p /theme-provider; \

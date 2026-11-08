@@ -1,0 +1,38 @@
+/* Snapshot of grounds-hub@889f6d8 src/styles/design-tokens.css.
+ * Tailwind @theme is emitted as ordinary CSS for native Keycloak.
+ * Keep values and semantic roles aligned with the Hub library. */
+/* Grounds Mini-CD v0.19. Product roles; existing Tailwind names stay compatible. */
+:root {
+  --color-stone-deep: #181d20;
+  --color-stone-surface: #272e32;
+  --color-stone-line: #353e44;
+  --color-text-primary: #f3f0ea;
+  --color-text-secondary: #c1b9aa;
+  --color-gold: #e7b84b;
+  --color-copper: #dda16f;
+  --color-energy: #67d9ec;
+  --color-success: #a4ce87;
+  --color-warning: #f0c36a;
+  --color-error: #f28b82;
+  --color-mode-duel: #c4a1e3;
+  --color-mode-bedwars: #dd9ea8;
+  --color-mode-survivalgames: #bbc99b;
+  --color-mode-keystone: #67d9ec;
+  --color-mode-getdown: #dda16f;
+  --font-sans: var(--font-bricolage), system-ui, sans-serif;
+  --font-pixel: var(--font-pixelify), monospace;
+  --radius-px: 2px;
+  --radius-control: 6px;
+  --radius-panel: 10px;
+  --ease-ground: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  --surface-page: var(--color-stone-deep);
+  --surface-section: var(--color-stone-surface);
+  --text-body: var(--color-text-primary);
+  --text-muted: var(--color-text-secondary);
+  --action-primary: var(--color-gold);
+  --focus-ring: var(--color-energy);
+  --space-section: clamp(44px, 6vw, 80px);
+}

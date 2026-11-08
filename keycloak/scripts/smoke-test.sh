@@ -3,6 +3,7 @@
 set -euo pipefail
 
 image="${1:?usage: $0 <image>}"
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 providers_dir="/opt/keycloak/providers"
 minecraft_provider="${providers_dir}/keycloak-minecraft-idp.jar"
 permissions_provider="${providers_dir}/keycloak-permissions-event-listener.jar"
@@ -27,6 +28,18 @@ trap cleanup EXIT
 
 docker cp "${container_id}:${minecraft_provider}" "${tmp_dir}/keycloak-minecraft-idp.jar"
 docker cp "${container_id}:${permissions_provider}" "${tmp_dir}/keycloak-permissions-event-listener.jar"
+
+candidate=false
+if docker cp "${container_id}:${providers_dir}/grounds-keycloak-theme.jar" "${tmp_dir}/grounds-keycloak-theme.jar" >/dev/null 2>&1; then
+  candidate=true
+  if [[ "${GROUNDS_KEYCLOAK_BROWSER:-0}" != 1 ]]; then
+    node "${script_dir}/../tests/run.mjs" "$image"
+    exit $?
+  fi
+elif [[ "${GROUNDS_KEYCLOAK_BROWSER:-0}" == 1 ]]; then
+  echo "Keycloak theme verification failed (reason=candidate_jar_missing)" >&2
+  exit 1
+fi
 
 test -s "${tmp_dir}/keycloak-minecraft-idp.jar"
 test -s "${tmp_dir}/keycloak-permissions-event-listener.jar"
@@ -63,14 +76,18 @@ assert_spi_config "kc.spi-events-listener-permissions-events-realm" "grounds-rea
 assert_spi_config "kc.spi-events-listener-permissions-events-subject" "minecraft-identity.changed"
 
 mkdir -p "${tmp_dir}/import"
-cat >"${tmp_dir}/import/grounds-realm.json" <<'EOF'
-{
-  "id": "grounds-realm-id",
-  "realm": "grounds",
-  "enabled": true,
-  "eventsListeners": ["jboss-logging", "permissions-events"]
-}
-EOF
+cp "${script_dir}/theme-smoke-realm.json" "${tmp_dir}/import/grounds-realm.json"
+
+if [[ "$candidate" == true ]]; then
+  : "${KEYCLOAK_TEST_CALLBACK_BASE:?browser runner must start an isolated callback server}"
+  python3 - "${script_dir}/../tests/fixtures" "${tmp_dir}/import" "$KEYCLOAK_TEST_CALLBACK_BASE" <<'PYFIXTURE'
+import json, pathlib, sys
+source, target, callback = sys.argv[1:]
+for fixture in pathlib.Path(source).glob('*.json'):
+    data = json.loads(fixture.read_text().replace('__CALLBACK_BASE__', callback))
+    (pathlib.Path(target) / fixture.name).write_text(json.dumps(data))
+PYFIXTURE
+fi
 
 docker network create "$network" >/dev/null
 postgres_container="$(docker run -d \
@@ -116,6 +133,7 @@ fi
 keycloak_container="$(docker create \
   --memory 768m \
   --network "$network" \
+  --publish 127.0.0.1::8080 \
   -e KC_DB=postgres \
   -e KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak \
   -e KC_DB_USERNAME=keycloak \
@@ -139,6 +157,12 @@ for _ in {1..90}; do
   if docker exec "$keycloak_container" bash -c \
     'exec 3<>/dev/tcp/localhost/8080 && printf "GET /realms/grounds/.well-known/openid-configuration HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && grep -q "HTTP/1.1 200" <&3' \
     >/dev/null 2>&1; then
+    local_port="$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$keycloak_container")"
+    python3 "${script_dir}/test-login-theme.py" "http://127.0.0.1:${local_port}"
+    if [[ "$candidate" == true ]]; then
+      npm run test:contracts --prefix "${script_dir}/../tests"
+      KEYCLOAK_TEST_BASE_URL="http://127.0.0.1:${local_port}" npm test --prefix "${script_dir}/../tests"
+    fi
     exit 0
   fi
   sleep 2

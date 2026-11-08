@@ -3,3 +3,8 @@
 
 # Codex
 .codex
+
+# Keycloak browser test dependencies and artifacts
+keycloak/tests/node_modules/
+keycloak/tests/test-results/
+keycloak/tests/playwright-report/

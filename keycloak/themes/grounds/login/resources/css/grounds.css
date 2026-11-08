@@ -1,0 +1,473 @@
+/* Native Keycloak adapter for grounds-hub@889f6d8.
+ * Foundations and shared Button/Select presentation live in hub-*.css.
+ * Layout follows src/app/[locale]/login/login.css. Keep Keycloak's forms,
+ * action URLs, validation, translations and session scripts inherited.
+ */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("../fonts/bricolage-grotesque-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("../fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root,
+:root.pf-v5-theme-dark {
+  color-scheme: dark;
+  --font-bricolage: "Bricolage Grotesque";
+  --font-pixelify: monospace;
+  --quick: 120ms;
+  --grounds-canvas: var(--surface-page);
+  --grounds-brand-hover: color-mix(in srgb, var(--color-gold) 85%, var(--color-text-primary));
+  --pf-v5-global--FontFamily--text: var(--font-sans);
+  --pf-v5-global--FontFamily--heading: var(--font-sans);
+  --pf-v5-global--Color--100: var(--text-body);
+  --pf-v5-global--Color--200: var(--text-muted);
+  --pf-v5-global--BackgroundColor--100: var(--surface-page);
+  --pf-v5-global--BackgroundColor--200: var(--surface-section);
+  --pf-v5-global--BorderColor--100: var(--color-stone-line);
+  --pf-v5-global--BorderColor--200: var(--text-muted);
+  --pf-v5-global--primary-color--100: var(--color-gold);
+  --pf-v5-global--primary-color--200: var(--grounds-brand-hover);
+  --pf-v5-global--link--Color: var(--text-body);
+  --pf-v5-global--link--Color--hover: var(--color-energy);
+  --pf-v5-global--danger-color--100: var(--color-error);
+  --pf-v5-global--success-color--100: var(--color-success);
+  --pf-v5-global--warning-color--100: var(--color-warning);
+}
+
+html,
+.login-pf body {
+  min-height: 100%;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--color-energy);
+  accent-color: var(--color-energy);
+  scrollbar-color: var(--color-stone-surface) var(--color-stone-deep);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-stone-deep);
+}
+
+a,
+button,
+.btn {
+  touch-action: manipulation;
+}
+
+.pf-v5-c-login {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 60px) 24px;
+  padding-block-start: max(84px, 4vw);
+  background: linear-gradient(rgb(24 29 32 / 38%), rgb(24 29 32 / 38%)),
+    url("../img/hero-clockwork-1920.avif") 58% 48% / cover no-repeat;
+}
+
+.pf-v5-c-login__container {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 456px;
+  min-width: 0;
+  padding: 30px 32px;
+  background: var(--surface-page);
+  border-radius: var(--radius-panel);
+}
+
+.pf-v5-c-login__header {
+  width: 100%;
+  margin: 0 0 24px;
+}
+
+#kc-header-wrapper {
+  margin: 0;
+  color: var(--text-muted) !important;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+#kc-header-wrapper::before {
+  display: block;
+  width: min(210px, 80%);
+  aspect-ratio: 1280 / 524;
+  margin: 0 auto 16px;
+  background: url("../img/grounds-logo.webp") center / contain no-repeat;
+  content: "";
+}
+
+.pf-v5-c-login__main {
+  position: static;
+  width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pf-v5-c-login__main-header {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 0 24px;
+  border: 0;
+}
+
+#kc-page-title {
+  width: 100%;
+  margin: 0;
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: clamp(30px, 3.5vw, 40px);
+  font-weight: 760;
+  font-variation-settings: "wdth" 85;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.pf-v5-c-login__main-header-utilities {
+  /* Language is a page utility, separate from the sign-in task. */
+  position: absolute;
+  inset-block-start: max(24px, env(safe-area-inset-top));
+  inset-inline-end: max(clamp(20px, 3vw, 36px), env(safe-area-inset-right));
+  max-width: calc(100% - 32px);
+}
+
+.pf-v5-c-login__main-header-utilities select {
+  padding-inline-end: 44px;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__utilities {
+  align-self: stretch;
+  align-items: center;
+  padding: 0 12px 0 0;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.pf-v5-c-login__main-header-utilities .pf-v5-c-form-control__toggle-icon svg {
+  display: block;
+}
+
+.pf-v5-c-login__main-body,
+.pf-v5-c-login__main-footer {
+  padding: 0;
+}
+
+.pf-v5-c-login__main-footer-band {
+  padding: 0;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.pf-v5-c-form {
+  row-gap: 20px;
+}
+
+.pf-v5-c-form:has(#kc-attempted-username) {
+  margin-block-end: 20px;
+}
+
+.pf-v5-c-input-group > .pf-v5-c-input-group__item:has(#reset-login) {
+  /* The same native restart action is presented below the submit button. */
+  display: none;
+}
+
+.pf-v5-c-form__label {
+  color: var(--text-body);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pf-v5-c-form-control.field {
+  --pf-v5-c-form-control--BackgroundColor: var(--surface-page);
+  --pf-v5-c-form-control--Color: var(--text-body);
+  min-height: 44px;
+  padding: 0;
+}
+
+.pf-v5-c-form-control::before,
+.pf-v5-c-form-control::after {
+  display: none;
+}
+
+.pf-v5-c-form-control input,
+.pf-v5-c-form-control select {
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 12px;
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.pf-v5-c-form-control select {
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+}
+
+.pf-v5-c-form-control input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.pf-v5-c-form-control.pf-m-readonly {
+  background: var(--surface-section);
+}
+
+.pf-v5-c-form-control.pf-m-readonly input {
+  color: var(--text-muted);
+}
+
+.pf-v5-c-form-control:focus-within {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.pf-v5-c-form-control.pf-m-error {
+  border-color: var(--color-error);
+}
+
+#otp {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.15em;
+}
+
+.pf-v5-c-button {
+  min-height: 44px;
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  --pf-v5-c-button--m-primary--Color: var(--color-stone-deep);
+  --pf-v5-c-button--m-primary--BackgroundColor: var(--color-gold);
+  --pf-v5-c-button--m-primary--hover--Color: var(--color-stone-deep);
+  --pf-v5-c-button--m-primary--hover--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-primary--focus--Color: var(--color-stone-deep);
+  --pf-v5-c-button--m-primary--focus--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-primary--active--Color: var(--color-stone-deep);
+  --pf-v5-c-button--m-primary--active--BackgroundColor: var(--grounds-brand-hover);
+  --pf-v5-c-button--m-secondary--Color: var(--text-body);
+  --pf-v5-c-button--m-secondary--BackgroundColor: var(--surface-section);
+  --pf-v5-c-button--m-secondary--after--BorderColor: transparent;
+  --pf-v5-c-button--m-secondary--hover--Color: var(--text-body);
+  --pf-v5-c-button--m-secondary--hover--BackgroundColor: var(--color-stone-line);
+}
+
+.pf-v5-c-button.pf-m-primary {
+  min-height: 52px;
+  padding: 12px 18px;
+  color: var(--color-stone-deep);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.pf-v5-c-button::after {
+  border-radius: inherit;
+}
+
+.pf-v5-c-button.pf-m-control {
+  border: 1px solid var(--color-stone-line);
+  background: var(--surface-section);
+  color: var(--text-body);
+}
+
+.pf-v5-c-button.pf-m-control:hover {
+  background: var(--color-stone-line);
+}
+
+.pf-v5-c-button.pf-m-control::after {
+  border: 0;
+}
+
+.pf-v5-c-button:disabled,
+.pf-v5-c-button.pf-m-aria-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+a {
+  color: var(--text-body);
+  text-decoration-color: var(--color-stone-line);
+  text-underline-offset: 4px;
+}
+
+a:hover {
+  color: var(--text-body);
+  text-decoration-color: var(--color-energy);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.pf-v5-c-form-control input:focus-visible,
+.pf-v5-c-form-control select:focus-visible {
+  outline: none;
+}
+
+.pf-v5-c-helper-text__item.pf-m-error,
+.pf-v5-c-helper-text__item.pf-m-error .kc-feedback-text {
+  color: var(--color-error);
+}
+
+.kc-login-tooltip .kc-tooltip-text {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + 8px);
+  left: auto;
+  max-width: min(192px, 70vw);
+  padding: 8px 12px;
+  border: 1px solid var(--color-stone-line);
+  border-radius: var(--radius-control);
+  background: var(--surface-section);
+  color: var(--text-body);
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 28%);
+}
+
+.kc-login-tooltip .kc-tooltip-text::after {
+  display: none;
+}
+
+.kc-login-tooltip:focus-visible .kc-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.pf-v5-c-alert {
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--surface-section);
+  box-shadow: none;
+}
+
+.pf-v5-c-alert__title,
+.pf-v5-c-alert__description {
+  color: var(--text-body);
+  font-size: 14px;
+}
+
+.pf-v5-c-tile,
+.pf-v5-c-panel,
+.pf-v5-c-data-list__item {
+  background: var(--surface-section);
+  color: var(--text-body);
+}
+
+.kc-qr-code img {
+  box-sizing: content-box;
+  max-width: calc(100% - 16px);
+  height: auto;
+  border: 8px solid #fff;
+  background: #fff;
+  box-shadow: none;
+}
+
+.grounds-restart {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.grounds-restart .btn {
+  color: var(--text-muted);
+  text-align: center;
+  white-space: normal;
+}
+
+.grounds-restart .btn:hover {
+  color: var(--text-body);
+}
+
+.grounds-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-stone-line);
+  font-size: 13px;
+}
+
+.grounds-footer a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.grounds-footer a:hover {
+  color: var(--text-body);
+}
+
+@media (max-width: 520px) {
+  .pf-v5-c-login__main-header-utilities {
+    inset-block-start: max(16px, env(safe-area-inset-top));
+    inset-inline-end: max(16px, env(safe-area-inset-right));
+  }
+
+  .pf-v5-c-login {
+    padding: 82px 16px 22px;
+    background-image: linear-gradient(rgb(24 29 32 / 38%), rgb(24 29 32 / 38%)),
+      url("../img/hero-clockwork-960.avif");
+    background-position: 63% center;
+  }
+
+  .pf-v5-c-login__container {
+    padding: 28px 22px;
+  }
+
+  #kc-header-wrapper::before {
+    width: min(200px, 80%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}

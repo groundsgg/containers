@@ -1,0 +1,87 @@
+name: Verify Keycloak theme candidate
+on:
+  workflow_dispatch:
+    inputs:
+      theme_image:
+        description: Reviewed ghcr.io/groundsgg/grounds-login-theme@sha256 digest
+        required: true
+        type: string
+      jar_sha256:
+        description: JAR checksum from the reviewed artifact manifest
+        required: true
+        type: string
+permissions:
+  contents: read
+  packages: read
+concurrency:
+  group: keycloak-theme-candidate-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  candidate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      THEME_IMAGE: ${{ inputs.theme_image }}
+      JAR_SHA256: ${{ inputs.jar_sha256 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Validate immutable artifact reference
+        run: |
+          python3 - <<'PYVALIDATE'
+          import os,re
+          assert re.fullmatch(r'ghcr\.io/groundsgg/grounds-login-theme@sha256:[0-9a-f]{64}',os.environ['THEME_IMAGE'])
+          assert re.fullmatch(r'[0-9a-f]{64}',os.environ['JAR_SHA256'])
+          PYVALIDATE
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify release manifest before building
+        run: |
+          set -euo pipefail
+          docker pull "$THEME_IMAGE"
+          artifact_container=$(docker create "$THEME_IMAGE" /unused)
+          trap 'docker rm "$artifact_container" >/dev/null' EXIT
+          docker cp "$artifact_container:/manifest.json" "$RUNNER_TEMP/theme-manifest.json"
+          python3 - <<'PYMANIFEST'
+          import os,json,re
+          from pathlib import Path
+          m=json.loads((Path(os.environ['RUNNER_TEMP'])/'theme-manifest.json').read_text())
+          assert m['schemaVersion']==1 and m['release'] is True and m['sourceDirty'] is False
+          assert m['themeName']=='grounds-login' and m['keycloakTarget']=='26.8.1-1'
+          assert re.fullmatch(r'[0-9a-f]{40}',m['sourceRevision'])
+          assert m['jarSha256']==os.environ['JAR_SHA256']
+          assert m['ui']['registryIntegrity'].startswith('sha512-')
+          PYMANIFEST
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Build both image architectures
+        run: |
+          docker buildx build --file keycloak/Dockerfile --platform linux/amd64,linux/arm64 \
+            --build-arg "GROUNDS_LOGIN_THEME_IMAGE=$THEME_IMAGE" \
+            --build-arg "GROUNDS_LOGIN_THEME_SHA256=$JAR_SHA256" \
+            --output "type=oci,dest=$RUNNER_TEMP/keycloak-candidate.tar" .
+      - name: Load runtime candidate
+        run: |
+          docker buildx build --file keycloak/Dockerfile --platform linux/amd64 --load \
+            --build-arg "GROUNDS_LOGIN_THEME_IMAGE=$THEME_IMAGE" \
+            --build-arg "GROUNDS_LOGIN_THEME_SHA256=$JAR_SHA256" \
+            --tag grounds-keycloak:theme-candidate .
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: keycloak/tests/package-lock.json
+      - run: npm ci --prefix keycloak/tests && npm run install:browsers --prefix keycloak/tests
+      - name: Verify providers, native rollback theme, and candidate flows
+        run: node keycloak/tests/run.mjs grounds-keycloak:theme-candidate
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: keycloak-theme-browser-failure
+          path: keycloak/tests/test-results/
+          retention-days: 7

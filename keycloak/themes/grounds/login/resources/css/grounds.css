@@ -74,6 +74,7 @@ button,
 }
 
 .pf-v5-c-login {
+  position: relative;
   display: flex;
   min-height: 100svh;
   align-items: center;
@@ -85,7 +86,7 @@ button,
 }
 
 .pf-v5-c-login__container {
-  position: relative;
+  position: static;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -157,9 +158,9 @@ button,
 .pf-v5-c-login__main-header-utilities {
   /* Language is a page utility, separate from the sign-in task. */
   position: absolute;
-  inset-block-end: calc(100% + 16px);
-  inset-inline-end: 0;
-  max-width: 100%;
+  inset-block-start: max(24px, env(safe-area-inset-top));
+  inset-inline-end: max(clamp(20px, 3vw, 36px), env(safe-area-inset-right));
+  max-width: calc(100% - 32px);
 }
 
 .pf-v5-c-login__main-header-utilities select {
@@ -485,6 +486,11 @@ select:focus-visible {
 }
 
 @media (max-width: 520px) {
+  .pf-v5-c-login__main-header-utilities {
+    inset-block-start: max(16px, env(safe-area-inset-top));
+    inset-inline-end: max(16px, env(safe-area-inset-right));
+  }
+
   .pf-v5-c-login {
     padding: 82px 16px 22px;
     background-image: linear-gradient(rgb(24 29 32 / 38%), rgb(24 29 32 / 38%)),

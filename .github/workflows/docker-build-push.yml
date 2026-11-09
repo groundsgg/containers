@@ -42,7 +42,7 @@ jobs:
 
       - name: Set up QEMU for Keycloak
         if: env.MATCHES_REF == 'true' && matrix.container == 'keycloak'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: 🐳 Set up Docker Buildx
         if: ${{ env.MATCHES_REF == 'true' }}

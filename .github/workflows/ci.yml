@@ -96,7 +96,7 @@ jobs:
             ${{ matrix.container == 'velocity' && 'scripts/transfer-admission/**' || '' }}
       - name: Set up QEMU for the Keycloak multiarch build
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Authenticate private Keycloak theme artifact
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
@@ -143,7 +143,7 @@ jobs:
             --tag grounds-keycloak:ci-test \
             .
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         if: steps.changed-files.outputs.any_changed == 'true' && matrix.container == 'keycloak'
         with:
           node-version: 24

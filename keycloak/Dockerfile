@@ -1,5 +1,5 @@
-# Published Grounds UI 0.1.0 theme; retain native grounds for rollback.
-ARG GROUNDS_LOGIN_THEME_IMAGE=ghcr.io/groundsgg/grounds-login-theme@sha256:62b69f78c3b1ab92388ce9f005bd475b3909cb271ad0c1f914462858171007dd
+# Published Grounds UI 0.2.0 theme; retain native grounds for rollback.
+ARG GROUNDS_LOGIN_THEME_IMAGE=ghcr.io/groundsgg/grounds-login-theme@sha256:85164791e3bb5b0291d9adecaf1f02a866742a68682471dc2655949c055da8ae
 FROM ${GROUNDS_LOGIN_THEME_IMAGE} AS login-theme
 
 FROM alpine:3.24 AS downloader
@@ -32,7 +32,7 @@ RUN set -eux; \
       || { echo "Keycloak permissions event listener validation failed (version=${KEYCLOAK_PERMISSIONS_EVENT_LISTENER_VERSION}, reason=provider_factory_not_registered)" >&2; exit 1; }
 
 ARG GROUNDS_LOGIN_THEME_IMAGE
-ARG GROUNDS_LOGIN_THEME_SHA256=dc0ad14008a40d272ad33bb3e7ec3ed4263803685a41bc63b031cdb329ea635e
+ARG GROUNDS_LOGIN_THEME_SHA256=0f75e51cb390ae2446b36832c6c991ba5d67f0cdc390941718cb173108ade212
 RUN --mount=from=login-theme,source=/,target=/theme,ro \
     set -eux; \
     mkdir -p /theme-provider; \

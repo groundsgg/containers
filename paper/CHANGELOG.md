@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/groundsgg/containers/compare/paper@v1.4.2...paper@v1.4.3) (2026-11-09)
+
+
+### Bug Fixes
+
+* **paper:** allow Bedrock chat behind authenticated proxies ([#345](https://github.com/groundsgg/containers/issues/345)) ([a63e704](https://github.com/groundsgg/containers/commit/a63e70403e907719d4babfb5c5c3f6f091af050c))
+
 ## [1.4.2](https://github.com/groundsgg/containers/compare/paper@v1.4.1...paper@v1.4.2) (2026-08-23)
 
 

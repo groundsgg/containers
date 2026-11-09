@@ -35,7 +35,7 @@ jobs:
           assert re.fullmatch(r'ghcr\.io/groundsgg/grounds-login-theme@sha256:[0-9a-f]{64}',os.environ['THEME_IMAGE'])
           assert re.fullmatch(r'[0-9a-f]{64}',os.environ['JAR_SHA256'])
           PYVALIDATE
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -57,8 +57,8 @@ jobs:
           assert m['jarSha256']==os.environ['JAR_SHA256']
           assert m['ui']['registryIntegrity'].startswith('sha512-')
           PYMANIFEST
-      - uses: docker/setup-qemu-action@v3
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-qemu-action@v4
+      - uses: docker/setup-buildx-action@v4
       - name: Build both image architectures
         run: |
           docker buildx build --file keycloak/Dockerfile --platform linux/amd64,linux/arm64 \
@@ -71,7 +71,7 @@ jobs:
             --build-arg "GROUNDS_LOGIN_THEME_IMAGE=$THEME_IMAGE" \
             --build-arg "GROUNDS_LOGIN_THEME_SHA256=$JAR_SHA256" \
             --tag grounds-keycloak:theme-candidate .
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -79,7 +79,7 @@ jobs:
       - run: npm ci --prefix keycloak/tests && npm run install:browsers --prefix keycloak/tests
       - name: Verify providers, native rollback theme, and candidate flows
         run: node keycloak/tests/run.mjs grounds-keycloak:theme-candidate
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: keycloak-theme-browser-failure

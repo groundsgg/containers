@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.8.0](https://github.com/groundsgg/containers/compare/keycloak@v0.7.2...keycloak@v0.8.0) (2026-11-09)
+
+
+### Features
+
+* **keycloak:** pin published Grounds login theme for rollout ([bdc8acf](https://github.com/groundsgg/containers/commit/bdc8acfab50093e16e6b3fd68af16547046dc312))
+* **keycloak:** use identity provider 1.3.0 with the avatar URL mapper ([#319](https://github.com/groundsgg/containers/issues/319)) ([4687655](https://github.com/groundsgg/containers/commit/46876550d44877838934f32f43ac5dc11b43e767))
+* **keycloak:** use verified Bedrock identity provider 1.2.0 ([#306](https://github.com/groundsgg/containers/issues/306)) ([f70fb2a](https://github.com/groundsgg/containers/commit/f70fb2a36c9d879c6ffdbfe82c97c12e12abf797))
+* **keycloak:** verify shared login theme candidates ([44157cd](https://github.com/groundsgg/containers/commit/44157cd86913840b3628fe04d79ae14017bf1ab6))
+
+
+### Bug Fixes
+
+* bump keycloak/keycloak from 26.7.1 to 26.8.1-1 in /keycloak ([#311](https://github.com/groundsgg/containers/issues/311)) ([7771dee](https://github.com/groundsgg/containers/commit/7771dee4e276364213bac83005acc87508e3e07c))
+* **keycloak:** use identity provider 1.3.1 ([#323](https://github.com/groundsgg/containers/issues/323)) ([ae090e1](https://github.com/groundsgg/containers/commit/ae090e1d78e560c8834a29557cd1387b51278ee4))
+* **keycloak:** use integrated password fields and regular favicon ([395b257](https://github.com/groundsgg/containers/commit/395b257b4573036c739af769673e5cb3649809f8))
+
 ## [0.7.2](https://github.com/groundsgg/containers/compare/keycloak@v0.7.1...keycloak@v0.7.2) (2026-08-23)
 
 

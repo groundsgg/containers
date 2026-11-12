@@ -47,7 +47,7 @@ RUN --mount=from=login-theme,source=/,target=/theme,ro \
       cp /theme/grounds-keycloak-theme.jar /theme-provider/grounds-keycloak-theme.jar; \
     fi
 
-FROM quay.io/keycloak/keycloak:26.8.1-1 AS builder
+FROM quay.io/keycloak/keycloak:26.8.2-2 AS builder
 
 WORKDIR /opt/keycloak
 
@@ -64,7 +64,7 @@ RUN /opt/keycloak/bin/kc.sh build \
       --event-metrics-user-enabled=true \
       --event-metrics-user-tags=realm,idp,clientId
 
-FROM quay.io/keycloak/keycloak:26.8.1-1
+FROM quay.io/keycloak/keycloak:26.8.2-2
 
 ARG VCS_REVISION
 ARG BUILD_DATE
